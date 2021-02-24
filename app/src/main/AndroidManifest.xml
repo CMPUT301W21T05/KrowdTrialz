@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KrowdTrialz">
+        <activity android:name=".ui.ExperimentDetailsNonOwnerActivity"></activity>
+        <activity android:name=".ui.ExperimentDetailsOwnerActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
