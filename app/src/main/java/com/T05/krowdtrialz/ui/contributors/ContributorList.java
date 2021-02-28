@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.T05.krowdtrialz.R;
-import com.T05.krowdtrialz.model.User;
+import com.T05.krowdtrialz.model.user.User;
 
 import java.util.ArrayList;
 

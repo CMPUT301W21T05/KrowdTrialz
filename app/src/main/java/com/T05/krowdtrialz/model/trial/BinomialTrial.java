@@ -2,13 +2,13 @@ package com.T05.krowdtrialz.model.trial;
 
 import android.location.Location;
 
-import com.T05.krowdtrialz.model.User;
+import com.T05.krowdtrialz.model.user.User;
 
 import java.util.Date;
 
 /**
  * the BinomialTrial maintains a count of the number of
- * "passes" and "fails" in a trial. For insance, the number
+ * "passes" and "fails" in a trial. For instance, the number
  * of heads and tails for 5 coin flips. Definition of "pass"
  * and "fail" are maintained by the experiment.
  * */

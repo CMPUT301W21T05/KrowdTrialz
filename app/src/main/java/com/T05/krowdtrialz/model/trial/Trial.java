@@ -2,7 +2,7 @@ package com.T05.krowdtrialz.model.trial;
 
 import android.location.Location;
 
-import com.T05.krowdtrialz.model.User;
+import com.T05.krowdtrialz.model.user.User;
 
 import java.util.Date;
 
