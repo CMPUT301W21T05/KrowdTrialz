@@ -1,4 +1,4 @@
-package com.T05.krowdtrialz.ui;
+package com.T05.krowdtrialz.model;
 
 public class User {
     private String name;
@@ -11,15 +11,7 @@ public class User {
         this.email = email;
     }
 
-    public String getName() {
+    public String getName(){
         return name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 }

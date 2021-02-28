@@ -3,4 +3,6 @@
     <string name="title_subscribed">Subscribed</string>
     <string name="title_publish">Publish</string>
     <string name="title_owner">Owner</string>
+    <string name="title_contributors">Contributors</string>
+    <string name="ignore_contributors">Ignore</string>
 </resources>

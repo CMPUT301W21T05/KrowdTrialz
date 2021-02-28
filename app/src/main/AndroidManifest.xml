@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KrowdTrialz">
         <activity android:name=".ui.SearchActivity"></activity>
+        <activity android:name=".ui.owner.ContributorsActivity"
+            android:parentActivityName=".ui.ExperimentDetailsOwnerActivity">
+        </activity>
         <activity android:name=".ui.ExperimentDetailsNonOwnerActivity" />
         <activity android:name=".ui.ExperimentDetailsOwnerActivity" />
         <activity
