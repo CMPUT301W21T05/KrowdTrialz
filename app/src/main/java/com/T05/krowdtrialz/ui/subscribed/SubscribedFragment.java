@@ -23,11 +23,11 @@ public class SubscribedFragment extends Fragment {
         subscribedViewModel =
                 new ViewModelProvider(this).get(SubscribedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscribed, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
+        //final TextView textView = root.findViewById(R.id.text_home);
         subscribedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                //textView.setText(s);
             }
         });
         return root;
