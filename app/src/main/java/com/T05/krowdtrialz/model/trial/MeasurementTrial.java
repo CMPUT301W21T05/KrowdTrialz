@@ -1,10 +1,13 @@
 package com.T05.krowdtrialz.model.trial;
 
 import android.location.Location;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.T05.krowdtrialz.model.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * MeasurementTrial holds a floating point trial result
@@ -13,11 +16,13 @@ import java.util.Date;
 public class MeasurementTrial extends Trial {
     private Float measurementValue;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public MeasurementTrial(User user, Location location) {
         super(user, location);
     }
 
-    public MeasurementTrial(User user, Location location, Date dateCreated) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public MeasurementTrial(User user, Location location, LocalDate dateCreated) {
         super(user, location, dateCreated);
     }
 

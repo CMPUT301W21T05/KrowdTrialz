@@ -4,7 +4,7 @@ import android.location.Location;
 
 import com.T05.krowdtrialz.model.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * the BinomialTrial maintains a count of the number of
@@ -13,13 +13,13 @@ import java.util.Date;
  * and "fail" are maintained by the experiment.
  * */
 public class BinomialTrial extends Trial {
-    private Integer passCount, failCount;
+    private int passCount, failCount;
 
     public BinomialTrial(User user, Location location) {
         super(user, location);
     }
 
-    public BinomialTrial(User user, Location location, Date dateCreated) {
+    public BinomialTrial(User user, Location location, LocalDate dateCreated) {
         super(user, location, dateCreated);
     }
 

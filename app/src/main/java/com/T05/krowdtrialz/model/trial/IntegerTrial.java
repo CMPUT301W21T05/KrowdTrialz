@@ -1,10 +1,13 @@
 package com.T05.krowdtrialz.model.trial;
 
 import android.location.Location;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.T05.krowdtrialz.model.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * IntegerTrials hold a single value which is the
@@ -15,11 +18,13 @@ import java.util.Date;
 public class IntegerTrial extends Trial {
     private Integer value;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public IntegerTrial(User user, Location location) {
         super(user, location);
     }
 
-    public IntegerTrial(User user, Location location, Date dateCreated) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public IntegerTrial(User user, Location location, LocalDate dateCreated) {
         super(user, location, dateCreated);
     }
 
