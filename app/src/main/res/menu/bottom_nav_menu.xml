@@ -12,7 +12,7 @@
         android:title="@string/title_publish" />
 
     <item
-        android:id="@+id/navigation_owned"
+        android:id="@+id/navigation_owner"
         android:icon="@drawable/ic_owned_black_24"
         android:title="@string/title_owner" />
 
