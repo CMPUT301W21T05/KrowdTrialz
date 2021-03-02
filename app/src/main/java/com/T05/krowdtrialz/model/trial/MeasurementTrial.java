@@ -16,12 +16,10 @@ import java.time.LocalDate;
 public class MeasurementTrial extends Trial {
     private Float measurementValue;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public MeasurementTrial(User user, Location location) {
         super(user, location);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public MeasurementTrial(User user, Location location, LocalDate dateCreated) {
         super(user, location, dateCreated);
     }

@@ -18,12 +18,10 @@ import java.time.LocalDate;
 public class IntegerTrial extends Trial {
     private Integer value;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public IntegerTrial(User user, Location location) {
         super(user, location);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public IntegerTrial(User user, Location location, LocalDate dateCreated) {
         super(user, location, dateCreated);
     }

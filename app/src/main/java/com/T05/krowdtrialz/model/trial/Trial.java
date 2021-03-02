@@ -18,14 +18,12 @@ public abstract class Trial {
     private Location location;
     private LocalDate dateCreated;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Trial(User user, Location location) {
         this.experimenter = user;
         this.location = location;
         this.dateCreated = LocalDate.now();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Trial(User user, Location location, LocalDate dateCreated) {
         this(user, location);
         this.dateCreated = dateCreated;
