@@ -1,6 +1,8 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.util.Statistics;
 
 public class IntegerExperiment extends Experiment {
     private String unit;
@@ -23,8 +25,9 @@ public class IntegerExperiment extends Experiment {
      * @return The total.
      */
     public int getTotal() {
-        // TODO
-        return 0;
+        return getTrials().stream()
+                .mapToInt(trial -> ((IntegerTrial) trial).getValue())
+                .sum();
     }
 
     /**
@@ -32,8 +35,8 @@ public class IntegerExperiment extends Experiment {
      * @return The standard deviation.
      */
     public double getStdDev() {
-        // TODO
-        return 0;
+        double[] data = getDataAsArray();
+        return Statistics.standardDeviation(data);
     }
 
     /**
@@ -44,16 +47,26 @@ public class IntegerExperiment extends Experiment {
      * @return The value of the qth quartile.
      */
     public double getQuartile(int q) {
-        // TODO
-        return 0;
+        double[] data = getDataAsArray();
+        return Statistics.quartile(data, q);
     }
 
     /**
      * Calculates the mean value of all trials in this experiment.
      * @return The mean.
      */
-    public float getMean() {
-        // TODO
-        return 0;
+    public double getMean() {
+        double[] data = getDataAsArray();
+        return Statistics.mean(getDataAsArray());
+    }
+
+    /**
+     * Helper method to get trial data as a array of doubles.
+     * @return Trial data as an array of doubles.
+     */
+    private double[] getDataAsArray() {
+        return getTrials().stream()
+                .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
+                .toArray();
     }
 }
