@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import com.T05.krowdtrialz.model.trial.BinomialTrial;
+import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 
 public class BinomialExperiment extends Experiment {
@@ -35,8 +37,11 @@ public class BinomialExperiment extends Experiment {
      * @return The total number of successes.
      */
     public int getSuccessCount() {
-        // TODO
-        return 0;
+        int successCount = 0;
+        for (Trial trial : getTrials()) {
+            successCount += ((BinomialTrial) trial).getPassCount();
+        }
+        return successCount;
     }
 
     /**
@@ -44,8 +49,11 @@ public class BinomialExperiment extends Experiment {
      * @return The total number of failures.
      */
     public int getFailureCount() {
-        // TODO
-        return 0;
+        int failureCount = 0;
+        for (Trial trial : getTrials()) {
+            failureCount += ((BinomialTrial) trial).getFailCount();
+        }
+        return failureCount;
     }
 
     /**
@@ -53,7 +61,9 @@ public class BinomialExperiment extends Experiment {
      * @return The success rate.
      */
     public double getSuccessRate() {
-        // TODO
-        return 0;
+        double successCount = getSuccessCount();
+        double failureCount = getFailureCount();
+        double total = successCount + failureCount;
+        return successCount / total;
     }
 }
