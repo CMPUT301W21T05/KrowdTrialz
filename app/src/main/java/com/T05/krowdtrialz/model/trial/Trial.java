@@ -4,7 +4,7 @@ import android.location.Location;
 
 import com.T05.krowdtrialz.model.user.User;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * The Trial class maintains metadata needed by all
@@ -13,20 +13,20 @@ import java.util.Date;
 public abstract class Trial {
     private User experimenter;
     private Location location;
-    private Date dateCreated;
+    private LocalDate dateCreated;
 
     public Trial(User user, Location location) {
         this.experimenter = user;
         this.location = location;
-        this.dateCreated = new Date();
+        this.dateCreated = LocalDate.now();
     }
 
-    public Trial(User user, Location location, Date dateCreated) {
+    public Trial(User user, Location location, LocalDate dateCreated) {
         this(user, location);
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 

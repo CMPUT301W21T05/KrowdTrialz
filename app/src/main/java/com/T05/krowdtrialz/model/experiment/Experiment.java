@@ -5,6 +5,7 @@ import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.model.trial.Trial;
 
 import java.util.ArrayList;
 import java.util.Collection;
