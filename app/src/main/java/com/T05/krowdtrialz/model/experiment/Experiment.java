@@ -3,6 +3,7 @@ package com.T05.krowdtrialz.model.experiment;
 import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
+import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 
 import java.util.ArrayList;

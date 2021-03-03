@@ -16,8 +16,7 @@ public class CountExperiment extends Experiment {
      * @return The total count.
      */
     public int getCount() {
-        // TODO
-        return 0;
+        return getTrials().size();
     }
 
     public String getUnit() {

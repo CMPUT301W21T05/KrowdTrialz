@@ -27,6 +27,14 @@ public class BinomialTrial extends Trial {
         return passCount;
     }
 
+    public Integer getFailCount() {
+        return failCount;
+    }
+
+    public void setPassCount(Integer passCount) {
+        this.passCount = passCount;
+    }
+
     public void setFailCount(Integer failCount) {
         this.failCount = failCount;
     }
