@@ -1,9 +1,6 @@
 package com.T05.krowdtrialz.model.trial;
 
 import android.location.Location;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.T05.krowdtrialz.model.user.User;
 
