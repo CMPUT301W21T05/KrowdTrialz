@@ -37,7 +37,7 @@ public class ContributorList extends ArrayAdapter<User> {
 
         User contributor = contributors.get(position);
 
-        TextView contributorName = view.findViewById(R.id.contributor_name_text_view);
+        TextView contributorName = view.findViewById(R.id.contributor_name_textView);
 
         contributorName.setText(contributor.getName());
 
