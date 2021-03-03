@@ -270,18 +270,18 @@
         app:layout_constraintTop_toBottomOf="@+id/view_map_button_detail_screen_owner" />
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/histogram_owner"
+        android:id="@+id/histogram_owner_barChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@+id/view_QnA_button_detail_screen_owner" />
 
     <com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/time_plot_owner"
+        android:id="@+id/time_plot_owner_scatterChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/histogram_non_owner" />
+        app:layout_constraintTop_toBottomOf="@+id/histogram_non_owner_barChart" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

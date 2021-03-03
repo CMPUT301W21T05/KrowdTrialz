@@ -19,7 +19,7 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/checklist_constraint_layout"
+        android:id="@+id/checklist_constraintLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="50dp"
@@ -30,10 +30,10 @@
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title_text_view">
+        app:layout_constraintTop_toBottomOf="@id/title_textView">
 
         <TextView
-            android:id="@+id/ignore_text_view"
+            android:id="@+id/ignore_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ignore_contributors"
@@ -42,13 +42,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ListView
-            android:id="@+id/contributorsListView"
+            android:id="@+id/contributors_listView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ignore_text_view" >
+            app:layout_constraintTop_toBottomOf="@id/ignore_textView" >
 
             <fragment
                 android:id="@+id/nav_host_fragment"
@@ -62,14 +62,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/title_text_view"
+        android:id="@+id/title_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="@string/title_contributors"
         android:textColor="#050505"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/checklist_constraint_layout"
+        app:layout_constraintBottom_toTopOf="@id/checklist_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -81,8 +81,8 @@
         android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
         android:backgroundTint="@color/white"
-        android:src="@drawable/ic_search_black_24"
-        app:layout_constraintBottom_toTopOf="@id/checklist_constraint_layout"
+        app:srcCompat="@drawable/ic_search_black_24"
+        app:layout_constraintBottom_toTopOf="@id/checklist_constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
