@@ -1,11 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.publish.PublishFragment">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.publish.PublishFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/publishExperimentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:text="Publish"
+        app:backgroundTint="#8BC34A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/experimentVariableNameLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="264dp"
+        android:layout_height="56dp"
+
+        android:layout_marginBottom="188dp"
+        android:hint="var"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:boxStrokeColor="#FF9800"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="#FF9800"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/experimentVariableNameInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="244dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:ems="10"
+            android:inputType="number"
+            android:paddingTop="0dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="0dp"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/experimentNameInputLayout"
@@ -126,7 +176,7 @@
         app:layout_constraintTop_toBottomOf="@+id/experimentDescriptionLayout" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/experimentTypeRadioGroup"
         android:layout_width="144dp"
         android:layout_height="193dp"
         android:layout_marginStart="16dp"
@@ -208,15 +258,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/experimentRegionLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="173dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="132dp"
+        android:layout_width="172dp"
+        android:layout_height="53dp"
 
+        android:layout_marginTop="12dp"
         app:boxCornerRadiusBottomEnd="5dp"
         app:boxCornerRadiusBottomStart="5dp"
         app:boxCornerRadiusTopEnd="5dp"
@@ -226,7 +277,7 @@
         app:hintEnabled="true"
         app:hintTextColor="#FF9800"
         app:layout_constraintStart_toStartOf="@+id/minimumTrialsLayout"
-        app:layout_constraintTop_toBottomOf="@+id/experimentDescriptionLayout">
+        app:layout_constraintTop_toBottomOf="@+id/minimumTrialsLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/experimentRegionInput"
@@ -243,10 +294,88 @@
             app:boxCornerRadiusBottomEnd="5dp"
             app:boxCornerRadiusBottomStart="5dp"
             app:boxCornerRadiusTopEnd="5dp"
-            app:boxCornerRadiusTopStart="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:boxCornerRadiusTopStart="5dp" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/binomialPassCriteriaLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="182dp"
+        android:layout_height="56dp"
+
+        android:layout_marginBottom="188dp"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:boxStrokeColor="#FF9800"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        android:hint="&quot;Pass&quot; criteria"
+        app:hintTextColor="#FF9800"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/binomialFailCriteriaLayout"
+        app:layout_constraintHorizontal_bias="0.042"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/binomialPassCriteriaInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="159dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:ems="10"
+            android:inputType="number"
+            android:paddingTop="0dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="0dp"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/binomialFailCriteriaLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="182dp"
+        android:layout_height="56dp"
+
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="188dp"
+        app:boxCornerRadiusBottomEnd="5dp"
+        app:boxCornerRadiusBottomStart="5dp"
+        app:boxCornerRadiusTopEnd="5dp"
+        app:boxCornerRadiusTopStart="5dp"
+        app:boxStrokeColor="#FF9800"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        android:hint="&quot;Fail&quot; criteria"
+        app:hintTextColor="#FF9800"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/binomialFailCriteriaInput"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="159dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:ems="10"
+            android:inputType="number"
+            android:paddingTop="0dp"
+            android:paddingRight="1dp"
+            android:paddingBottom="0dp"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
