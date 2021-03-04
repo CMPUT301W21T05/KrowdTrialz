@@ -23,13 +23,7 @@ public class PublishFragment extends Fragment {
         publishViewModel =
                 new ViewModelProvider(this).get(PublishViewModel.class);
         View root = inflater.inflate(R.layout.fragment_publish, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        publishViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         return root;
     }
 }

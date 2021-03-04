@@ -5,4 +5,7 @@
     <string name="title_owner">Owner</string>
     <string name="title_contributors">Contributors</string>
     <string name="ignore_contributors">Ignore</string>
+    <string name="add_experiment_name_prompt">Add experiment name</string>
+    <string name="add_experiment_description_prompt">Add a description</string>
+    <string name="geo_location_toggle">Geolocation required</string>
 </resources>
