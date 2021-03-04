@@ -235,6 +235,7 @@
         app:boxStrokeColor="#FF9800"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
+        android:hint="Min no. of trials"
         app:hintTextColor="#FF9800"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/experimentDescriptionLayout">
@@ -246,7 +247,6 @@
             android:layout_height="44dp"
             android:layout_marginBottom="36dp"
             android:ems="10"
-            android:hint="Min no. of trials"
             android:inputType="number"
             android:paddingTop="0dp"
             android:paddingRight="1dp"
@@ -275,6 +275,7 @@
         app:boxStrokeColor="#FF9800"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
+        android:hint="Experiment Region"
         app:hintTextColor="#FF9800"
         app:layout_constraintStart_toStartOf="@+id/minimumTrialsLayout"
         app:layout_constraintTop_toBottomOf="@+id/minimumTrialsLayout">
@@ -286,8 +287,7 @@
             android:layout_height="44dp"
             android:layout_marginBottom="36dp"
             android:ems="10"
-            android:hint="Experiment Region"
-            android:inputType="number"
+            android:inputType="text"
             android:paddingTop="0dp"
             android:paddingRight="1dp"
             android:paddingBottom="0dp"
