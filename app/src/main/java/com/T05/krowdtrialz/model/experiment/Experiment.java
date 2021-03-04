@@ -18,7 +18,7 @@ public abstract class Experiment {
     private User owner;
     private Collection<Trial> trials;
     private String description;
-    private Region region;
+    private String region;
     private boolean locationRequired = false;
     private int minTrials = 0;
     private Collection<Barcode> barcodes;
@@ -78,11 +78,11 @@ public abstract class Experiment {
         this.description = description;
     }
 
-    public Region getRegion() {
+    public String getRegion() {
         return region;
     }
 
-    public void setRegion(Region region) {
+    public void setRegion(String region) {
         this.region = region;
     }
 
@@ -101,4 +101,6 @@ public abstract class Experiment {
     public void setMinTrials(int minTrials) {
         this.minTrials = minTrials;
     }
+
+
 }
