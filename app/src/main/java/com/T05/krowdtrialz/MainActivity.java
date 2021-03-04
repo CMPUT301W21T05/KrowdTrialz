@@ -1,11 +1,9 @@
 package com.T05.krowdtrialz;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.T05.krowdtrialz.model.Database;
-import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

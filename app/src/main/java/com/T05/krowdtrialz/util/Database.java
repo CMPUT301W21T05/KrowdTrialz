@@ -1,4 +1,4 @@
-package com.T05.krowdtrialz.model;
+package com.T05.krowdtrialz.util;
 
 import android.util.Log;
 
