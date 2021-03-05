@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,8 @@ public class PublishFragment extends Fragment {
         clearExperimentSettings(root);
 
         RadioGroup radioGroup = (RadioGroup) root.findViewById(R.id.experimentTypeRadioGroup);
+        Button publishExperimentButton = (Button) root.findViewById(R.id.publishExperimentButton);
+
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Log.d(TAG, "Radio changed: " + ((Integer) checkedId).toString());
             switch (checkedId) {
@@ -51,7 +54,25 @@ public class PublishFragment extends Fragment {
                     clearExperimentSettings(root);
             }
         });
+
+
+        publishExperimentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Publish Experiment Selected");
+                // TODO: capture inputs and create an experiment object.
+            }
+        });
+
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "Resuming");
+        View view = getView();
+        clearExperimentSettings(view);
     }
 
     /**
@@ -68,6 +89,7 @@ public class PublishFragment extends Fragment {
         view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.VISIBLE);
         view.findViewById(R.id.experimentVariableNameLayout).setVisibility(View.GONE);
         view.findViewById(R.id.experimentVariableNameInput).setVisibility(View.GONE);
+        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -82,6 +104,7 @@ public class PublishFragment extends Fragment {
         view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
         view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
         view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
+        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
         com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experimentVariableNameLayout);
         variableNameLayout.setVisibility(View.VISIBLE);
         com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experimentVariableNameInput);
@@ -102,6 +125,7 @@ public class PublishFragment extends Fragment {
         view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
         view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
         view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
+        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
         com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experimentVariableNameLayout);
         variableNameLayout.setVisibility(View.VISIBLE);
         com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experimentVariableNameInput);
@@ -121,6 +145,7 @@ public class PublishFragment extends Fragment {
         view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
         view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
         view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
+        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
         com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experimentVariableNameLayout);
         variableNameLayout.setVisibility(View.VISIBLE);
         com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experimentVariableNameInput);
@@ -141,5 +166,6 @@ public class PublishFragment extends Fragment {
         view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
         view.findViewById(R.id.experimentVariableNameLayout).setVisibility(View.GONE);
         view.findViewById(R.id.experimentVariableNameInput).setVisibility(View.GONE);
+        view.findViewById(R.id.publishExperimentButton).setVisibility(View.GONE);
     }
 }
