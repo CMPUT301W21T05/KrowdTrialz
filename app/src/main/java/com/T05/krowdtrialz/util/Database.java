@@ -113,88 +113,58 @@ public class Database {
      * @return
      *  valid unique id
      */
-    public String generateID() {
+    public void verifyID(String localID, GenerateIDCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
-        Random rand = new Random();
-        localID = String.valueOf(rand.nextInt(10000));
-        final String[] getID = {String.valueOf(9341)};
-        Log.d("generateID id:", getID[0]);
+        Log.d("generateID id:", localID);
 
-        CountDownLatch done = new CountDownLatch(1);
+        Query query = userCollectionReference.whereEqualTo("User.id", localID); // Create a query to check if ID exists in the database already
 
-        Query query = userCollectionReference.whereEqualTo("User.id", getID[0]); // Create a query to check if ID exists in the database already
-//        List<Thread> workers = Stream
-//                .generate(() -> new Thread (new Worker(userCollectionReference, query, getID, done)))
-//                .limit(1)
-//                .collect(toList());
-
-
-//        for (Thread thread : workers)
-//        {
-//            thread.start();
-//        }
-
-        Thread queryThread = new HandlerThread("queryHandler") {
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void run(){
-                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.getResult().isEmpty()) {
-                            // create new user in the database
-                            HashMap<String, Object> newUser = new HashMap<>();
-                            newUser.put("User", new User("","","", getID[0]));
-                            userCollectionReference
-                                    .document(getID[0])
-                                    .set(newUser)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "Data has been added");
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "Data cannot be added" + e.toString());
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.getResult().isEmpty()) {
+                    // create new user in the database
+                    // This means the id generated is unique
+                    HashMap<String, Object> newUser = new HashMap<>();
+                    newUser.put("User", new User("","","", localID));
+                    userCollectionReference
+                            .document(localID)
+                            .set(newUser)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Data has been added");
+                                    callback.onSuccess(localID);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "Data cannot be added" + e.toString());
+                                    callback.onFailure();
 
-                                        }
-                                    });
-                        }else {
+                                }
+                            });
 
-                            Log.d("generateID", "Should be neg");
-                            getID[0] = String.valueOf(-1);
+                }else {
 
-                        }
-                        done.countDown();
-                    }
-                });
+                    // This means the id generated is not unique
+                    callback.onFailure();
 
+                }
             }
-        };
+        });
 
-        queryThread.start();
-
-        // if ID does not exist then create a new user
-
-        Log.d("generateID", "Made it to done.await");
-
-        try {
-            done.await(); //it will wait till the response is received from firebase.
-            Log.d("generateID", "Made past await");
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
-        Log.d("generateID", "Made it to return");
-        return (getID[0]);
     }// end generateID
 
 
 
     /**
      * This method adds the given experiment to the database
+     * ISSUE: if an experiment is added that is identical in all its fields to an existing experiment then there is a chance that
+     * id is overwritten in one and remains null in the other (likely not a problem for our uses)
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
@@ -231,7 +201,6 @@ public class Database {
 
                 // add id to OwnedExperiment
                 experiment.setId(expId);
-                newExperiment.put("Experiment", experiment);
                 userCollectionReference.document(id).collection("OwnedExperiments").document(expId).update("Experiment.id",expId);
             }
         });
@@ -282,45 +251,33 @@ public class Database {
 
     /**
      * This method returns a list of experiments that are owned by a given user
-     * NOT DONE
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param owner
      *  This is the user that owns the experiments
-     * @return
-     *  returns a list of experiments that are owned by a given user
      */
-    public ArrayList<Experiment> getExperimentsByOwner (User owner) {
+    public void getExperimentsByOwner (User owner, QueryExperimentsCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
         String ownerID = owner.getId();
         ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
-        Task task = userCollectionReference.document(ownerID).collection("OwnedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        userCollectionReference.document(ownerID).collection("OwnedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-
-                    Log.d("getExperiment", "Started For");
-
-
+                    // Find the type of the experiment
                     String type = String.valueOf(document.getData());
-
                     int startIndex = type.indexOf("Type=");
-
                     type = type.substring(startIndex+5);
-
                     int endIndex = type.indexOf(",");
-
                     type = type.substring(0,endIndex);
-                    Log.d("getExperiment",type);
 
+                    // Depending on the type add the corresponding type of experiment to the ArrayList
                     if (type.equals("Measurement")){
-                        Log.d("getExperiment","addedMES");
                         MeasurementExperiment experiment = document.toObject(MeasurementExperiment.class);
                         ownedExperiments.add(experiment);
                     }else if (type.equals("Binomial")){
-                        Log.d("getExperiment","addedBi");
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                         ownedExperiments.add(experiment);
                     }else if (type.equals("Count")){
@@ -332,20 +289,199 @@ public class Database {
                     }else{
                         ownedExperiments.add(null);
                     }
+                }
+                if(ownedExperiments.size() > 0){
+                    callback.onSuccess(ownedExperiments);
+                }else{
+                    callback.onFailure();
+                }
+            }
+        });
+    }// end getExperimentsByOwner
 
+    /**
+     * This method returns a list of experiments that are subscribed to by a given user
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     * @param subscriber
+     *  This is the user that is subscribed to the experiments
+     */
+    public void getExperimentsBySubscriber (User subscriber, QueryExperimentsCallback callback) {
 
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("Users");
+        String ownerID = subscriber.getId();
+        ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
+        userCollectionReference.document(ownerID).collection("SubscribedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Find the type of the experiment
+                    String type = String.valueOf(document.getData());
+                    int startIndex = type.indexOf("Type=");
+                    type = type.substring(startIndex+5);
+                    int endIndex = type.indexOf(",");
+                    type = type.substring(0,endIndex);
 
+                    // Depending on the type add the corresponding type of experiment to the ArrayList
+                    if (type.equals("Measurement")){
+                        MeasurementExperiment experiment = document.toObject(MeasurementExperiment.class);
+                        ownedExperiments.add(experiment);
+                    }else if (type.equals("Binomial")){
+                        BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
+                        ownedExperiments.add(experiment);
+                    }else if (type.equals("Count")){
+                        CountExperiment experiment = document.toObject(CountExperiment.class);
+                        ownedExperiments.add(experiment);
+                    }else if (type.equals("Integer")){
+                        IntegerExperiment experiment = document.toObject(IntegerExperiment.class);
+                        ownedExperiments.add(experiment);
+                    }else{
+                        ownedExperiments.add(null);
+                    }
+                }
+                if(ownedExperiments.size() > 0){
+                    callback.onSuccess(ownedExperiments);
+                }else{
+                    callback.onFailure();
+                }
+            }
+        });
+    }// end getExperimentsBySubscriber
 
+    private void checkRegions(DocumentSnapshot userDocumentSnapshot,ArrayList<Experiment> descriptionMatches, QueryExperimentsCallback callback)  {
+        userDocumentSnapshot.getReference().collection("OwnedExperiments").whereIn("Experiment.region", keyWords).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.getResult().isEmpty()){
+                    callback.onFailure();
+                }else{
+                    List<DocumentSnapshot> experimentDocumentSnapshots = task.getResult().getDocuments();
+                    for (DocumentSnapshot experimentDocumentSnapshot: experimentDocumentSnapshots){
+                        // Find the type of the experiment
+                        String type = String.valueOf(experimentDocumentSnapshot.getData());
+                        int startIndex = type.indexOf("Type=");
+                        type = type.substring(startIndex+5);
+                        int endIndex = type.indexOf(",");
+                        type = type.substring(0,endIndex);
 
+                        // Depending on the type add the corresponding type of experiment to the ArrayList
+                        if (type.equals("Measurement")){
+                            MeasurementExperiment experiment = experimentDocumentSnapshot.toObject(MeasurementExperiment.class);
+                            descriptionMatches.add(experiment);
+                        }else if (type.equals("Binomial")){
+                            BinomialExperiment experiment = experimentDocumentSnapshot.toObject(BinomialExperiment.class);
+                            descriptionMatches.add(experiment);
+                        }else if (type.equals("Count")){
+                            CountExperiment experiment = experimentDocumentSnapshot.toObject(CountExperiment.class);
+                            descriptionMatches.add(experiment);
+                        }else if (type.equals("Integer")){
+                            IntegerExperiment experiment = experimentDocumentSnapshot.toObject(IntegerExperiment.class);
+                            descriptionMatches.add(experiment);
+                        }else{
+                            descriptionMatches.add(null);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void checkDescriptions (Task<QuerySnapshot> task,DocumentSnapshot userDocumentSnapshot,ArrayList<Experiment> descriptionMatches, QueryExperimentsCallback callback) {
+        if (task.getResult().isEmpty()) {
+
+            checkRegions(userDocumentSnapshot, descriptionMatches, new QueryExperimentsCallback() {
+                @Override
+                public void onSuccess(ArrayList<Experiment> experiments) {
+                    callback.onSuccess(descriptionMatches);
                 }
 
-            }
+                @Override
+                public void onFailure() {
+                    callback.onFailure();
+                }
+            });
 
+        }else{
+
+            List<DocumentSnapshot> experimentDocumentSnapshots = task.getResult().getDocuments();
+            for (DocumentSnapshot experimentDocumentSnapshot: experimentDocumentSnapshots){
+                // Find the type of the experiment
+                String type = String.valueOf(experimentDocumentSnapshot.getData());
+                int startIndex = type.indexOf("Type=");
+                type = type.substring(startIndex+5);
+                int endIndex = type.indexOf(",");
+                type = type.substring(0,endIndex);
+
+                Log.d("test",type);
+
+                // Depending on the type add the corresponding type of experiment to the ArrayList
+                if (type.equals("Measurement")){
+                    MeasurementExperiment experiment = experimentDocumentSnapshot.toObject(MeasurementExperiment.class);
+                    descriptionMatches.add(experiment);
+                }else if (type.equals("Binomial")){
+                    BinomialExperiment experiment = experimentDocumentSnapshot.toObject(BinomialExperiment.class);
+                    Log.d("test","BIn");
+                    descriptionMatches.add(experiment);
+                }else if (type.equals("Count")){
+                    CountExperiment experiment = experimentDocumentSnapshot.toObject(CountExperiment.class);
+                    descriptionMatches.add(experiment);
+                }else if (type.equals("Integer")){
+                    IntegerExperiment experiment = experimentDocumentSnapshot.toObject(IntegerExperiment.class);
+                    descriptionMatches.add(experiment);
+                }else{
+                    descriptionMatches.add(null);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method returns a list of experiments where given keyword matches description, region, or owner username
+     * NOT DONE
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     * @param keyWord
+     *  This is the search term
+     */
+    public void getExperimentsBySearch (String keyWord, QueryExperimentsCallback callback) {
+
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("Users");
+        ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
+        ArrayList<String> keyWords = new ArrayList<String>();
+        keyWords.add(keyWord);
+        userCollectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                List<DocumentSnapshot> userDocumentSnapshots = task.getResult().getDocuments();
+
+                for (DocumentSnapshot userDocumentSnapshot: userDocumentSnapshots){
+
+                    userDocumentSnapshot.getReference().collection("OwnedExperiments").whereIn("Experiment.description", keyWords).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            checkDescriptions(task, userDocumentSnapshot, matchingExperiments, new QueryExperimentsCallback() {
+                                @Override
+                                public void onSuccess(ArrayList<Experiment> experiments) {
+                                    callback.onSuccess(matchingExperiments);
+                                }
+
+                                @Override
+                                public void onFailure() {
+
+                                }
+                            });
+                        }
+                    });
+                }
+                Log.d("test",matchingExperiments.toString());
+                callback.onSuccess(matchingExperiments);
+            }
         });
 
-        return ownedExperiments;
-
-    }// end getExperimentsByOwner
+    }// end getExperimentsBySearch
 
     /**
      * This method adds the given experiment to the SubscribedExperiments collection in the database and adds its path to the lookups
@@ -387,7 +523,7 @@ public class Database {
             }
         });
 
-    }
+    }// end addSubscription
 
     /**
      * This method updates an existing experiment in the database based on id
@@ -423,66 +559,36 @@ public class Database {
 
 
 
-    }
+    }// end updateExperiment
 
 
     /**
-     * We think this class, or something similar, may be part of a solution to async problem
+     * For this call back onSuccess indicates that the id does not exist in the database
+     * and therefore should be added
      * @author
-     *  Furmaan Sekhon and Jacques Leong-Sit
+     *  Furmaan Sekhon and Jacques Leong-Sit and Ryan Shukla
      */
-    private class Worker implements Runnable {
+    public interface GenerateIDCallback  {
+        public void onSuccess(String id);
+        public void onFailure();
 
-        private CollectionReference userCollectionReference;
-        private Query query;
-        private String[] getID;
-        private CountDownLatch countDownLatch;
+    }// end GenerateIDCallback
 
-        public Worker(CollectionReference userCollectionReference, Query query, String[] getID, CountDownLatch countDownLatch) {
-            this.userCollectionReference = userCollectionReference;
-            this.query = query;
-            this.getID = getID;
-            this.countDownLatch = countDownLatch;
-        }
+    /**
+     * For this call back onSuccess indicates that at least one result was found
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit and Ryan Shukla
+     */
+    public interface QueryExperimentsCallback  {
+        public void onSuccess(ArrayList<Experiment> experiments);
+        public void onFailure();
 
-        public String[] getGetID() {
-            return getID;
-        }
+    }// end GenerateIDCallback
 
-        @Override
-        public void run() {
-            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(queryDocumentSnapshots.getDocuments().isEmpty()) {
-                        // create new user in the database
-                        HashMap<String, Object> newUser = new HashMap<>();
-                        newUser.put("User", new User("","","", getID[0]));
-                        userCollectionReference
-                                .document(getID[0])
-                                .set(newUser)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "Data has been added");
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d(TAG, "Data cannot be added" + e.toString());
-
-                                    }
-                                });
-                    }else {
-
-                        Log.d("generateID", "Should be neg");
-                        getID[0] = String.valueOf(-1);
-                    }
-                }
-            });
-            countDownLatch.countDown();
-        }
+    public interface DocumentSnapshotCallback {
+        public void onSuccess(DocumentSnapshot documentSnapshot);
+        public void onFailure();
     }
 
 }// end Database
+

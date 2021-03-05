@@ -8,7 +8,6 @@ public class MeasurementExperiment extends StatisticsExperiment {
     private String unit;
 
     public MeasurementExperiment() {
-
     }
 
     public MeasurementExperiment(User owner, String description, String unit) {

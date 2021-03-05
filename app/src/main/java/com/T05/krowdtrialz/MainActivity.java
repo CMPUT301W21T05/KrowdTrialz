@@ -1,20 +1,16 @@
 package com.T05.krowdtrialz;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
+import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
-import com.T05.krowdtrialz.model.trial.BinomialTrial;
-import com.T05.krowdtrialz.model.trial.Trial;
-import com.T05.krowdtrialz.util.Database;
+import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,8 +21,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import org.apache.commons.math3.analysis.function.Exp;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Database db = new Database();
     private String localID;
+
+    private String measureExperimentID = "123MES";
+    private String binomialExperimentID = "123BIN";
+    private String countExperimentID = "123COU";
+    private String integerExperimentID = "123INT";
+    private String uid = "JB123";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
 //        loadID();
+//        smokeTestGetExperimentsByOwner();
+//        smokeTestGetExperimentsBySubscriber();
+//        db.addExperiment(mockBinomialExperiment());
+
+        smokeTestGetExperimentsBySearch();
 
 //        MeasurementExperiment measurementExperiment = new MeasurementExperiment(new
 //                User("Test","Test1","test@gmail.com","com.google.android.gms.tasks.zzu@8525085"), "Measurement experiment","cm");
@@ -118,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
         String convertedID = gson.toJson(localID); // converts arrayList to json
         editor.putString("ID",convertedID); // saves converted arrayList
         editor.apply();
+        Log.d("saveID","Saved"+localID);
 
-    }
+    }// end saveID
 
     /**
      * This may be part of a solution to generate unique id
@@ -136,13 +142,105 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("loadID", "Made it to loadID");
 
-        localID = db.generateID();
-        Log.d("generateID NEgative:",localID);
         if (localID == null) {
-            localID = db.generateID();
-            saveID();
+            Log.d("loadID","Created new id");
+            Random rand = new Random();
+            localID = String.valueOf(rand.nextInt(10000));
+            db.verifyID(localID,new Database.GenerateIDCallback() {
+                @Override
+                public void onSuccess(String id) {
+                    saveID();
+                }
+
+                @Override
+                public void onFailure() {
+                    loadID();
+                }
+            });
         }
 
+    }// end loadID
+    public User mockUser () {
+        User user = new User("Joe Bob","jbeast","jb@gmail.com",uid);
+
+        return user;
     }
 
-}
+    public MeasurementExperiment mockMeasurementExperiment (){
+        MeasurementExperiment experiment = new MeasurementExperiment(mockUser(),"Test measurement experiment", "cm");
+        return experiment;
+    }
+    public BinomialExperiment mockBinomialExperiment (){
+        BinomialExperiment experiment = new BinomialExperiment(mockUser(),"Test binomial experiment", "Heads","Tails");
+        return experiment;
+    }
+    public CountExperiment mockCountExperiment (){
+        CountExperiment experiment = new CountExperiment(mockUser(),"Test count experiment","Cars Seen");
+        return experiment;
+    }
+    public IntegerExperiment mockIntegerExperiment (){
+        IntegerExperiment experiment = new IntegerExperiment(mockUser(),"Test Integer experiment", "Eggs dropped");
+        return experiment;
+    }
+
+
+    void smokeTestGetExperimentsByOwner(){
+
+        db.addExperiment(mockBinomialExperiment());
+
+        db.getExperimentsByOwner(mockUser(), new Database.QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+//                Log.d("test",String.valueOf(experiments.size()));
+                //Log.d("test",experiments.get(0).getDescription());
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("Failure","Failed");
+            }
+        });
+    }
+
+    void smokeTestGetExperimentsBySubscriber(){
+
+        BinomialExperiment experiment = mockBinomialExperiment();
+
+        experiment.setId("vpVzsJNKANMbN18gIQRB");
+
+        db.addSubscription(mockUser(), experiment);
+
+        db.getExperimentsBySubscriber(mockUser(), new Database.QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                Log.d("test",String.valueOf(experiments.size()));
+                //Log.d("test",experiments.get(0).getDescription());
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("Failure","Failed");
+            }
+        });
+    }
+
+    void smokeTestGetExperimentsBySearch(){
+
+//        db.addExperiment(mockBinomialExperiment());
+
+        db.getExperimentsBySearch("Test binomial experiment", new Database.QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                Log.d("test",String.valueOf(experiments.size()));
+//                Log.d("test",experiments.get(0).getDescription());
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("Failure","Failed");
+            }
+        });
+    }
+
+
+}// end MainActivity
