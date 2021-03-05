@@ -5,6 +5,7 @@ import android.location.Location;
 import com.T05.krowdtrialz.model.user.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * MeasurementTrial holds a floating point trial result
@@ -17,7 +18,7 @@ public class MeasurementTrial extends Trial {
         super(user, location);
     }
 
-    public MeasurementTrial(User user, Location location, LocalDate dateCreated) {
+    public MeasurementTrial(User user, Location location, LocalDateTime dateCreated) {
         super(user, location, dateCreated);
     }
 

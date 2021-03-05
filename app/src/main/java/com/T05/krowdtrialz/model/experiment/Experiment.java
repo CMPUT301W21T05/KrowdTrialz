@@ -14,7 +14,7 @@ import java.util.Collection;
  * Base class to represent all types of experiments.
  */
 public abstract class Experiment {
-    private int id;
+    private String id;
     private User owner;
     private Collection<Trial> trials;
     private String description;
@@ -23,6 +23,9 @@ public abstract class Experiment {
     private int minTrials = 0;
     private Collection<Barcode> barcodes;
     private Collection<QRCode> qrCodes;
+
+    public Experiment() {
+    }
 
     public Experiment(User owner, String description) {
         // TODO generate unique id
@@ -34,9 +37,11 @@ public abstract class Experiment {
         qrCodes = new ArrayList<QRCode>();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
+
+    public void setId(String id) { this.id = id; }
 
     public Collection<Trial> getTrials() {
         return trials;
@@ -101,6 +106,5 @@ public abstract class Experiment {
     public void setMinTrials(int minTrials) {
         this.minTrials = minTrials;
     }
-
 
 }

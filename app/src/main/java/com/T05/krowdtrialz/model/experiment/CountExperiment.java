@@ -6,6 +6,9 @@ public class CountExperiment extends Experiment {
     // The name of the unit of measurement for trials in this experiment.
     private String unit;
 
+    public CountExperiment() {
+    }
+
     public CountExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
