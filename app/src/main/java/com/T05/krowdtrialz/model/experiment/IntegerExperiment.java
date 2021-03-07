@@ -6,9 +6,13 @@ import com.T05.krowdtrialz.model.user.User;
 public class IntegerExperiment extends StatisticsExperiment {
     private String unit;
 
+    public IntegerExperiment() {
+    }
+
     public IntegerExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
+        this.setType("Integer");
     }
 
     public String getUnit() {
