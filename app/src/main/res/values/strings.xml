@@ -42,4 +42,6 @@
     <string name="median_owner">median</string>
     <string name="view_map_owner">view map</string>
     <string name="view_q_amp_a_owner"><![CDATA[View Q&A]]></string>
+    <string name="subscribed_experiments_title">Subscribed Experiments</string>
+    <string name="edit_profile_button_text">Edit Profile</string>
 </resources>
