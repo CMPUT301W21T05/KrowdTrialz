@@ -27,25 +27,25 @@ public class PublishFragment extends Fragment {
 
         clearExperimentSettings(root);
 
-        RadioGroup radioGroup = (RadioGroup) root.findViewById(R.id.experimentTypeRadioGroup);
-        Button publishExperimentButton = (Button) root.findViewById(R.id.publishExperimentButton);
+        RadioGroup radioGroup = (RadioGroup) root.findViewById(R.id.experiment_type_radio_group);
+        Button publishExperimentButton = (Button) root.findViewById(R.id.publish_experiment_button);
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             Log.d(TAG, "Radio changed: " + ((Integer) checkedId).toString());
             switch (checkedId) {
-                case R.id.countExperimentRadio:
+                case R.id.count_experiment_radio:
                     Log.d(TAG, "Count Experiment Selected");
                     countExperimentSelected(root);
                     break;
-                case R.id.integerExperimentRadio:
+                case R.id.integer_experiment_radio:
                     Log.d(TAG, "Integer Exeperiment Selected");
                     integerExperimentSelected(root);
                     break;
-                case R.id.binomialExperimentRadio:
+                case R.id.binomial_experiment_radio:
                     Log.d(TAG, "Binomial Experiment Selected");
                     binomialExperimentSelected(root);
                     break;
-                case R.id.measurementExperimentRadio:
+                case R.id.measurement_experiment_radio:
                     Log.d(TAG, "Measurement Experiment Selected");
                     measurementExperimentSelected(root);
                     break;
@@ -83,13 +83,13 @@ public class PublishFragment extends Fragment {
      */
     private void binomialExperimentSelected(View view) {
         // adjust input box visibility
-        view.findViewById(R.id.binomialPassCriteriaLayout).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.experimentVariableNameLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.experimentVariableNameInput).setVisibility(View.GONE);
-        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.binomial_fail_criteria_layout).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.binomial_fail_criteria_input).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.experiment_variable_name_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.experiment_variable_name_input).setVisibility(View.GONE);
+        view.findViewById(R.id.publish_experiment_button).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -100,14 +100,14 @@ public class PublishFragment extends Fragment {
      */
     private void countExperimentSelected(View view) {
         // Adjust visibility and change hint text
-        view.findViewById(R.id.binomialPassCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
-        com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experimentVariableNameLayout);
+        view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.publish_experiment_button).setVisibility(View.VISIBLE);
+        com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experiment_variable_name_layout);
         variableNameLayout.setVisibility(View.VISIBLE);
-        com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experimentVariableNameInput);
+        com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experiment_variable_name_input);
         variableNameInput.setVisibility(View.VISIBLE);
 
         variableNameLayout.setHint("Name of variable to count");
@@ -121,14 +121,14 @@ public class PublishFragment extends Fragment {
      */
     private void integerExperimentSelected(View view) {
         // Adjust visibility and change hint text
-        view.findViewById(R.id.binomialPassCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
-        com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experimentVariableNameLayout);
+        view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.publish_experiment_button).setVisibility(View.VISIBLE);
+        com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experiment_variable_name_layout);
         variableNameLayout.setVisibility(View.VISIBLE);
-        com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experimentVariableNameInput);
+        com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experiment_variable_name_input);
         variableNameInput.setVisibility(View.VISIBLE);
 
         variableNameLayout.setHint("Name of integer result");
@@ -141,14 +141,14 @@ public class PublishFragment extends Fragment {
      */
     private void measurementExperimentSelected(View view) {
         // Adjust visibility and change hint text
-        view.findViewById(R.id.binomialPassCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.publishExperimentButton).setVisibility(View.VISIBLE);
-        com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experimentVariableNameLayout);
+        view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.publish_experiment_button).setVisibility(View.VISIBLE);
+        com.google.android.material.textfield.TextInputLayout variableNameLayout = view.findViewById(R.id.experiment_variable_name_layout);
         variableNameLayout.setVisibility(View.VISIBLE);
-        com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experimentVariableNameInput);
+        com.google.android.material.textfield.TextInputEditText variableNameInput = view.findViewById(R.id.experiment_variable_name_input);
         variableNameInput.setVisibility(View.VISIBLE);
 
         variableNameLayout.setHint("Name of measurement");
@@ -160,12 +160,12 @@ public class PublishFragment extends Fragment {
      *  publish experiment view to operate on
      */
     private void clearExperimentSettings(View view) {
-        view.findViewById(R.id.binomialPassCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialPassCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.binomialFailCriteriaInput).setVisibility(View.GONE);
-        view.findViewById(R.id.experimentVariableNameLayout).setVisibility(View.GONE);
-        view.findViewById(R.id.experimentVariableNameInput).setVisibility(View.GONE);
-        view.findViewById(R.id.publishExperimentButton).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.binomial_fail_criteria_input).setVisibility(View.GONE);
+        view.findViewById(R.id.experiment_variable_name_layout).setVisibility(View.GONE);
+        view.findViewById(R.id.experiment_variable_name_input).setVisibility(View.GONE);
+        view.findViewById(R.id.publish_experiment_button).setVisibility(View.GONE);
     }
 }

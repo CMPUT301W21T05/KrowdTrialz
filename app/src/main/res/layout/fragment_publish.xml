@@ -7,7 +7,7 @@
     tools:context=".ui.publish.PublishFragment">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/publishExperimentButton"
+        android:id="@+id/publish_experiment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/experimentVariableNameLayout"
+        android:id="@+id/experiment_variable_name_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="264dp"
         android:layout_height="56dp"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/experimentVariableNameInput"
+            android:id="@+id/experiment_variable_name_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="244dp"
             android:layout_height="44dp"
@@ -58,7 +58,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/experimentNameInputLayout"
+        android:id="@+id/experiment_description_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -75,48 +75,14 @@
         app:hintEnabled="true"
         app:hintTextColor="#FF9800"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/experimentName"
+            android:id="@+id/experiment_description_input"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_gravity="bottom"
-            android:bufferType="editable"
-            android:ellipsize="end"
-            android:hint="My experiment..."
-            android:maxLines="1"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
-            tools:ignore="KeyboardInaccessibleWidget" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/experimentDescriptionLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        app:boxCornerRadiusBottomEnd="5dp"
-
-        app:boxCornerRadiusBottomStart="5dp"
-        app:boxCornerRadiusTopEnd="5dp"
-        app:boxCornerRadiusTopStart="5dp"
-        app:boxStrokeColor="#FF9800"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true"
-        app:hintTextColor="#FF9800"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/experimentNameInputLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/experimentDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="93dp"
             android:layout_gravity="bottom"
             android:bufferType="editable"
             android:ellipsize="end"
@@ -126,33 +92,22 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/addDescriptionPrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:id="@+id/add_description_prompt"
+        android:layout_width="141dp"
+        android:layout_height="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
         android:editable="false"
         android:text="@string/add_experiment_description_prompt"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/experimentDescriptionLayout"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/experiment_description_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/addTitlePrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:editable="false"
-        android:text="@string/add_experiment_name_prompt"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/experimentNameInputLayout"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/experimentTypeSelection"
+        android:id="@+id/experiment_type_selection"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -162,10 +117,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#000000"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/geoLocationToggle" />
+        app:layout_constraintTop_toBottomOf="@+id/geo_location_toggle" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/geoLocationToggle"
+        android:id="@+id/geo_location_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -173,20 +128,20 @@
         android:layout_marginTop="16dp"
         android:text="@string/geo_location_toggle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/experimentDescriptionLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/experiment_description_layout" />
 
     <RadioGroup
-        android:id="@+id/experimentTypeRadioGroup"
+        android:id="@+id/experiment_type_radio_group"
         android:layout_width="144dp"
         android:layout_height="193dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/geoLocationToggle">
+        app:layout_constraintTop_toBottomOf="@+id/geo_location_toggle">
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/countExperimentRadio"
+            android:id="@+id/count_experiment_radio"
             android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -194,7 +149,7 @@
             android:text="Count" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/binomialExperimentRadio"
+            android:id="@+id/binomial_experiment_radio"
             android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -202,7 +157,7 @@
             android:text="Binomial" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/integerExperimentRadio"
+            android:id="@+id/integer_experiment_radio"
             android:layout_width="116dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -210,7 +165,7 @@
             android:text="Integer" />
 
         <com.google.android.material.radiobutton.MaterialRadioButton
-            android:id="@+id/measurementExperimentRadio"
+            android:id="@+id/measurement_experiment_radio"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -220,7 +175,7 @@
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/minimumTrialsLayout"
+        android:id="@+id/minumum_trials_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="147dp"
         android:layout_height="51dp"
@@ -238,10 +193,10 @@
         android:hint="Min no. of trials"
         app:hintTextColor="#FF9800"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/experimentDescriptionLayout">
+        app:layout_constraintTop_toBottomOf="@+id/experiment_description_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/minimumTrialsInput"
+            android:id="@+id/minimum_trials_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="131dp"
             android:layout_height="44dp"
@@ -262,7 +217,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/experimentRegionLayout"
+        android:id="@+id/experiment_region_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="172dp"
         android:layout_height="53dp"
@@ -277,11 +232,11 @@
         app:hintEnabled="true"
         android:hint="Experiment Region"
         app:hintTextColor="#FF9800"
-        app:layout_constraintStart_toStartOf="@+id/minimumTrialsLayout"
-        app:layout_constraintTop_toBottomOf="@+id/minimumTrialsLayout">
+        app:layout_constraintStart_toStartOf="@+id/minumum_trials_layout"
+        app:layout_constraintTop_toBottomOf="@+id/minumum_trials_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/experimentRegionInput"
+            android:id="@+id/experiment_region_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="159dp"
             android:layout_height="44dp"
@@ -298,7 +253,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/binomialPassCriteriaLayout"
+        android:id="@+id/binomial_pass_criteria_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="182dp"
         android:layout_height="56dp"
@@ -314,12 +269,12 @@
         android:hint="&quot;Pass&quot; criteria"
         app:hintTextColor="#FF9800"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/binomialFailCriteriaLayout"
+        app:layout_constraintEnd_toStartOf="@+id/binomial_fail_criteria_layout"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/binomialPassCriteriaInput"
+            android:id="@+id/binomial_pass_criteria_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="159dp"
             android:layout_height="44dp"
@@ -338,7 +293,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/binomialFailCriteriaLayout"
+        android:id="@+id/binomial_fail_criteria_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="182dp"
         android:layout_height="56dp"
@@ -359,7 +314,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/binomialFailCriteriaInput"
+            android:id="@+id/binomial_fail_criteria_input"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="159dp"
             android:layout_height="44dp"

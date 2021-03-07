@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "452119458214",
+    "project_id": "krowdtrialz",
+    "storage_bucket": "krowdtrialz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452119458214:android:bcb21c13cf2cb937c39f67",
+        "android_client_info": {
+          "package_name": "com.T05.krowdtrialz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452119458214-r6oik8rk7eov6s20ag3uvrvthfa3abdc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCS-mogRdKFp4iIKg6Feq5U9ZVKyaLJSOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452119458214-r6oik8rk7eov6s20ag3uvrvthfa3abdc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
