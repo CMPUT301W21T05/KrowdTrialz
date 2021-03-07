@@ -10,10 +10,14 @@ public class BinomialExperiment extends Experiment {
     // The name of a fail event. (e.g. "tails")
     private String failUnit;
 
+    public BinomialExperiment() {
+    }
+
     public BinomialExperiment(User owner, String description, String passUnit, String failUnit) {
         super(owner, description);
         this.passUnit = passUnit;
         this.failUnit = failUnit;
+        this.setType("Binomial");
     }
 
     public String getPassUnit() {
