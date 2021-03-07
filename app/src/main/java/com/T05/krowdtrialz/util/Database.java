@@ -65,7 +65,6 @@ public class Database {
     /**
      * This method checks if user already exits in the database and returns a new unique id if they don't
      * or existing one if they do
-     * NOT DONE (This version is closer to complete than above version)
      * @return
      *  valid unique id
      */
@@ -116,8 +115,6 @@ public class Database {
 
     /**
      * This method adds the given experiment to the database
-     * ISSUE: if an experiment is added that is identical in all its fields to an existing experiment then there is a chance that
-     * id is overwritten in one and remains null in the other (likely not a problem for our uses)
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
@@ -301,8 +298,7 @@ public class Database {
     }// end getExperimentsBySubscriber
 
     /**
-     * This method returns a list of experiments where given keyword matches description, region, or owner username
-     * NOT DONE
+     * This method returns a list of experiments where given keyword matches description
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param keyWord
