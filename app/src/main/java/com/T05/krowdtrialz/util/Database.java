@@ -304,7 +304,7 @@ public class Database {
      * @param keyWord
      *  This is the search term
      */
-    public void getExperimentsBySearch (String keyWord, QueryExperimentsCallback callback) {
+    public void getExperimentsByDescription (String keyWord, QueryExperimentsCallback callback) {
         db = FirebaseFirestore.getInstance();
         CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
         ArrayList<String> keyWords = new ArrayList<String>();
