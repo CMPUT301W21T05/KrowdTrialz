@@ -23,11 +23,11 @@ public class OwnerFragment extends Fragment {
         ownerViewModel =
                 new ViewModelProvider(this).get(OwnerViewModel.class);
         View root = inflater.inflate(R.layout.fragment_owner, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
+        //final TextView textView = root.findViewById(R.id.text_notifications);
         ownerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                //textView.setText(s);
             }
         });
         return root;

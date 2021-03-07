@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_subscribed">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_subscribed"
         android:name="com.T05.krowdtrialz.ui.subscribed.SubscribedFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_subscribed"
         tools:layout="@layout/fragment_subscribed" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_publish"
         android:name="com.T05.krowdtrialz.ui.publish.PublishFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_publish"
         tools:layout="@layout/fragment_publish" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_owner"
         android:name="com.T05.krowdtrialz.ui.owner.OwnerFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_owner"
         tools:layout="@layout/fragment_owner" />
 </navigation>
