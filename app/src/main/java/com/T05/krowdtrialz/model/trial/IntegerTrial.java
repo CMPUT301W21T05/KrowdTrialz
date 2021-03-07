@@ -5,6 +5,7 @@ import android.location.Location;
 import com.T05.krowdtrialz.model.user.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * IntegerTrials hold a single value which is the
@@ -19,7 +20,7 @@ public class IntegerTrial extends Trial {
         super(user, location);
     }
 
-    public IntegerTrial(User user, Location location, LocalDate dateCreated) {
+    public IntegerTrial(User user, Location location, LocalDateTime dateCreated) {
         super(user, location, dateCreated);
     }
 
