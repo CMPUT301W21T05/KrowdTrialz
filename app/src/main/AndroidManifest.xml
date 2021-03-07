@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KrowdTrialz">
-        <activity android:name=".ui.SearchActivity"></activity>
+        <activity android:name=".ui.search.SearchActivity"></activity>
         <activity android:name=".ui.owner.ContributorsActivity"
             android:parentActivityName=".ui.ExperimentDetailsOwnerActivity">
         </activity>

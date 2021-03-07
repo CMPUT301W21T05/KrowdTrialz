@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/experiment_list_user"
+        android:layout_width="123dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="@string/owner_username" />
+
+    <TextView
+        android:id="@+id/experiment_list_description"
+        android:layout_width="194dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="experiment description" />
+
+    <CheckBox
+        android:id="@+id/experiment_status_checkbox"
+        android:layout_width="73dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="CheckBox" />
+</LinearLayout>
