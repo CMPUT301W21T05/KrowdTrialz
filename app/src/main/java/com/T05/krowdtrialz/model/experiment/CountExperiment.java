@@ -12,6 +12,7 @@ public class CountExperiment extends Experiment {
     public CountExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
+        this.setType("Count");
     }
 
     /**

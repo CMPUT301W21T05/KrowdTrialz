@@ -16,13 +16,14 @@ import java.util.Collection;
 public abstract class Experiment {
     private String id;
     private User owner;
-    private Collection<Trial> trials;
+    private ArrayList<Trial> trials;
     private String description;
     private String region;
+    private String type;
     private boolean locationRequired = false;
     private int minTrials = 0;
-    private Collection<Barcode> barcodes;
-    private Collection<QRCode> qrCodes;
+    private ArrayList<Barcode> barcodes;
+    private ArrayList<QRCode> qrCodes;
 
     public Experiment() {
     }
@@ -107,4 +108,7 @@ public abstract class Experiment {
         this.minTrials = minTrials;
     }
 
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
 }

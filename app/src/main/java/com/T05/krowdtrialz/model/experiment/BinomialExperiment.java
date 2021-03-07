@@ -17,6 +17,7 @@ public class BinomialExperiment extends Experiment {
         super(owner, description);
         this.passUnit = passUnit;
         this.failUnit = failUnit;
+        this.setType("Binomial");
     }
 
     public String getPassUnit() {

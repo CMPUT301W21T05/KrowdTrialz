@@ -12,6 +12,7 @@ public class IntegerExperiment extends StatisticsExperiment {
     public IntegerExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
+        this.setType("Integer");
     }
 
     public String getUnit() {

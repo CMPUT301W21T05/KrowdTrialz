@@ -13,6 +13,7 @@ public class MeasurementExperiment extends StatisticsExperiment {
     public MeasurementExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
+        this.setType("Measurement");
     }
 
     public String getUnit() {
