@@ -5,6 +5,7 @@ import android.location.Location;
 import com.T05.krowdtrialz.model.user.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * the BinomialTrial maintains a count of the number of
@@ -19,7 +20,7 @@ public class BinomialTrial extends Trial {
         super(user, location);
     }
 
-    public BinomialTrial(User user, Location location, LocalDate dateCreated) {
+    public BinomialTrial(User user, Location location, LocalDateTime dateCreated) {
         super(user, location, dateCreated);
     }
 

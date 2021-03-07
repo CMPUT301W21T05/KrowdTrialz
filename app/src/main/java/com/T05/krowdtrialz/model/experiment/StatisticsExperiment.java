@@ -8,6 +8,10 @@ import com.T05.krowdtrialz.util.Statistics;
  * can be calculated.
  */
 public abstract class StatisticsExperiment extends Experiment {
+
+    public StatisticsExperiment() {
+    }
+
     public StatisticsExperiment(User owner, String description) {
         super(owner, description);
     }
