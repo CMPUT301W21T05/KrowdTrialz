@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.T05.krowdtrialz.R;
@@ -27,6 +28,7 @@ public class SearchActivity extends Activity {
 
     private Database db;
     private ArrayAdapter<Experiment> experimentAdapter;
+    private final String TAG = "SearchActivity";
 
     public SearchActivity() {
         super();
@@ -43,31 +45,34 @@ public class SearchActivity extends Activity {
 
         ListView searchResultsList = findViewById(R.id.search_results_list);
 
+        EditText searchEditText = findViewById(R.id.search_editText);
+
         experimentAdapter = new ExperimentList(this, new ArrayList<>());
 
         searchResultsList.setAdapter(experimentAdapter);
 
-
-
         searchExperimentsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchString = v.findViewById(R.id.search_editText).toString();
+                String searchString = searchEditText.getText().toString();
 
                 if (searchString.isEmpty()) {
-                    Log.e("SeachActivity", "No Query");
+                    Log.e(TAG, "No Query");
                     return;
                 }
 
+                Log.e(TAG, searchString);
                 db.getExperimentsByDescription(searchString, new Database.QueryExperimentsCallback() {
                     @Override
                     public void onSuccess(ArrayList<Experiment> experiments) {
+                        Log.d(TAG, "Got search results" + experiments.toString());
                         experimentAdapter.addAll(experiments);
+                        experimentAdapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onFailure() {
-                        Log.e("SeachActivity", "Error Searching Database");
+                        Log.e(TAG, "Error Searching Database");
                     }
                 });
             }

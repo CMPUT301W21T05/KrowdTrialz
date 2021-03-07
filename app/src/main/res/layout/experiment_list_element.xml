@@ -7,14 +7,14 @@
     android:layout_height="wrap_content">
 
 
-    <TextView
+    <EditText
         android:id="@+id/experiment_list_user"
         android:layout_width="123dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="@string/owner_username" />
 
-    <TextView
+    <EditText
         android:id="@+id/experiment_list_description"
         android:layout_width="194dp"
         android:layout_height="match_parent"

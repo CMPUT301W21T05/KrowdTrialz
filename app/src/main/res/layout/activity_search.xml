@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/experiment_search_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.search.SearchActivity"
-    android:id="@+id/experiment_search_fragment">
+    tools:context=".ui.search.SearchActivity">
 
     <EditText
         android:id="@+id/search_editText"
@@ -15,10 +15,21 @@
         android:layout_marginLeft="44dp"
         android:layout_marginTop="36dp"
         android:ems="10"
-        android:inputType="text"
         android:hint="Search..."
+        android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/search_results_list"
+        android:layout_width="411dp"
+        android:layout_height="603dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/search_experiments_button"
@@ -30,12 +41,4 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/search_editText"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ListView
-        android:id="@+id/search_results_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="39dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_editText" />
 </androidx.constraintlayout.widget.ConstraintLayout>
