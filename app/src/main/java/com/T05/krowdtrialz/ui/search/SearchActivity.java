@@ -38,7 +38,6 @@ public class SearchActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Log.d("asadf", "ASdf");
         db = new Database();
 
         Button searchExperimentsButton = findViewById(R.id.search_experiments_button);
@@ -55,6 +54,8 @@ public class SearchActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String searchString = searchEditText.getText().toString();
+
+                experimentAdapter.clear();
 
                 if (searchString.isEmpty()) {
                     Log.e(TAG, "No Query");

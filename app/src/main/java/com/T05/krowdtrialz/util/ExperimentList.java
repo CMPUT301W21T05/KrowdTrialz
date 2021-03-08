@@ -5,9 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,9 +18,9 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
     private ArrayList<Experiment> experiments;
     private Context context;
 
-    private EditText experimentOwner;
-    private EditText experimentDescription;
-    private CheckBox experimentStatusCheck;
+    private com.google.android.material.textview.MaterialTextView experimentOwner;
+    private com.google.android.material.textview.MaterialTextView experimentDescription;
+    private com.google.android.material.checkbox.MaterialCheckBox experimentStatusCheck;
 
     public ExperimentList (Context context, ArrayList<Experiment> experiments) {
         super(context, 0, experiments);
@@ -46,7 +43,7 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
 
         experimentOwner.setText(experiment.getOwner().getUserName().toString());
         experimentDescription.setText(experiment.getDescription().toString());
-        experimentStatusCheck.setActivated(true); // TODO implement status in experiment class.
+        experimentStatusCheck.setChecked(true); // TODO implement status in experiment class.
         
         return view;
     }
