@@ -6,19 +6,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
+import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
+import com.T05.krowdtrialz.model.experiment.CountExperiment;
+import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
+import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
+import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.util.Database;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class PublishFragment extends Fragment {
 
     private PublishViewModel publishViewModel;
     private final String TAG = "PublishFragment";
 
+    private Class experimentClass;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +71,7 @@ public class PublishFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Publish Experiment Selected");
-                // TODO: capture inputs and create an experiment object.
+                publishExperiment();
             }
         });
 
@@ -76,12 +87,77 @@ public class PublishFragment extends Fragment {
     }
 
     /**
+     * Gets user input data and publishes an experiment to the database.
+     *
+     * @author Ryan Shukla
+     */
+    public void publishExperiment() {
+        View view = getView();
+
+        Database db = Database.getInstance();
+        String id = db.getID();
+        // TODO implement a way to get the current User from Database
+        User owner = new User("", "", "", id);
+
+        EditText descriptionEditText = view.findViewById(R.id.experiment_description_input);
+        String description = descriptionEditText.getText().toString();
+
+        // Get fields that are specific to the type of experiment
+        Experiment experiment;
+        if (experimentClass == MeasurementExperiment.class) {
+            EditText variableNameEditText = view.findViewById(R.id.experiment_variable_name_input);
+            String unit = variableNameEditText.getText().toString();
+            experiment = new MeasurementExperiment(owner, description, unit);
+        } else if (experimentClass == CountExperiment.class) {
+            EditText variableNameEditText = view.findViewById(R.id.experiment_variable_name_input);
+            String unit = variableNameEditText.getText().toString();
+            experiment = new CountExperiment(owner, description, unit);
+        } else if (experimentClass == BinomialExperiment.class) {
+            EditText passUnitEditText = view.findViewById(R.id.binomial_pass_criteria_input);
+            String passUnit = passUnitEditText.getText().toString();
+            EditText failUnitEditText = view.findViewById(R.id.binomial_fail_criteria_input);
+            String failUnit = failUnitEditText.getText().toString();
+            experiment = new BinomialExperiment(owner, description, passUnit, failUnit);
+        } else if (experimentClass == IntegerExperiment.class) {
+            EditText variableNameEditText = view.findViewById(R.id.experiment_variable_name_input);
+            String unit = variableNameEditText.getText().toString();
+            experiment = new IntegerExperiment(owner, description, unit);
+        } else if (experimentClass == null) {
+            Log.e(TAG, "experimentClass null in publishExperiment");
+            return;
+        } else {
+            Log.e(TAG, "experimentClass not recognized in publishExperiment. experimentClass: " + experimentClass.getCanonicalName());
+            return;
+        }
+
+        SwitchMaterial locationRequiredSwitch  = view.findViewById(R.id.geo_location_toggle);
+        boolean locationRequired = locationRequiredSwitch.isChecked();
+        experiment.setLocationRequired(locationRequired);
+
+        EditText minTrialsEditText = view.findViewById(R.id.minimum_trials_input);
+        String minTrialsString = minTrialsEditText.getText().toString();
+        int minTrials = 0;
+        if (minTrialsString.length() != 0) {
+            try {
+                minTrials = Integer.parseInt(minTrialsString);
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Failed to parse minimum trials as integer. "  + e.getMessage());
+            }
+        }
+        experiment.setMinTrials(minTrials);
+
+        db.addExperiment(experiment);
+    }
+
+    /**
      * Update the view to get binomial experiment settings
      *
      * @param view
      *  publish experiment view to operate on
      */
     private void binomialExperimentSelected(View view) {
+        experimentClass = BinomialExperiment.class;
+
         // adjust input box visibility
         view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.VISIBLE);
         view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.VISIBLE);
@@ -99,6 +175,8 @@ public class PublishFragment extends Fragment {
      *  publish experiment view to operate on
      */
     private void countExperimentSelected(View view) {
+        experimentClass = CountExperiment.class;
+
         // Adjust visibility and change hint text
         view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
         view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
@@ -120,6 +198,8 @@ public class PublishFragment extends Fragment {
      *  publish experiment view to operate on
      */
     private void integerExperimentSelected(View view) {
+        experimentClass = IntegerExperiment.class;
+
         // Adjust visibility and change hint text
         view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
         view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
@@ -140,6 +220,8 @@ public class PublishFragment extends Fragment {
      *  publish experiment view to operate on
      */
     private void measurementExperimentSelected(View view) {
+        experimentClass = MeasurementExperiment.class;
+
         // Adjust visibility and change hint text
         view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
         view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
@@ -160,6 +242,8 @@ public class PublishFragment extends Fragment {
      *  publish experiment view to operate on
      */
     private void clearExperimentSettings(View view) {
+        experimentClass = null;
+
         view.findViewById(R.id.binomial_pass_criteria_layout).setVisibility(View.GONE);
         view.findViewById(R.id.binomial_pass_criteria_input).setVisibility(View.GONE);
         view.findViewById(R.id.binomial_fail_criteria_layout).setVisibility(View.GONE);
