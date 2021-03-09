@@ -4,16 +4,23 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.util.Database;
+
+import java.util.ArrayList;
+
 public class SubscribedViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private Database db;
+    private MutableLiveData<ArrayList<Experiment>> experiments;
 
     public SubscribedViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        db = new Database();
+        experiments = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<ArrayList<Experiment>> getExperimentList(){
+        db.getExperimentsBySubscriber();
     }
+
 }

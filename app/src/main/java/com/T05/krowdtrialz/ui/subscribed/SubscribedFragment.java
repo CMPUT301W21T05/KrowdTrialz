@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,23 +15,30 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.T05.krowdtrialz.R;
+import com.T05.krowdtrialz.model.experiment.Experiment;
+
+import java.util.ArrayList;
 
 public class SubscribedFragment extends Fragment {
 
     private SubscribedViewModel subscribedViewModel;
+
+    ListView experimentsList;
+    ArrayAdapter<Experiment> experimentArrayAdapter;
+    ArrayList<Experiment> experimentDataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         subscribedViewModel =
                 new ViewModelProvider(this).get(SubscribedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscribed, container, false);
-        //final TextView textView = root.findViewById(R.id.text_home);
-        subscribedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
-            }
-        });
+
+        experimentsList = root.findViewById(R.id.subscribed_exp_listView);
+
+        experimentDataList = new ArrayList<Experiment>();
+
+        experimentArrayAdapter = new SubscribedCustomList(root.getContext(), experimentDataList);
+
         return root;
     }
 }

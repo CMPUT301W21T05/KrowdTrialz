@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/subscribed_exp_list"
+        android:id="@+id/subscribed_exp_listView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
