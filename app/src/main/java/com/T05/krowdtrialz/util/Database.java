@@ -1,7 +1,7 @@
 package com.T05.krowdtrialz.util;
 
 
-import android.os.HandlerThread;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,46 +13,32 @@ import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.installations.FirebaseInstallations;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-
-import org.apache.commons.math3.analysis.function.Exp;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.stream.Stream;
-
+import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
-import static java.util.stream.Collectors.toList;
 
 
 /**
  * This class handles everything to do with reading and writing to firestore database
+ * This class is a singleton.
  * @author
  *  Furmaan Sekhon and Jacques Leong-Sit
  */
@@ -61,6 +47,105 @@ import static java.util.stream.Collectors.toList;
 public class Database {
 
     private FirebaseFirestore db;
+    private SharedPreferences sharedPreferences;
+
+    // The unique id associated with this device.
+    // This is generated the first time the app is opened.
+    private String localID;
+
+    // The single instance for the singleton pattern
+    private static Database instance = null;
+
+    /**
+     * Initializes the single instance.
+     * This must be called before getInstance() is called.
+     * This should be called from MainActivity when the app starts.
+     * @author Ryan Shukla
+     * @param sharedPreferences The app's instance of SharedPreferences.
+     */
+    public static void initializeInstance(SharedPreferences sharedPreferences) {
+        if (instance == null) {
+            instance = new Database(sharedPreferences);
+        }
+    }
+
+    /**
+     * Gets the single instance of the Database class.
+     * This method throws a RuntimeException if it is called before initializeInstance.
+     * @return The instance.
+     */
+    public static Database getInstance() {
+        if (instance == null) {
+            throw new RuntimeException("Tried to get Database instance before initializeInstance was called");
+        }
+        return instance;
+    }
+
+    /**
+     * This constructor has been made private to enforce the singleton pattern.
+     * @param sharedPreferences The app's instance of SharedPreferences.
+     */
+    private Database(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    /**
+     * This saves unique id after loadID generates a unique id
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    private void saveID() {
+
+        // allows variable to be saved
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String convertedID = gson.toJson(localID); // converts arrayList to json
+        editor.putString("ID",convertedID); // saves converted arrayList
+        editor.apply();
+        Log.d("saveID","Saved"+localID);
+
+    }// end saveID
+
+    /**
+     * This checks if the device already has an id saved if not it generates unique id and saves it to device
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    public void loadID() {
+
+        SharedPreferences sharedP = sharedPreferences;
+        Gson gson = new Gson();
+        String convertedID = sharedP.getString("ID", null);// gets saved arrayList (in json form) null if there is none saved
+        Type type = new TypeToken<String>() {}.getType();
+        localID = gson.fromJson(convertedID, type);
+
+
+        if (localID == null) {
+            UUID uuid = UUID.randomUUID();
+            localID = uuid.toString();
+            verifyID(localID.toString(),new Database.GenerateIDCallback() {
+                @Override
+                public void onSuccess(String id) {
+                    saveID();
+                }
+
+                @Override
+                public void onFailure() {
+                    loadID();
+                }
+            });
+        }
+    }// end loadID
+
+    /**
+     * Gets the unique ID associated with this user's device.
+     * In order for this to return the correct ID, the app should have called loadID first and
+     * allowed ample time to confirm the ID with the database.
+     * @return The ID.
+     */
+    public String getID() {
+        return localID;
+    }
 
     /**
      * This method checks if user already exits in the database and returns a new unique id if they don't
