@@ -12,10 +12,14 @@ import androidx.annotation.NonNull;
 
 import androidx.fragment.app.Fragment;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.util.ExperimentList;
+
+import org.apache.commons.math3.analysis.function.Exp;
 
 import java.util.ArrayList;
 
@@ -26,7 +30,7 @@ public class SubscribedFragment extends Fragment {
 
     ListView experimentsList;
     ArrayAdapter<Experiment> experimentArrayAdapter;
-    ArrayList<Experiment> experimentDataList;
+    ArrayList<Experiment> experimentsDataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,9 +39,17 @@ public class SubscribedFragment extends Fragment {
 
         experimentsList = root.findViewById(R.id.subscribed_exp_listView);
 
-        experimentDataList = new ArrayList<Experiment>();
+        experimentsDataList = new ArrayList<Experiment>();
+        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList);
+        experimentsList.setAdapter(experimentArrayAdapter);
 
-        experimentArrayAdapter = new SubscribedCustomList(root.getContext(), experimentDataList);
+        subscribedViewModel.getExperimentList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Experiment>>() {
+            @Override
+            public void onChanged(ArrayList<Experiment> experiments) {
+                experimentArrayAdapter.clear();
+                experimentArrayAdapter.addAll(experiments);
+            }
+        });
 
         return root;
     }
