@@ -20,7 +20,7 @@ public class SubscribedViewModel extends ViewModel {
     }
 
     public LiveData<ArrayList<Experiment>> getExperimentList(){
-        db.getExperimentsBySubscriber();
+        //TODO: implement
     }
 
 }

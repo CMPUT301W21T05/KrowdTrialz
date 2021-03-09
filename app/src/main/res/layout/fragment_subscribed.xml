@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.subscribed.SubscribedFragment">
+    tools:context=".ui.subscribed.SubscribedFragment"
+    android:id="@+id/subscribed_experiment_fragment">
 
     <TextView
         android:id="@+id/title_subscribed_exp_textView"
@@ -15,18 +16,6 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/search_actionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.98"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
