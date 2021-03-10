@@ -340,6 +340,97 @@ public class Database {
     }// end getExperimentsBySearch
 
     /**
+     * This method returns a list of experiments where given tags match description, owner name, owner username, or owner email, region
+     * and unit(s)
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     * @param tags
+     *  This is the tags to search for
+     */
+    public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
+
+        for (int i = 0; i < tags.size(); i++){
+            tags.set(i, tags.get(i).toLowerCase());
+        }
+
+        ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
+        List<String> tempTags = new ArrayList<String>();
+        boolean dontRun = false;
+        while (!dontRun){
+            // if there are more than 10 tags then take the first 10
+            if (tags.size() > 10){
+                tempTags = tags.subList(0,10);
+                tags.removeAll(tempTags);
+                if (tags.size() == 0){
+                    dontRun = true;
+                }
+            }else{
+                tempTags = tags;
+                dontRun = true;
+            }
+
+            getExperimentsByFirstTenTags(tempTags, dontRun, new QueryExperimentsFirstTenCallback() {
+                @Override
+                public void onSuccess(ArrayList<Experiment> experiments, boolean finished) {
+                   matchingExperiments.addAll(experiments);
+                   if (finished && matchingExperiments.size() > 0) {
+                       callback.onSuccess(matchingExperiments);
+                   }else if (finished){
+                       callback.onFailure();
+                   }
+                }
+
+                @Override
+                public void onFailure(boolean finished) {
+                    if (finished) {
+                        if (matchingExperiments.size() == 0){
+                            callback.onFailure();
+                        }else{
+                            callback.onSuccess(matchingExperiments);
+                        }
+                    }
+                }
+            });
+
+        }
+    }// end getExperimentsByTags
+
+    private void getExperimentsByFirstTenTags (List<String> tags, boolean finished, QueryExperimentsFirstTenCallback callback) {
+        // Process the query for the up to 10 results in the temp tags
+        db = FirebaseFirestore.getInstance();
+        CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
+        allExperimentsCollectionReference.whereArrayContainsAny("tags",tags).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
+                for(QueryDocumentSnapshot document: queryDocumentSnapshots){
+                    Log.d("Test","Iteraded");
+                    if(document.get("type").toString().equals("Binomial")){
+                        BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }else if(document.get("type").toString().equals("Count")){
+                        CountExperiment experiment = document.toObject(CountExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }else if(document.get("type").toString().equals("Measurement")){
+                        MeasurementExperiment experiment = document.toObject(MeasurementExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }else if(document.get("type").toString().equals("Integer")){
+                        IntegerExperiment experiment = document.toObject(IntegerExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }
+                }
+                callback.onSuccess(matchingExperiments, finished);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("test firstten","Made it to onFailure");
+                callback.onFailure(finished);
+            }
+        });
+    }
+
+    /**
      * This method updates an existing experiment in the database based on id
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
@@ -401,6 +492,17 @@ public class Database {
     public interface QueryExperimentsCallback  {
         public void onSuccess(ArrayList<Experiment> experiments);
         public void onFailure();
+
+    }// end GenerateIDCallback
+
+    /**
+     * For this call back onSuccess indicates that at least one result was found
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit and Ryan Shukla
+     */
+    public interface QueryExperimentsFirstTenCallback  {
+        public void onSuccess(ArrayList<Experiment> experiments, boolean finished);
+        public void onFailure(boolean finished);
 
     }// end GenerateIDCallback
 

@@ -3,6 +3,7 @@ package com.T05.krowdtrialz.model.experiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Statistics;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -65,8 +66,8 @@ public abstract class StatisticsExperiment extends Experiment {
      *  Tags to ID this experiment
      */
     @Override
-    public Set<String> getTags() {
-        Set<String> tags = super.getTags();
+    public ArrayList<String> getTags() {
+        ArrayList<String> tags = super.getTags();
         return tags;
     }
 }

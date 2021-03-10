@@ -8,6 +8,7 @@ import com.T05.krowdtrialz.model.user.User;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class ExperimentTest {
         experiment.setMinTrials(12);
         experiment.setRegion("Here");
 
-        Set<String> tags = experiment.getTags();
+        ArrayList<String> tags = experiment.getTags();
         Set<String> expectedTags = new HashSet<>();
 
         expectedTags.addAll(Arrays.asList("here", "joe", "12", "jbeast",
