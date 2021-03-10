@@ -349,53 +349,56 @@ public class Database {
      */
     public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
 
+        boolean overTen = tags.size() > 10;
         for (int i = 0; i < tags.size(); i++){
             tags.set(i, tags.get(i).toLowerCase());
         }
-
         ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
-        List<String> tempTags = new ArrayList<String>();
-        boolean dontRun = false;
-        while (!dontRun){
-            // if there are more than 10 tags then take the first 10
-            if (tags.size() > 10){
-                tempTags = tags.subList(0,10);
-                tags.removeAll(tempTags);
-                if (tags.size() == 0){
-                    dontRun = true;
+        List<String> tags1 = new ArrayList<String>();
+        List<String> tags2 = new ArrayList<String>();
+
+        if (overTen){
+            tags1 = tags.subList(0,10);
+            tags.removeAll(tags1);
+            tags2 = tags;
+        }else{
+            tags1 = tags;
+        }
+        List<String> finalTags = tags2;
+        getExperimentsByFirstTenTags(tags1, new QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                matchingExperiments.addAll(experiments);
+                if ((!overTen) && matchingExperiments.size() > 0) {
+                    callback.onSuccess(matchingExperiments);
+                }else{
+                    getExperimentsByFirstTenTags(finalTags, new QueryExperimentsCallback() {
+                        @Override
+                        public void onSuccess(ArrayList<Experiment> experiments) {
+                            matchingExperiments.addAll(experiments);
+                            if (matchingExperiments.size() > 0) {
+                                callback.onSuccess(matchingExperiments);
+                            }else{
+                                callback.onFailure();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Log.e("Error", "Error occurred during query 2");
+                        }
+                    });
                 }
-            }else{
-                tempTags = tags;
-                dontRun = true;
             }
 
-            getExperimentsByFirstTenTags(tempTags, dontRun, new QueryExperimentsFirstTenCallback() {
-                @Override
-                public void onSuccess(ArrayList<Experiment> experiments, boolean finished) {
-                   matchingExperiments.addAll(experiments);
-                   if (finished && matchingExperiments.size() > 0) {
-                       callback.onSuccess(matchingExperiments);
-                   }else if (finished){
-                       callback.onFailure();
-                   }
-                }
-
-                @Override
-                public void onFailure(boolean finished) {
-                    if (finished) {
-                        if (matchingExperiments.size() == 0){
-                            callback.onFailure();
-                        }else{
-                            callback.onSuccess(matchingExperiments);
-                        }
-                    }
-                }
-            });
-
-        }
+            @Override
+            public void onFailure() {
+                Log.e("Error", "Error occurred during query 1");
+            }
+        });
     }// end getExperimentsByTags
 
-    private void getExperimentsByFirstTenTags (List<String> tags, boolean finished, QueryExperimentsFirstTenCallback callback) {
+    private void getExperimentsByFirstTenTags (List<String> tags, QueryExperimentsCallback callback) {
         // Process the query for the up to 10 results in the temp tags
         db = FirebaseFirestore.getInstance();
         CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
@@ -419,13 +422,13 @@ public class Database {
                         matchingExperiments.add(experiment);
                     }
                 }
-                callback.onSuccess(matchingExperiments, finished);
+                callback.onSuccess(matchingExperiments);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("test firstten","Made it to onFailure");
-                callback.onFailure(finished);
+                callback.onFailure();
             }
         });
     }
@@ -492,17 +495,6 @@ public class Database {
     public interface QueryExperimentsCallback  {
         public void onSuccess(ArrayList<Experiment> experiments);
         public void onFailure();
-
-    }// end GenerateIDCallback
-
-    /**
-     * For this call back onSuccess indicates that at least one result was found
-     * @author
-     *  Furmaan Sekhon and Jacques Leong-Sit and Ryan Shukla
-     */
-    public interface QueryExperimentsFirstTenCallback  {
-        public void onSuccess(ArrayList<Experiment> experiments, boolean finished);
-        public void onFailure(boolean finished);
 
     }// end GenerateIDCallback
 
