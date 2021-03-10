@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Base class to represent all types of experiments.
@@ -116,12 +117,41 @@ public abstract class Experiment implements Tagged {
 
     public void setType(String type) { this.type = type; }
 
+    /**
+     * Adds all strings to a set that a user may want to search by
+     *
+     * @alert
+     *  Make sure all tags are lower case since queries will be put to lower case
+     *
+     * @return tags
+     *  A set of tags that can be searched
+     *
+     */
     @Override
     public Set<String> getTags() {
         Set<String> tags = new HashSet<>();
-        tags.addAll(new ArrayList<String>(Arrays.asList(
-                this.
-        )));
+
+        // add description tags - remove spaces and punctuation then filter any null strings from list
+        if (this.getDescription() != null) {
+            tags.addAll(Arrays.asList(this.getDescription().toLowerCase().split("[^A-Za-z1-9]"))
+                    .stream()
+                    .filter(item -> item != null && !item.isEmpty())
+                    .collect(Collectors.toList()));
+        }
+
+        if (this.getOwner() != null) {
+            tags.addAll(Arrays.asList(this.getOwner().getName().toString().toLowerCase().split(" ")));
+            tags.add(this.getOwner().getUserName().toLowerCase());
+            tags.add(this.getOwner().getEmail().toLowerCase());
+        }
+
+        if (this.getRegion() != null) {
+            tags.add(this.getRegion().toLowerCase());
+        }
+
+        tags.add(this.getType().toLowerCase());
+        tags.add(((Integer) this.getMinTrials()).toString());
+
         return tags;
     }
 }

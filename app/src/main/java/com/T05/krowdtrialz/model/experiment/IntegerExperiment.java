@@ -3,6 +3,8 @@ package com.T05.krowdtrialz.model.experiment;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.user.User;
 
+import java.util.Set;
+
 public class IntegerExperiment extends StatisticsExperiment {
     private String unit;
 
@@ -42,5 +44,20 @@ public class IntegerExperiment extends StatisticsExperiment {
         return getTrials().stream()
                 .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
                 .toArray();
+    }
+
+    /**
+     * Add units to tag set
+     *
+     * @return tags
+     *  Tags to ID this experiment
+     */
+    @Override
+    public Set<String> getTags() {
+        Set<String> tags = super.getTags();
+
+        tags.add(getUnit());
+
+        return tags;
     }
 }
