@@ -349,56 +349,10 @@ public class Database {
      */
     public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
 
-        boolean overTen = tags.size() > 10;
-        for (int i = 0; i < tags.size(); i++){
+        for (int i = 0; i < tags.size(); i++) {
             tags.set(i, tags.get(i).toLowerCase());
         }
-        ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
-        List<String> tags1 = new ArrayList<String>();
-        List<String> tags2 = new ArrayList<String>();
 
-        if (overTen){
-            tags1 = tags.subList(0,10);
-            tags.removeAll(tags1);
-            tags2 = tags;
-        }else{
-            tags1 = tags;
-        }
-        List<String> finalTags = tags2;
-        getExperimentsByFirstTenTags(tags1, new QueryExperimentsCallback() {
-            @Override
-            public void onSuccess(ArrayList<Experiment> experiments) {
-                matchingExperiments.addAll(experiments);
-                if ((!overTen) && matchingExperiments.size() > 0) {
-                    callback.onSuccess(matchingExperiments);
-                }else{
-                    getExperimentsByFirstTenTags(finalTags, new QueryExperimentsCallback() {
-                        @Override
-                        public void onSuccess(ArrayList<Experiment> experiments) {
-                            matchingExperiments.addAll(experiments);
-                            if (matchingExperiments.size() > 0) {
-                                callback.onSuccess(matchingExperiments);
-                            }else{
-                                callback.onFailure();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Log.e("Error", "Error occurred during query 2");
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure() {
-                Log.e("Error", "Error occurred during query 1");
-            }
-        });
-    }// end getExperimentsByTags
-
-    private void getExperimentsByFirstTenTags (List<String> tags, QueryExperimentsCallback callback) {
         // Process the query for the up to 10 results in the temp tags
         db = FirebaseFirestore.getInstance();
         CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
@@ -407,7 +361,6 @@ public class Database {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
                 for(QueryDocumentSnapshot document: queryDocumentSnapshots){
-                    Log.d("Test","Iteraded");
                     if(document.get("type").toString().equals("Binomial")){
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                         matchingExperiments.add(experiment);
@@ -422,16 +375,21 @@ public class Database {
                         matchingExperiments.add(experiment);
                     }
                 }
-                callback.onSuccess(matchingExperiments);
+
+                if (matchingExperiments.size() > 0){
+                    callback.onSuccess(matchingExperiments);
+                }else{
+                    callback.onFailure();
+                }
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d("test firstten","Made it to onFailure");
                 callback.onFailure();
             }
         });
-    }
+    }// end getExperimentsByTags
 
     /**
      * This method updates an existing experiment in the database based on id

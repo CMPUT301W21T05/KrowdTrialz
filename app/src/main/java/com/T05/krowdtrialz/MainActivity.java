@@ -49,47 +49,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-//        IntegerExperiment experiment = mockIntegerExperiment();
-//        experiment.setRegion("North America");
-//        db.addExperiment(experiment);
-
-        ArrayList<String> tags = new ArrayList<>();
-        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashfkajshdfkjashfkjsadhfjkshadfjkhsadkljf");
-        tags.add("billy");
-        tags.add("a");
-        tags.add("b");
-        tags.add("c");
-        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashf1kajshdfkjashfkjsadhfjkshadfjkhsadkljf");
-        tags.add("biasdfl345345ly");
-        tags.add("boasdft435b");
-        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashfk2ajshdfkjashfkjsadhfjkshadfjkhsadkljf");
-        tags.add("bi3l2ly");
-        tags.add("bo3b");
-        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashfkaj3shdfkjashfkjsadhfjkshadfjkhsadkljf");
-        tags.add("bi32lly");
-        tags.add("bo2b");
-        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashfkajiu5667345yhyey435shdfkjashfkjsadhfjkshadfjkhsadkljf");
-        tags.add("bil123ly");
-        tags.add("b543ob");
-        tags.add("asdf7jaskjdfhaskjdhfakjsdhfkjashfkajshdfkjashfkjsadhfjkshadfjkhsadkljf");
-        tags.add("bi987lly");
-        tags.add("bob");
-        db.getExperimentsByTags(tags, new Database.QueryExperimentsCallback() {
-            @Override
-            public void onSuccess(ArrayList<Experiment> experiments) {
-                Log.d("test Tags","Made it to onSuccess");
-                for(Experiment experiment : experiments){
-                    Log.d("test Tags",experiment.getId());
-                }
-
-            }
-
-            @Override
-            public void onFailure() {
-                Log.e("Failure","Failure Tags");
-            }
-        });
-
     }
 
     /**
@@ -141,15 +100,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }// end loadID
-
-    public User mockUser () {
-        User user = new User("Billy James","jamesb","billyjames@gmail.com", "bb0ee07d-0669-45e7-8d25-f3ca3f280b24");
-        return user;
-    }
-
-    public IntegerExperiment mockIntegerExperiment (){
-        IntegerExperiment experiment = new IntegerExperiment(mockUser(),"Test Integer experiment", "Eggs dropped");
-        return experiment;
-    }
 
 }// end MainActivity
