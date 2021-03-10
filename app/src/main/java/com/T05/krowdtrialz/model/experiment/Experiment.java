@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import com.T05.krowdtrialz.model.interfaces.Tagged;
 import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
@@ -8,12 +9,15 @@ import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.model.trial.Trial;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Base class to represent all types of experiments.
  */
-public abstract class Experiment {
+public abstract class Experiment implements Tagged {
     private String id;
     private User owner;
     private ArrayList<Trial> trials;
@@ -111,4 +115,13 @@ public abstract class Experiment {
     public String getType() { return type; }
 
     public void setType(String type) { this.type = type; }
+
+    @Override
+    public Set<String> getTags() {
+        Set<String> tags = new HashSet<>();
+        tags.addAll(new ArrayList<String>(Arrays.asList(
+                this.
+        )));
+        return tags;
+    }
 }
