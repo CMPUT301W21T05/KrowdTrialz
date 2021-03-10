@@ -132,21 +132,21 @@ public abstract class Experiment implements Tagged {
         Set<String> tags = new HashSet<>();
 
         // add description tags - remove spaces and punctuation then filter any null strings from list
-        if (this.getDescription() != null) {
-            tags.addAll(Arrays.asList(this.getDescription().toLowerCase().split("[^A-Za-z1-9]"))
+        if (getDescription() != null) {
+            tags.addAll(Arrays.asList(getDescription().toLowerCase().split("[^A-Za-z1-9]"))
                     .stream()
                     .filter(item -> item != null && !item.isEmpty())
                     .collect(Collectors.toList()));
         }
 
-        if (this.getOwner() != null) {
-            tags.addAll(Arrays.asList(this.getOwner().getName().toString().toLowerCase().split(" ")));
-            tags.add(this.getOwner().getUserName().toLowerCase());
-            tags.add(this.getOwner().getEmail().toLowerCase());
+        if (getOwner() != null) {
+            tags.addAll(Arrays.asList(getOwner().getName().toString().toLowerCase().split(" ")));
+            tags.add(getOwner().getUserName().toLowerCase());
+            tags.add(getOwner().getEmail().toLowerCase());
         }
 
-        if (this.getRegion() != null) {
-            tags.add(this.getRegion().toLowerCase());
+        if (getRegion() != null) {
+            tags.add(getRegion().toLowerCase());
         }
 
         tags.add(this.getType().toLowerCase());
