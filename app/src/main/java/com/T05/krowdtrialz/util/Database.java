@@ -63,7 +63,7 @@ public class Database {
     private FirebaseFirestore db;
 
     /**
-     * This method checks if user already exits in the database and returns a new unique id if they don't
+     * This method checks if user already exits in the database* and returns a new unique id if they don't
      * or existing one if they do
      * @return
      *  valid unique id

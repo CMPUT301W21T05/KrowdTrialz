@@ -24,11 +24,11 @@ public class BinomialTrial extends Trial {
         super(user, location, dateCreated);
     }
 
-    public Integer getPassCount() {
+    public int getPassCount() {
         return passCount;
     }
 
-    public Integer getFailCount() {
+    public int getFailCount() {
         return failCount;
     }
 

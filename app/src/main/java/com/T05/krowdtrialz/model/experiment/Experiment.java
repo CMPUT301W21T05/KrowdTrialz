@@ -49,7 +49,7 @@ public abstract class Experiment implements Tagged {
 
     public void setId(String id) { this.id = id; }
 
-    public Collection<Trial> getTrials() {
+    public ArrayList<Trial> getTrials() {
         return trials;
     }
 
@@ -57,7 +57,7 @@ public abstract class Experiment implements Tagged {
         trials.add(trial);
     }
 
-    public Collection<Barcode> getBarcodes() {
+    public ArrayList<Barcode> getBarcodes() {
         return barcodes;
     }
 
@@ -65,7 +65,7 @@ public abstract class Experiment implements Tagged {
         barcodes.add(barcode);
     }
 
-    public Collection<QRCode> getQrCodes() {
+    public ArrayList<QRCode> getQrCodes() {
         return qrCodes;
     }
 
