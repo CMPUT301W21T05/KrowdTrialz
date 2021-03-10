@@ -15,14 +15,12 @@ import java.util.Set;
 import static org.junit.Assert.*;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Test Experiment classes
  */
 public class ExperimentTest {
 
     public User mockUser () {
-        User user = new User("Joe Bob","jbeast","jb@gmail.com", "123");
+        User user = new User("Joe Bob","jbeast","jb@gmail.com","123");
         return user;
     }
 
@@ -34,7 +32,7 @@ public class ExperimentTest {
     @Test
     public void tags_areCorrect() {
         MeasurementExperiment experiment = mockMeasurementExperiment();
-        
+
         experiment.setMinTrials(12);
         experiment.setRegion("Here");
 
