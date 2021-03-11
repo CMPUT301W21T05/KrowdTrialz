@@ -103,7 +103,7 @@ public class Database {
         String convertedID = gson.toJson(localID); // converts arrayList to json
         editor.putString("ID",convertedID); // saves converted arrayList
         editor.apply();
-        Log.d("saveID","Saved"+localID);
+        Log.d("saveID","Saved ID: "+localID);
 
     }// end saveID
 
@@ -133,7 +133,7 @@ public class Database {
 
             verifyUserID(deviceUser, new Database.GenerateIDCallback() {
                 @Override
-                public void onSuccess(String id) {
+                public void onSuccess(User user) {
                     saveID();
                 }
 
@@ -149,6 +149,8 @@ public class Database {
                 @Override
                 public void onSuccess(User user) {
                     deviceUser = user;
+                    Log.d(TAG, "Successfully retrieved existing user information from database."
+                            + " ID: " + deviceUser.getId());
                 }
 
                 @Override
@@ -202,7 +204,7 @@ public class Database {
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
 
-        Query query = userCollectionReference.whereEqualTo("User.id", id); // Create a query to check if ID exists in the database already
+        Query query = userCollectionReference.whereEqualTo("id", id); // Create a query to check if ID exists in the database already
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -232,7 +234,7 @@ public class Database {
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
 
-        Query query = userCollectionReference.whereEqualTo("User.id", user.getId()); // Create a query to check if ID exists in the database already
+        Query query = userCollectionReference.whereEqualTo("id", user.getId()); // Create a query to check if ID exists in the database already
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -240,16 +242,14 @@ public class Database {
                 if(task.getResult().isEmpty()) {
                     // create new user in the database
                     // This means the id generated is unique
-                    HashMap<String, Object> newUser = new HashMap<>();
-                    newUser.put("User", user);
                     userCollectionReference
                             .document(user.getId())
-                            .set(newUser)
+                            .set(user)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "Data has been added");
-                                    callback.onSuccess(user.getId());
+                                    callback.onSuccess(user);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -547,7 +547,7 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit and Ryan Shukla
      */
     public interface GenerateIDCallback  {
-        public void onSuccess(String id);
+        public void onSuccess(User user);
         public void onFailure();
 
     }// end GenerateIDCallback
