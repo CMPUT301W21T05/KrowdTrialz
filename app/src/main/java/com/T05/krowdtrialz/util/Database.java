@@ -344,10 +344,13 @@ public class Database {
      * and unit(s)
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
-     * @param tags
+     * @param tagSet
      *  This is the tags to search for
      */
-    public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
+    public void getExperimentsByTags (Set<String> tagSet, QueryExperimentsCallback callback) {
+
+        ArrayList<String> tags = new ArrayList<>();
+        tags.addAll(tagSet);
 
         for (int i = 0; i < tags.size(); i++) {
             tags.set(i, tags.get(i).toLowerCase());

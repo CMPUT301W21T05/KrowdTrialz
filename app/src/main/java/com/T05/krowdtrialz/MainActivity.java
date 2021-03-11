@@ -27,7 +27,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +51,34 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        Set<String> tags = new HashSet<>();
+        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashfkajshdfkjashfkjsadhfjkshadfjkhsadkljf");
+        tags.add("billy");
+        tags.add("a");
+        tags.add("b");
+        tags.add("c");
+        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashf1kajshdfkjashfkjsadhfjkshadfjkhsadkljf");
+        tags.add("biasdfl345345ly");
+        tags.add("boasdft435b");
+        tags.add("asdfjaskjdfhaskjdhfakjsdhfkjashfk2ajshdfkjashfkjsadhfjkshadfjkhsadkljf");
+        tags.add("bob");
+        db.getExperimentsByTags(tags, new Database.QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                Log.d("test Tags","Made it to onSuccess");
+                for(Experiment experiment : experiments){
+                    Log.d("test Tags",experiment.getId());
+                }
+
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("Failure","Failure Tags");
+            }
+        });
+
 
     }
 

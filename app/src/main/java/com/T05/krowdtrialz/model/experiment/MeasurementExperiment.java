@@ -45,8 +45,8 @@ public class MeasurementExperiment extends StatisticsExperiment {
      *  Tags to ID this experiment
      */
     @Override
-    public ArrayList<String> getTags() {
-        ArrayList<String> tags = super.getTags();
+    public Set<String> getTags() {
+        Set<String> tags = super.getTags();
 
         tags.add(getUnit());
 

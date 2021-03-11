@@ -66,8 +66,8 @@ public abstract class StatisticsExperiment extends Experiment {
      *  Tags to ID this experiment
      */
     @Override
-    public ArrayList<String> getTags() {
-        ArrayList<String> tags = super.getTags();
+    public Set<String> getTags() {
+        Set<String> tags = super.getTags();
         return tags;
     }
 }
