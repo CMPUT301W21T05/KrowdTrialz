@@ -140,17 +140,17 @@ public abstract class Experiment implements Tagged {
         }
 
         if (getOwner() != null) {
-            tags.addAll(Arrays.asList(getOwner().getName().toString().toLowerCase().split(" ")));
+            tags.addAll(Arrays.asList(getOwner().getName().toLowerCase().split(" ")));
             tags.add(getOwner().getUserName().toLowerCase());
             tags.add(getOwner().getEmail().toLowerCase());
         }
 
         if (getRegion() != null) {
-            tags.add(getRegion().toLowerCase());
+            tags.addAll(Arrays.asList(getRegion().toLowerCase().split(" ")));
         }
 
-        tags.add(this.getType().toLowerCase());
-        tags.add(((Integer) this.getMinTrials()).toString());
+        tags.add(getType().toLowerCase());
+        tags.add(((Integer) getMinTrials()).toString());
 
         return tags;
     }

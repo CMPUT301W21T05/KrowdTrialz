@@ -34,13 +34,13 @@ public class ExperimentTest {
         MeasurementExperiment experiment = mockMeasurementExperiment();
 
         experiment.setMinTrials(12);
-        experiment.setRegion("Here");
+        experiment.setRegion("NOrth America");
 
         Set<String> tags = experiment.getTags();
         Set<String> expectedTags = new HashSet<>();
 
-        expectedTags.addAll(Arrays.asList("here", "joe", "12", "jbeast",
-                "test", "experiment", "bob", "jb@gmail.com", "cm", "measurement"));
+        expectedTags.addAll(Arrays.asList("joe", "12", "jbeast", "measurement",
+                "test", "experiment", "bob", "jb@gmail.com", "cm", "north", "america"));
 
         assertEquals(expectedTags, tags);
     }
