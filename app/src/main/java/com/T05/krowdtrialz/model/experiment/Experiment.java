@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.interfaces.Tagged;
 import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
@@ -128,7 +130,7 @@ public abstract class Experiment implements Tagged {
      *
      */
     @Override
-    public Set<String> getTags() {
+    public ArrayList<String> getTags() {
         Set<String> tags = new HashSet<>();
 
         // add description tags - remove spaces and punctuation then filter any null strings from list
@@ -152,6 +154,9 @@ public abstract class Experiment implements Tagged {
         tags.add(this.getType().toLowerCase());
         tags.add(((Integer) this.getMinTrials()).toString());
 
-        return tags;
+        ArrayList<String> tagsList = new ArrayList<>();
+        tagsList.addAll(tags);
+
+        return tagsList;
     }
 }
