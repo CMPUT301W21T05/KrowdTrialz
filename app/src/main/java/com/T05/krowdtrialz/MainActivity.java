@@ -1,8 +1,7 @@
 package com.T05.krowdtrialz;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -10,7 +9,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.T05.krowdtrialz.util.Database;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        // Initialize the Database instance.
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_P", MODE_PRIVATE);
+        Database.initializeInstance(sharedPreferences);
+        db = Database.getInstance();
+        // Generate a new user with unique ID or fetch information for an existing user.
+        db.initializeDeviceUser();
     }
 
-}
+}// end MainActivity

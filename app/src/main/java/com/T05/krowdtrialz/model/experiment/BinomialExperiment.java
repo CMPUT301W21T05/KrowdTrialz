@@ -4,16 +4,22 @@ import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 
+import java.util.Set;
+
 public class BinomialExperiment extends Experiment {
     // The name of a fail event. (e.g. "heads")
     private String passUnit;
     // The name of a fail event. (e.g. "tails")
     private String failUnit;
 
+    public BinomialExperiment() {
+    }
+
     public BinomialExperiment(User owner, String description, String passUnit, String failUnit) {
         super(owner, description);
         this.passUnit = passUnit;
         this.failUnit = failUnit;
+        this.setType("Binomial");
     }
 
     public String getPassUnit() {
@@ -30,6 +36,22 @@ public class BinomialExperiment extends Experiment {
 
     public void setFailUnit(String failUnit) {
         this.failUnit = failUnit;
+    }
+
+    /**
+     * Add units to tag set
+     *
+     * @return tags
+     *  Tags to ID this experiment
+     */
+    @Override
+    public Set<String> getTags() {
+        Set<String> tags = super.getTags();
+
+        tags.add(getFailUnit());
+        tags.add(getPassUnit());
+
+        return tags;
     }
 
     /**

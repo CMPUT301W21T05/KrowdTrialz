@@ -3,13 +3,19 @@ package com.T05.krowdtrialz.model.experiment;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.user.User;
 
+import java.util.Set;
+
 public class MeasurementExperiment extends StatisticsExperiment {
     // The name of the unit of measurement for trials in this experiment.
     private String unit;
 
+    public MeasurementExperiment() {
+    }
+
     public MeasurementExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
+        this.setType("Measurement");
     }
 
     public String getUnit() {
@@ -29,5 +35,20 @@ public class MeasurementExperiment extends StatisticsExperiment {
         return getTrials().stream()
                 .mapToDouble(trial -> ((MeasurementTrial) trial).getMeasurementValue())
                 .toArray();
+    }
+
+    /**
+     * Add units to tag set
+     *
+     * @return tags
+     *  Tags to ID this experiment
+     */
+    @Override
+    public Set<String> getTags() {
+        Set<String> tags = super.getTags();
+
+        tags.add(getUnit());
+
+        return tags;
     }
 }
