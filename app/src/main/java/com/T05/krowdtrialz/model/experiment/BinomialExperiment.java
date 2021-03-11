@@ -1,10 +1,13 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class BinomialExperiment extends Experiment {
@@ -46,13 +49,19 @@ public class BinomialExperiment extends Experiment {
      *  Tags to ID this experiment
      */
     @Override
-    public Set<String> getTags() {
-        Set<String> tags = super.getTags();
+    public ArrayList<String> getTags() {
+        ArrayList<String> tags = super.getTags();
 
         tags.add(getFailUnit());
         tags.add(getPassUnit());
 
-        return tags;
+        Set<String> tagSet = new HashSet<>();
+        tagSet.addAll(tags);
+
+        ArrayList<String> returnTags = new ArrayList<>();
+        returnTags.addAll(tagSet);
+
+        return returnTags;
     }
 
     /**

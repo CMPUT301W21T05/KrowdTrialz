@@ -7,5 +7,5 @@ import java.util.Set;
  * Implementing classes maintain a set of tag strings
  */
 public interface Tagged {
-    public Set<String> getTags();
+    public ArrayList<String> getTags();
 }
