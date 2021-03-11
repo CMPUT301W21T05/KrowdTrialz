@@ -70,7 +70,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
         experimentAdapter.clear();
 
         Log.e(TAG, "Query: " + searchString);
-        db.getExperimentsByDescription(searchString, new Database.QueryExperimentsCallback() {
+        db.getExperimentsByTags(searchString, new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
                 Log.d(TAG, "Got search results" + experiments.toString());
