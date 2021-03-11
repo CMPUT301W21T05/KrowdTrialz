@@ -3,6 +3,9 @@ package com.T05.krowdtrialz.model.experiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Statistics;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 /**
  * Super class for types of experiments for whiche statistics such as mean and standard deviation
  * can be calculated.
@@ -54,5 +57,17 @@ public abstract class StatisticsExperiment extends Experiment {
     public double getMean() {
         double[] data = getDataAsArray();
         return Statistics.mean(getDataAsArray());
+    }
+
+    /**
+     * Add information to tags
+     *
+     * @return tags
+     *  Tags to ID this experiment
+     */
+    @Override
+    public ArrayList<String> getTags() {
+        ArrayList<String> tags = super.getTags();
+        return tags;
     }
 }

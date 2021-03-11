@@ -8,7 +8,7 @@
 
 
     <EditText
-        android:id="@+id/measure_edit_text"
+        android:id="@+id/measure_editText"
         android:layout_width="151dp"
         android:layout_height="47dp"
         android:hint="cm"
@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.122" />
 
     <TextView
-        android:id="@+id/measure_text_view"
+        android:id="@+id/measure_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/measure_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/measure_editText" />
 
     <Button
         android:id="@+id/measure_submit_button"
