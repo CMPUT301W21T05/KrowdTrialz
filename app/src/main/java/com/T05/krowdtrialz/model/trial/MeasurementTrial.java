@@ -25,4 +25,8 @@ public class MeasurementTrial extends Trial {
     public Float getMeasurementValue() {
         return measurementValue;
     }
+
+    public void setMeasurementValue(Float measurementValue) {
+        this.measurementValue = measurementValue;
+    }
 }

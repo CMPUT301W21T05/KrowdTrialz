@@ -26,16 +26,17 @@ public class ExperimentDetailsOwnerActivityTest {
 
     @Before
     public void setUp() {
-        Solo.Config config = new Solo.Config();
-        config.screenshotSavePath = "content://com.android.providers.media.documents/document/images_root";
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), config,rule.getActivity());
+
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
     }
 
     @Test
-    public void testHistogram() {
+    public void testGraphs() throws InterruptedException {
         solo.waitForText("View Contributors");
-        solo.takeScreenshot("HISTOGRAMSCREENSHOT");
+        solo.wait(100000);
     }
+
+
 
     @After
     public void tearDown() {
