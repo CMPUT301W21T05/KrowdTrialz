@@ -3,6 +3,7 @@ package com.T05.krowdtrialz.model.experiment;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.user.User;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class MeasurementExperiment extends StatisticsExperiment {
@@ -44,8 +45,8 @@ public class MeasurementExperiment extends StatisticsExperiment {
      *  Tags to ID this experiment
      */
     @Override
-    public Set<String> getTags() {
-        Set<String> tags = super.getTags();
+    public ArrayList<String> getTags() {
+        ArrayList<String> tags = super.getTags();
 
         tags.add(getUnit());
 

@@ -1,7 +1,16 @@
 package com.T05.krowdtrialz;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.T05.krowdtrialz.ui.search.SearchActivity;
+import com.T05.krowdtrialz.util.Database;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -9,8 +18,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.T05.krowdtrialz.util.Database;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+        
+        final FloatingActionButton openSearchView = (FloatingActionButton) findViewById(R.id.search_action_button);
+        openSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("SUBSCRIBED FRAGMENT", "Clicked Search");
+                Intent intent = new Intent(navView.getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Initialize the Database instance.
         SharedPreferences sharedPreferences = getSharedPreferences("shared_P", MODE_PRIVATE);

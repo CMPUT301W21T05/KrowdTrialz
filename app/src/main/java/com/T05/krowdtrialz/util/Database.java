@@ -499,6 +499,58 @@ public class Database {
     }// end getExperimentsBySearch
 
     /**
+     * This method returns a list of experiments where given tags match description, owner name, owner username, or owner email, region
+     * and unit(s)
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     * @param tags
+     *  This is the tags to search for
+     */
+    public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
+
+        for (int i = 0; i < tags.size(); i++) {
+            tags.set(i, tags.get(i).toLowerCase());
+        }
+
+        // Process the query for the up to 10 results in the temp tags
+        db = FirebaseFirestore.getInstance();
+        CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
+        allExperimentsCollectionReference.whereArrayContainsAny("tags",tags).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
+                for(QueryDocumentSnapshot document: queryDocumentSnapshots){
+                    if(document.get("type").toString().equals("Binomial")){
+                        BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }else if(document.get("type").toString().equals("Count")){
+                        CountExperiment experiment = document.toObject(CountExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }else if(document.get("type").toString().equals("Measurement")){
+                        MeasurementExperiment experiment = document.toObject(MeasurementExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }else if(document.get("type").toString().equals("Integer")){
+                        IntegerExperiment experiment = document.toObject(IntegerExperiment.class);
+                        matchingExperiments.add(experiment);
+                    }
+                }
+
+                if (matchingExperiments.size() > 0){
+                    callback.onSuccess(matchingExperiments);
+                }else{
+                    callback.onFailure();
+                }
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure();
+            }
+        });
+    }// end getExperimentsByTags
+
+    /**
      * This method updates an existing experiment in the database based on id
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
