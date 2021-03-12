@@ -43,7 +43,7 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
 
         experimentOwner.setText(experiment.getOwner().getUserName().toString());
         experimentDescription.setText(experiment.getDescription().toString());
-        experimentStatusCheck.setChecked(true); // TODO implement status in experiment class.
+        experimentStatusCheck.setChecked(experiment.getStatus());
         
         return view;
     }

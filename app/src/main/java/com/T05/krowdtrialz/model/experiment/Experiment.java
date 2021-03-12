@@ -26,9 +26,13 @@ public abstract class Experiment implements Tagged {
     private String region;
     private String type;
     private boolean locationRequired = false;
+    public boolean status;
     private int minTrials = 0;
     private ArrayList<Barcode> barcodes;
     private ArrayList<QRCode> qrCodes;
+
+    private final boolean active = true;
+    private final boolean inactive = false;
 
     public Experiment() {
     }
@@ -41,6 +45,7 @@ public abstract class Experiment implements Tagged {
         trials = new ArrayList<Trial>();
         barcodes = new ArrayList<Barcode>();
         qrCodes = new ArrayList<QRCode>();
+        status = active;
     }
 
     public String getId() {
@@ -97,6 +102,10 @@ public abstract class Experiment implements Tagged {
         this.region = region;
     }
 
+    public boolean getStatus() {
+        return status;
+    }
+
     public boolean isLocationRequired() {
         return locationRequired;
     }
@@ -116,6 +125,14 @@ public abstract class Experiment implements Tagged {
     public String getType() { return type; }
 
     public void setType(String type) { this.type = type; }
+
+    public void setActive() {
+        status = active;
+    }
+
+    public void setInactive() {
+        status = inactive;
+    }
 
     /**
      * Adds all strings to a set that a user may want to search by
