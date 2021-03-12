@@ -1,16 +1,13 @@
 package com.T05.krowdtrialz.model.experiment;
 
 import com.T05.krowdtrialz.model.interfaces.Tagged;
-import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-import com.T05.krowdtrialz.model.trial.Trial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -154,5 +151,30 @@ public abstract class Experiment implements Tagged {
 
         ArrayList<String> tagsList = new ArrayList<>(tags);
         return tagsList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Experiment)) {
+            return false;
+        }
+
+        Experiment c = (Experiment) o;
+
+        return getId().equals(c.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0x05;
+        result = 31 * result + getId().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getType().hashCode();
+        return result;
     }
 }
