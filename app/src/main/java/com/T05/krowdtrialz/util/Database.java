@@ -30,7 +30,9 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
@@ -512,42 +514,55 @@ public class Database {
             tags.set(i, tags.get(i).toLowerCase());
         }
 
-        // Process the query for the up to 10 results in the temp tags
         db = FirebaseFirestore.getInstance();
-        CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
-        allExperimentsCollectionReference.whereArrayContainsAny("tags",tags).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                ArrayList<Experiment> matchingExperiments = new ArrayList<Experiment>();
-                for(QueryDocumentSnapshot document: queryDocumentSnapshots){
-                    if(document.get("type").toString().equals("Binomial")){
-                        BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
-                        matchingExperiments.add(experiment);
-                    }else if(document.get("type").toString().equals("Count")){
-                        CountExperiment experiment = document.toObject(CountExperiment.class);
-                        matchingExperiments.add(experiment);
-                    }else if(document.get("type").toString().equals("Measurement")){
-                        MeasurementExperiment experiment = document.toObject(MeasurementExperiment.class);
-                        matchingExperiments.add(experiment);
-                    }else if(document.get("type").toString().equals("Integer")){
-                        IntegerExperiment experiment = document.toObject(IntegerExperiment.class);
-                        matchingExperiments.add(experiment);
-                    }
-                }
 
-                if (matchingExperiments.size() > 0){
-                    callback.onSuccess(matchingExperiments);
-                }else{
+        Set<Experiment> resultSet = new HashSet<>();
+
+        CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
+
+        for (String tag: tags) {
+            allExperimentsCollectionReference.whereArrayContains("tags", tag).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    Set<Experiment> matchingExperiments = new HashSet<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        if (document.get("type").toString().equals("Binomial")) {
+                            BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
+                            matchingExperiments.add(experiment);
+                        } else if (document.get("type").toString().equals("Count")) {
+                            CountExperiment experiment = document.toObject(CountExperiment.class);
+                            matchingExperiments.add(experiment);
+                        } else if (document.get("type").toString().equals("Measurement")) {
+                            MeasurementExperiment experiment = document.toObject(MeasurementExperiment.class);
+                            matchingExperiments.add(experiment);
+                        } else if (document.get("type").toString().equals("Integer")) {
+                            IntegerExperiment experiment = document.toObject(IntegerExperiment.class);
+                            matchingExperiments.add(experiment);
+                        }
+                    }
+
+                    if (resultSet.isEmpty()) {
+                        resultSet.addAll(matchingExperiments);
+                    } else {
+                        resultSet.retainAll(matchingExperiments);
+                    }
+
+                    if (matchingExperiments.size() > 0) {
+                        ArrayList<Experiment> output = new ArrayList<>();
+                        output.addAll(resultSet);
+                        callback.onSuccess(output);
+                    } else {
+                        callback.onFailure();
+                    }
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
                     callback.onFailure();
                 }
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                callback.onFailure();
-            }
-        });
+            });
+        }
     }// end getExperimentsByTags
 
     /**

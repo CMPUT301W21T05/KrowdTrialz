@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.interfaces.Tagged;
 import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
@@ -154,5 +156,30 @@ public abstract class Experiment implements Tagged {
 
         ArrayList<String> tagsList = new ArrayList<>(tags);
         return tagsList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Experiment)) {
+            return false;
+        }
+
+        Experiment c = (Experiment) o;
+
+        return getId().equals(c.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0x05;
+        result = 31 * result + getId().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getType().hashCode();
+        return result;
     }
 }

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        
+
         final FloatingActionButton openSearchView = (FloatingActionButton) findViewById(R.id.search_action_button);
         openSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
