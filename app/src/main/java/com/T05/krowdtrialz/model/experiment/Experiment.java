@@ -1,18 +1,13 @@
 package com.T05.krowdtrialz.model.experiment;
 
-import android.util.Log;
-
 import com.T05.krowdtrialz.model.interfaces.Tagged;
-import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-import com.T05.krowdtrialz.model.trial.Trial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
