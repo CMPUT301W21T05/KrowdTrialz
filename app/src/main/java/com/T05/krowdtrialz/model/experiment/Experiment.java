@@ -126,10 +126,16 @@ public abstract class Experiment implements Tagged {
 
     public void setType(String type) { this.type = type; }
 
+    /**
+     * Set experiment status to active
+     */
     public void setActive() {
         status = active;
     }
 
+    /**
+     * Set experiment status to inactive
+     */
     public void setInactive() {
         status = inactive;
     }
