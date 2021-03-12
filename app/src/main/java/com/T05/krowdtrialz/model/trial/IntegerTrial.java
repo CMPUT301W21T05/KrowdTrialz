@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * instance.
  * */
 public class IntegerTrial extends Trial {
-    private Integer value;
+    private int value;
 
     public IntegerTrial(User user, Location location) {
         super(user, location);
@@ -24,7 +24,11 @@ public class IntegerTrial extends Trial {
         super(user, location, dateCreated);
     }
 
-    public Integer getValue() {
+    public int getValue() {
         return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 }

@@ -1,7 +1,7 @@
 package com.T05.krowdtrialz.util;
 
 
-import android.os.HandlerThread;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,46 +13,32 @@ import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.installations.FirebaseInstallations;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-
-import org.apache.commons.math3.analysis.function.Exp;
-
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.stream.Stream;
-
+import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
-import static java.util.stream.Collectors.toList;
 
 
 /**
  * This class handles everything to do with reading and writing to firestore database
+ * This class is a singleton.
  * @author
  *  Furmaan Sekhon and Jacques Leong-Sit
  */
@@ -61,19 +47,194 @@ import static java.util.stream.Collectors.toList;
 public class Database {
 
     private FirebaseFirestore db;
+    private SharedPreferences sharedPreferences;
+
+    // The user with a unique id associated with this device.
+    // This is populated when the app is opened.
+    private User deviceUser;
+
+    // The single instance for the singleton pattern
+    private static Database instance = null;
 
     /**
-     * This method checks if user already exits in the database and returns a new unique id if they don't
-     * or existing one if they do
-     * @return
-     *  valid unique id
+     * Initializes the single instance.
+     * This must be called before getInstance() is called.
+     * This should be called from MainActivity when the app starts.
+     * @author Ryan Shukla
+     * @param sharedPreferences The app's instance of SharedPreferences.
      */
-    public void verifyID(String localID, GenerateIDCallback callback) {
+    public static void initializeInstance(SharedPreferences sharedPreferences) {
+        if (instance == null) {
+            instance = new Database(sharedPreferences);
+        }
+    }
+
+    /**
+     * Gets the single instance of the Database class.
+     * This method throws a RuntimeException if it is called before initializeInstance.
+     * @return The instance.
+     */
+    public static Database getInstance() {
+        if (instance == null) {
+            throw new RuntimeException("Tried to get Database instance before initializeInstance was called");
+        }
+        return instance;
+    }
+
+    /**
+     * This constructor has been made private to enforce the singleton pattern.
+     * @param sharedPreferences The app's instance of SharedPreferences.
+     */
+    private Database(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+
+    /**
+     * This saves unique id after initializeDeviceUser generates a unique id
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    private void saveID() {
+
+        // allows variable to be saved
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String localID = deviceUser.getId();
+        String convertedID = gson.toJson(localID); // converts arrayList to json
+        editor.putString("ID",convertedID); // saves converted arrayList
+        editor.apply();
+        Log.d("saveID","Saved ID: "+localID);
+
+    }// end saveID
+
+    /**
+     * This initializes a User instance with a unique id associated with this device.
+     * To generate the id, this code checks if the device already has an id saved and if not, it
+     * generates a unique id and saves it to device and also to the database.
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    public void initializeDeviceUser() {
+
+        Gson gson = new Gson();
+        String convertedID = sharedPreferences.getString("ID", null);// gets saved arrayList (in json form) null if there is none saved
+        Type type = new TypeToken<String>() {}.getType();
+        String localID = gson.fromJson(convertedID, type);
+
+        if (localID == null) {
+            // No ID has been generated for this device.
+            // We must generate a new User with a new ID.
+
+            UUID uuid = UUID.randomUUID();
+            localID = uuid.toString();
+
+            // Create new User with default contact information
+            deviceUser = new User(localID.toString());
+
+            verifyUserID(deviceUser, new Database.GenerateIDCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    saveID();
+                }
+
+                @Override
+                public void onFailure() {
+                    // ID was not unique, try again
+                    initializeDeviceUser();
+                }
+            });
+        } else {
+            // User exists, restore the user's info from the database
+            getUserById(localID, new GetUserCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    deviceUser = user;
+                    Log.d(TAG, "Successfully retrieved existing user information from database."
+                            + " ID: " + deviceUser.getId());
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.e(TAG, "Failed to find user in database with ID from SharedPreferences.");
+                }
+            });
+        }
+
+    }// end loadID
+
+    /**
+     * Gets a User instance with a unique id associated with this device.
+     * In order for this to return the correct User, the app should have called initializeUser first
+     * and allowed ample time to confirm the ID with the database.
+     * @return The User associated with this device..
+     */
+    public User getDeviceUser() {
+        return deviceUser;
+    }
+
+    /**
+     * Updates the User instance associated with this device and also updates the user's
+     * information in the database.
+     *
+     * Note: this cannot be used to change the ID associated with this device.
+     *   The argument "user" should have the same ID as the current user.
+     *
+     * @param user A User instance with updated info
+     * @author Ryan Shukla
+     */
+    public void updateDeviceUser(User user) {
+        // TODO do we need to update the user in every experiment?
+
+        // Update the user in the database
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("Users");
+        userCollectionReference.document(deviceUser.getId()).set(user);
+
+        // Update the user locally
+        deviceUser = user;
+    }
+
+    /**
+     * Queries for the user associated with the given ID.
+     * @param id The ID of the user to search for.
+     * @param callback The callback to be called when the query is finished.
+     * @author Ryan Shukla
+     */
+    public void getUserById(String id, GetUserCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("Users");
+
+        Query query = userCollectionReference.whereEqualTo("id", id); // Create a query to check if ID exists in the database already
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.getResult().size() == 1) {
+                    User user = null;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        user = document.toObject(User.class);
+                    }
+                    callback.onSuccess(user);
+                } else if (task.getResult().size() > 1) {
+                    Log.e(TAG, "Multiple users with same ID found.");
+                    callback.onFailure();
+                } else {
+                    Log.e(TAG, "No user with given ID found.");
+                    callback.onFailure();
+                }
+            }
+        });
+    }
+
+    /**
+     * This method checks if user already exits in the database* and returns a new unique id if they don't
+     * or existing one if they do
+     */
+    public void verifyUserID(User user, GenerateIDCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
 
-        Query query = userCollectionReference.whereEqualTo("User.id", localID); // Create a query to check if ID exists in the database already
+        Query query = userCollectionReference.whereEqualTo("id", user.getId()); // Create a query to check if ID exists in the database already
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -81,16 +242,14 @@ public class Database {
                 if(task.getResult().isEmpty()) {
                     // create new user in the database
                     // This means the id generated is unique
-                    HashMap<String, Object> newUser = new HashMap<>();
-                    newUser.put("User", new User("","","", localID));
                     userCollectionReference
-                            .document(localID)
-                            .set(newUser)
+                            .document(user.getId())
+                            .set(user)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Log.d(TAG, "Data has been added");
-                                    callback.onSuccess(localID);
+                                    callback.onSuccess(user);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -388,7 +547,7 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit and Ryan Shukla
      */
     public interface GenerateIDCallback  {
-        public void onSuccess(String id);
+        public void onSuccess(User user);
         public void onFailure();
 
     }// end GenerateIDCallback
@@ -404,4 +563,12 @@ public class Database {
 
     }// end GenerateIDCallback
 
+    /**
+     * Callback for methods that query for one user.
+     * @author Ryan Shukla
+     */
+    public interface GetUserCallback {
+        public void onSuccess(User user);
+        public void onFailure();
+    }
 }// end Database
