@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
@@ -10,6 +11,10 @@ import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
 
+import org.mockito.Mockito;
+import org.mockito.Mockito.*;
+
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
 
-    private Database db = new Database();
+    private Database db;
 
     private String measureExperimentID = "123MES";
     private String binomialExperimentID = "123BIN";
@@ -46,6 +51,13 @@ public class DatabaseTest {
     public IntegerExperiment mockIntegerExperiment (){
         IntegerExperiment experiment = new IntegerExperiment(mockUser(),"Test Integer experiment", "Eggs dropped");
         return experiment;
+    }
+
+    @Before
+    void setup() {
+        final SharedPreferences sharedPreferences = Mockito.mock(SharedPreferences.class);
+        Database.initializeInstance(sharedPreferences);
+        db = Database.getInstance();
     }
 
     @Test

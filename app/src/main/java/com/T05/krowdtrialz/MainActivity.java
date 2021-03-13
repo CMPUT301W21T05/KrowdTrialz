@@ -34,6 +34,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     private Database db;
+    private final String TAG = "MAIN ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         openSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("SUBSCRIBED FRAGMENT", "Clicked Search");
+                Log.d(TAG, "Clicked Search");
                 Intent intent = new Intent(navView.getContext(), SearchActivity.class);
                 startActivity(intent);
             }
