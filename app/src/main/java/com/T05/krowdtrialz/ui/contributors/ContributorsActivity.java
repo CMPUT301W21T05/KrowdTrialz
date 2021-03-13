@@ -1,4 +1,4 @@
-package com.T05.krowdtrialz.ui.owner;
+package com.T05.krowdtrialz.ui.contributors;
 
 import androidx.appcompat.app.AppCompatActivity;
 

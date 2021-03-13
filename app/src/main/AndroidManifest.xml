@@ -12,7 +12,7 @@
         <activity android:name=".ui.search.SearchActivity"
             android:windowSoftInputMode="adjustNothing">
         </activity>
-        <activity android:name=".ui.owner.ContributorsActivity"
+        <activity android:name=".ui.contributors.ContributorsActivity"
             android:parentActivityName=".ui.ExperimentDetailsOwnerActivity">
         </activity>
         <activity android:name=".ui.ExperimentDetailsNonOwnerActivity" />
