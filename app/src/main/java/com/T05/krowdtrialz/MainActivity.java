@@ -10,8 +10,10 @@ import com.T05.krowdtrialz.ui.search.SearchActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +22,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+
 import java.lang.reflect.Type;
 import java.util.UUID;
 
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 
 public class MainActivity extends AppCompatActivity {

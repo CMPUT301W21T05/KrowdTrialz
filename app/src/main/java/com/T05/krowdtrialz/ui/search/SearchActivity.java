@@ -25,6 +25,9 @@ import com.T05.krowdtrialz.util.ExperimentList;
 
 import java.util.ArrayList;
 
+import java.util.Arrays;
+
+
 public class SearchActivity extends Activity implements SearchView.OnQueryTextListener{
 
     private Database db;
@@ -41,7 +44,11 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
         db = new Database();
+
+        db = Database.getInstance();;
+
 
         searchExperimentsQuery = findViewById(R.id.search_experiment_query);
 
@@ -70,7 +77,13 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
         experimentAdapter.clear();
 
         Log.e(TAG, "Query: " + searchString);
+
         db.getExperimentsByDescription(searchString, new Database.QueryExperimentsCallback() {
+
+        ArrayList<String> tags = new ArrayList<>(Arrays.asList(searchString.split(" ")));
+
+        db.getExperimentsByTags(tags, new Database.QueryExperimentsCallback() {
+
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
                 Log.d(TAG, "Got search results" + experiments.toString());

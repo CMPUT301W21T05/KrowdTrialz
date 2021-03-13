@@ -5,14 +5,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 
 import androidx.annotation.NonNull;
 
 import androidx.fragment.app.Fragment;
 
+
 import androidx.lifecycle.Observer;
+
 import androidx.lifecycle.ViewModelProvider;
 
 import com.T05.krowdtrialz.R;
@@ -22,6 +26,7 @@ import com.T05.krowdtrialz.util.ExperimentList;
 import org.apache.commons.math3.analysis.function.Exp;
 
 import java.util.ArrayList;
+
 
 
 public class SubscribedFragment extends Fragment {
@@ -37,6 +42,7 @@ public class SubscribedFragment extends Fragment {
         subscribedViewModel = new ViewModelProvider(this).get(SubscribedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscribed, container, false);
 
+
         experimentsList = root.findViewById(R.id.subscribed_exp_listView);
 
         experimentsDataList = new ArrayList<Experiment>();
@@ -50,7 +56,6 @@ public class SubscribedFragment extends Fragment {
                 experimentArrayAdapter.addAll(experiments);
             }
         });
-
         return root;
     }
 }

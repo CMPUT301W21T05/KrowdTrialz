@@ -18,8 +18,13 @@ public class SubscribedViewModel extends ViewModel {
     private static final String TAG = "SubscribedViewModel";
 
     public SubscribedViewModel() {
+
         db = Database.getInstance();
         experiments = new MutableLiveData<>();
+
+        mText = new MutableLiveData<>();
+        mText.setValue("This is home fragment");
+
     }
 
     public LiveData<ArrayList<Experiment>> getExperimentList(){
