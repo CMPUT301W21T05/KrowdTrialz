@@ -1,35 +1,56 @@
 package com.T05.krowdtrialz.ui.subscribed;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.fragment.app.Fragment;
+
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.T05.krowdtrialz.R;
+import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.util.ExperimentList;
+
+import org.apache.commons.math3.analysis.function.Exp;
+
+import java.util.ArrayList;
+
 
 public class SubscribedFragment extends Fragment {
 
     private SubscribedViewModel subscribedViewModel;
 
+    ListView experimentsList;
+    ArrayAdapter<Experiment> experimentArrayAdapter;
+    ArrayList<Experiment> experimentsDataList;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        subscribedViewModel =
-                new ViewModelProvider(this).get(SubscribedViewModel.class);
+        subscribedViewModel = new ViewModelProvider(this).get(SubscribedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscribed, container, false);
-        //final TextView textView = root.findViewById(R.id.text_home);
-        subscribedViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+
+        experimentsList = root.findViewById(R.id.subscribed_exp_listView);
+
+        experimentsDataList = new ArrayList<Experiment>();
+        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList);
+        experimentsList.setAdapter(experimentArrayAdapter);
+
+        subscribedViewModel.getExperimentList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Experiment>>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
+            public void onChanged(ArrayList<Experiment> experiments) {
+                experimentArrayAdapter.clear();
+                experimentArrayAdapter.addAll(experiments);
             }
         });
+
         return root;
     }
 }
