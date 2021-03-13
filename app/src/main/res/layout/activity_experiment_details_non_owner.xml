@@ -62,8 +62,10 @@
                 android:layout_width="335dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginLeft="38dp"
                 android:text="@string/subscribe_non_owner"
-                app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
+                android:onClick="subscribeToExperiment"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/region_detail_non_owner_screen_textView" />
 
             <Button
@@ -72,6 +74,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/add_trials_non_owner"
+                android:onClick="addTrialToExperiment"
                 app:layout_constraintStart_toStartOf="@+id/subscribe_non_owner_screen_button"
                 app:layout_constraintTop_toBottomOf="@+id/subscribe_non_owner_screen_button" />
 
@@ -236,7 +239,8 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/view_map_non_owner"
-                app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
+                android:onClick="viewMap"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
                 app:layout_constraintTop_toBottomOf="@+id/median_text_detail_non_owner_screen_textView" />
 
             <Button
@@ -245,7 +249,8 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/view_q_amp_a_non_owner"
-                app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
+                android:onClick="viewQnA"
+                app:layout_constraintStart_toStartOf="@+id/view_map_non_owner_screen_button"
                 app:layout_constraintTop_toBottomOf="@+id/view_map_non_owner_screen_button" />
 
             <com.github.mikephil.charting.charts.BarChart
