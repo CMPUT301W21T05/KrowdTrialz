@@ -128,12 +128,27 @@ public abstract class Experiment implements Tagged {
         return ignoredUsers;
     }
 
+    public boolean isIgnored(User user){
+        for (User i : ignoredUsers){
+            if(i.getId().equals(user.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void ignoreUser(User user){
         ignoredUsers.add(user);
     }
 
     public void ignoreMultipleUsers(ArrayList<User> users){
         ignoredUsers.addAll(users);
+    }
+
+    public void removeIgnoredUser(User user){
+        if(ignoredUsers.contains(user)){
+            ignoredUsers.remove(user);
+        }
     }
 
     /**
