@@ -64,10 +64,14 @@ public class Database {
      * This should be called from MainActivity when the app starts.
      * @author Ryan Shukla
      * @param sharedPreferences The app's instance of SharedPreferences.
+     * @param callback Callback to be called when all initialization is finished.
      */
-    public static void initializeInstance(SharedPreferences sharedPreferences) {
+    public static void initializeInstance(
+            SharedPreferences sharedPreferences,
+            InitializeDatabaseCallback callback) {
         if (instance == null) {
             instance = new Database(sharedPreferences);
+            instance.initializeDeviceUser(callback);
         }
     }
 
@@ -96,7 +100,7 @@ public class Database {
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
-    private void saveID() {
+    private void saveID(InitializeDatabaseCallback callback) {
 
         // allows variable to be saved
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -107,6 +111,8 @@ public class Database {
         editor.apply();
         Log.d("saveID","Saved ID: "+localID);
 
+        callback.onSuccess();
+
     }// end saveID
 
     /**
@@ -116,7 +122,8 @@ public class Database {
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
-    public void initializeDeviceUser() {
+    public void initializeDeviceUser(InitializeDatabaseCallback callback) {
+        Log.d(TAG, "initializeDeviceUser");
 
         Gson gson = new Gson();
         String convertedID = sharedPreferences.getString("ID", null);// gets saved arrayList (in json form) null if there is none saved
@@ -131,18 +138,19 @@ public class Database {
             localID = uuid.toString();
 
             // Create new User with default contact information
+            Log.d(TAG, "construct deviceUser");
             deviceUser = new User(localID.toString());
 
             verifyUserID(deviceUser, new Database.GenerateIDCallback() {
                 @Override
                 public void onSuccess(User user) {
-                    saveID();
+                    saveID(callback);
                 }
 
                 @Override
                 public void onFailure() {
                     // ID was not unique, try again
-                    initializeDeviceUser();
+                    initializeDeviceUser(callback);
                 }
             });
         } else {
@@ -153,11 +161,13 @@ public class Database {
                     deviceUser = user;
                     Log.d(TAG, "Successfully retrieved existing user information from database."
                             + " ID: " + deviceUser.getId());
+                    callback.onSuccess();
                 }
 
                 @Override
                 public void onFailure() {
                     Log.e(TAG, "Failed to find user in database with ID from SharedPreferences.");
+                    callback.onFailure();
                 }
             });
         }
@@ -636,6 +646,15 @@ public class Database {
      */
     public interface GetUserCallback {
         public void onSuccess(User user);
+        public void onFailure();
+    }
+
+    /**
+     * Callback for when initializeInstance is finished.
+     * @author Ryan Shukla
+     */
+    public interface InitializeDatabaseCallback {
+        public void onSuccess();
         public void onFailure();
     }
 }// end Database
