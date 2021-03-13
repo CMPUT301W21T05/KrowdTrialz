@@ -5,255 +5,265 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ExperimentDetailsNonOwnerActivity">
-
-    <TextView
-        android:id="@+id/owner_username_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="230dp"
-        android:text="@string/owner_username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="230dp" />
-
-    <TextView
-        android:id="@+id/description_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="70dp"
-        android:text="@string/description_non_owner_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.877"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="70dp" />
-
-    <TextView
-        android:id="@+id/status_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/status"
-        app:layout_constraintStart_toStartOf="@+id/description_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/description_detail_non_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/region_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/region_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/status_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/status_detail_non_owner_screen_textView"
-        />
-
-    <Button
-        android:id="@+id/subscribe_non_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/subscribe_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/region_detail_non_owner_screen_textView" />
-
-    <Button
-        android:id="@+id/add_trials_non_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/add_trials_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/subscribe_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/subscribe_non_owner_screen_button" />
-
-    <TextView
-        android:id="@+id/mean_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/_1_23_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/add_trials_non_owner_screen_button"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/st_dev_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="75dp"
-        android:text="@string/_0_98_non_owner"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/add_trials_non_owner_screen_button"
-        android:layout_marginEnd="75dp" />
-
-    <TextView
-        android:id="@+id/mean_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/mean_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/mean_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/st_dev_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="75dp"
-        android:text="@string/stdev_non_owner"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_detail_non_owner_screen_textView"
-        android:layout_marginEnd="75dp" />
-
-    <TextView
-        android:id="@+id/first_experiment_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/second_experiment_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/third_experiment_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fourth_experiment_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fifth_experiment_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="0.00"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/first_experiment_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/q0_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/second_experiment_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/q1_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/third_experiment_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/q2_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fourth_experiment_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/q3_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fifth_experiment_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/q4_non_owner"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/median_text_detail_non_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/median_non_owner"
-        app:layout_constraintEnd_toEndOf="@+id/third_experiment_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_text_detail_non_owner_screen_textView" />
-
-    <Button
-        android:id="@+id/view_map_non_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/view_map_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/median_text_detail_non_owner_screen_textView" />
-
-    <Button
-        android:id="@+id/view_QnA_detail_non_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/view_q_amp_a_non_owner"
-        app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/view_map_non_owner_screen_button" />
-
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/histogram_non_owner"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/view_QnA_detail_non_owner_screen_button" />
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize">
 
-    <com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/time_plot_non_owner"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/histogram_non_owner" />
+            <TextView
+                android:id="@+id/owner_username_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="230dp"
+                android:text="@string/owner_username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="230dp" />
 
+            <TextView
+                android:id="@+id/description_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="70dp"
+                android:text="@string/description_non_owner_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.877"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="70dp" />
+
+            <TextView
+                android:id="@+id/status_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/status"
+                app:layout_constraintStart_toStartOf="@+id/description_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/description_detail_non_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/region_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/region_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/status_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/status_detail_non_owner_screen_textView"
+                />
+
+            <Button
+                android:id="@+id/subscribe_non_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/subscribe_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/region_detail_non_owner_screen_textView" />
+
+            <Button
+                android:id="@+id/add_trials_non_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/add_trials_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/subscribe_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/subscribe_non_owner_screen_button" />
+
+            <TextView
+                android:id="@+id/mean_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="75dp"
+                android:text="1.23"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/add_trials_non_owner_screen_button"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/st_dev_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="75dp"
+                android:text="0.98"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/add_trials_non_owner_screen_button"
+                android:layout_marginEnd="75dp" />
+
+            <TextView
+                android:id="@+id/mean_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="@string/mean_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/mean_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/st_dev_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="75dp"
+                android:text="@string/stdev_non_owner"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_detail_non_owner_screen_textView"
+                android:layout_marginEnd="75dp" />
+
+            <TextView
+                android:id="@+id/first_experiment_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/second_experiment_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/third_experiment_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fourth_experiment_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fifth_experiment_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="0.00"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_non_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/first_experiment_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/q0_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/second_experiment_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="@string/q1_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/third_experiment_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="@string/q2_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fourth_experiment_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="@string/q3_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fifth_experiment_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/q4_non_owner"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_non_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_non_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/median_text_detail_non_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/median_non_owner"
+                app:layout_constraintEnd_toEndOf="@+id/third_experiment_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_text_detail_non_owner_screen_textView" />
+
+            <Button
+                android:id="@+id/view_map_non_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/view_map_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/median_text_detail_non_owner_screen_textView" />
+
+            <Button
+                android:id="@+id/view_QnA_detail_non_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/view_q_amp_a_non_owner"
+                app:layout_constraintStart_toStartOf="@+id/owner_username_detail_non_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/view_map_non_owner_screen_button" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/histogram_non_owner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/view_QnA_detail_non_owner_screen_button" />
+
+            <com.github.mikephil.charting.charts.ScatterChart
+                android:id="@+id/time_plot_non_owner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/histogram_non_owner" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -266,7 +276,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -278,5 +287,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

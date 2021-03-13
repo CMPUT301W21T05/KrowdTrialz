@@ -11,12 +11,23 @@ import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+
+import java.lang.reflect.Type;
+import java.util.UUID;
+
+import com.T05.krowdtrialz.util.Database;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 
@@ -38,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+
         final FloatingActionButton openSearchView = (FloatingActionButton) findViewById(R.id.search_action_button);
         openSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         db = Database.getInstance();
         // Generate a new user with unique ID or fetch information for an existing user.
         db.initializeDeviceUser();
+
     }
 
 }// end MainActivity
