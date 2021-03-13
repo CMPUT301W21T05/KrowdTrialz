@@ -125,7 +125,7 @@ public abstract class Experiment implements Tagged {
      *
      */
     @Override
-    public Set<String> getTags() {
+    public ArrayList<String> getTags() {
         Set<String> tags = new HashSet<>();
 
         // add description tags - remove spaces and punctuation then filter any null strings from list
@@ -149,7 +149,8 @@ public abstract class Experiment implements Tagged {
         tags.add(getType().toLowerCase());
         tags.add(((Integer) getMinTrials()).toString());
 
-        return tags;
+        ArrayList<String> tagsList = new ArrayList<>(tags);
+        return tagsList;
     }
 
     @Override
