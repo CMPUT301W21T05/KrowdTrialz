@@ -2,6 +2,7 @@ package com.T05.krowdtrialz.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.T05.krowdtrialz.R;
@@ -15,6 +16,7 @@ import com.T05.krowdtrialz.model.trial.CountTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
+import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -42,6 +44,10 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_details_non_owner);
+
+        Intent intent = getIntent();
+        // TODO: Use this to get experiment object
+        String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
         populateHistogram();
         populateTimePlot();

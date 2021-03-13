@@ -26,6 +26,7 @@ public abstract class Experiment implements Tagged {
     private int minTrials = 0;
     private ArrayList<Barcode> barcodes;
     private ArrayList<QRCode> qrCodes;
+    private ArrayList<User> ignoredUsers;
 
     public Experiment() {
     }
@@ -38,6 +39,7 @@ public abstract class Experiment implements Tagged {
         trials = new ArrayList<Trial>();
         barcodes = new ArrayList<Barcode>();
         qrCodes = new ArrayList<QRCode>();
+        ignoredUsers = new ArrayList<User>();
     }
 
     public String getId() {
@@ -72,6 +74,14 @@ public abstract class Experiment implements Tagged {
 
     public User getOwner() {
         return owner;
+    }
+
+    public boolean isOwner(User user){
+        if(owner.getId().equals(user.getId())){
+            return true;
+        } else{
+            return false;
+        }
     }
 
     public void setOwner(User owner) {
@@ -113,6 +123,18 @@ public abstract class Experiment implements Tagged {
     public String getType() { return type; }
 
     public void setType(String type) { this.type = type; }
+
+    public ArrayList<User> getIgnoredUsers(){
+        return ignoredUsers;
+    }
+
+    public void ignoreUser(User user){
+        ignoredUsers.add(user);
+    }
+
+    public void ignoreMultipleUsers(ArrayList<User> users){
+        ignoredUsers.addAll(users);
+    }
 
     /**
      * Adds all strings to a set that a user may want to search by
