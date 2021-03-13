@@ -171,6 +171,8 @@ public class Database {
      * @return The User associated with this device..
      */
     public User getDeviceUser() {
+        User user;
+        if (deviceUser
         return deviceUser;
     }
 
