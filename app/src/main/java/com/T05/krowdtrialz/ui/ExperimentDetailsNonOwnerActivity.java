@@ -4,6 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
@@ -29,13 +34,24 @@ import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
+import com.T05.krowdtrialz.util.Database;
+
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
 public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
+    private final String TAG = "ExperimentDetailsNO";
+    TextView ownerName;
+    TextView description;
+    TextView status;
+    TextView region;
+    TextView mean;
+    TextView stdev;
+    TextView median;
 
+    private Database db;
     private Experiment experiment;
     private BarChart barChart;
     private ScatterChart scatterChart;
@@ -44,13 +60,118 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_details_non_owner);
+        db = Database.getInstance();
 
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
-        populateHistogram();
-        populateTimePlot();
+        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment exp) {
+                experiment = exp;
+                populateMainInfo();
+                populateTrialResults();
+
+                populateHistogram();
+                populateTimePlot();
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "Error Searching Database for experiment");
+            }
+        });
+    }
+
+    /**
+     * This method fills out Owner Username, Description, Status and Region
+     * @author
+     *  Ricky Au
+     */
+    private void populateMainInfo() {
+        // fill out owner Username
+        ownerName = findViewById(R.id.owner_username_detail_non_owner_screen_textView);
+        ownerName.setText(experiment.getOwner().getUserName());
+
+        // fill out experiment description
+        description = findViewById(R.id.description_detail_non_owner_screen_textView);
+        description.setText(experiment.getDescription());
+
+        //fill out status
+        status = findViewById(R.id.status_detail_non_owner_screen_textView);
+//        // TODO: get status once implemented
+
+        // fill out region
+        region = findViewById(R.id.region_detail_non_owner_screen_textView);
+        region.setText(experiment.getRegion());
+
+    }
+
+    /**
+     * This method subscribes the user to the experiment they are looking at
+     * @author
+     *  Ricky Au
+     */
+    public void subscribeToExperiment(View view){
+        Log.d(TAG, "subscribe to experiment");
+        Toast.makeText(ExperimentDetailsNonOwnerActivity.this, "pressed subscribe",Toast.LENGTH_SHORT).show();
+        db.addSubscription(db.getDeviceUser(), experiment);
+    }
+
+    /**
+     * This method subscribes the user to the experiment they are looking at
+     * @author
+     *  Ricky Au
+     */
+    public void addTrialToExperiment(View view){
+        Log.d(TAG, "addTrial");
+        Toast.makeText(ExperimentDetailsNonOwnerActivity.this, "pressed add Trial",Toast.LENGTH_SHORT).show();
+        // TODO: pass a trial to add it to this experiment
+//        switch activity to whatever type of trial this experiment is
+    }
+
+    /**
+     * This method fills out Mean, Standard deviation, Median and maybe some trial results
+     * @author
+     *  Ricky Au
+     */
+    private void populateTrialResults() {
+        // fill out Mean
+        mean = findViewById(R.id.mean_detail_non_owner_screen_textView);
+        // TODO: get the mean of experiment
+
+        // TODO: get the standard deviation of experiment
+        // fill out Standard deviation
+        stdev = findViewById(R.id.st_dev_detail_non_owner_screen_textView);
+
+        // TODO: get mean added to xml then
+//        mean = findViewByID()
+
+    }
+
+    /**
+     * This method allows user to view map of experiment
+     * @author
+     *  Ricky Au
+     */
+    public void viewMap(View view){
+        Log.d(TAG, "view map");
+        Toast.makeText(ExperimentDetailsNonOwnerActivity.this, "pressed view map",Toast.LENGTH_SHORT).show();
+        // TODO: open map activity
+
+    }
+
+    /**
+     * This method allows user to view map Questions and Answers for Experiment
+     * @author
+     *  Ricky Au
+     */
+    public void viewQnA(View view){
+        Log.d(TAG, "view Q&A");
+        Toast.makeText(ExperimentDetailsNonOwnerActivity.this, "pressed view Q&A",Toast.LENGTH_SHORT).show();
+        // TODO: open Q&A activity
+
     }
 
     /**
