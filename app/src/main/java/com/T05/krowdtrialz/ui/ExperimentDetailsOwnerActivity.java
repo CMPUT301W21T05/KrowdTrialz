@@ -22,6 +22,7 @@ import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
+import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -66,15 +67,9 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
 
         description = findViewById(R.id.description_owner_screen_editText);
         minTrials = findViewById(R.id.minimum_trial_owner_screen_exitText);
-
-        Intent i = getIntent();
-
-        Bundle extras = getIntent().getExtras();
-//        experiment = (Experiment) extras.get("experiment");
-        str = (String) extras.get("experiment");
-        // integers cannot be passed with intents without crashing
-//        num = (Integer) extras.get("experiment");
-//        num = 10;
+        Intent intent = getIntent();
+        // TODO: Use this to get experiment object
+        String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
         //TODO: might need to make sure if these fields are actually filled
         //testing
@@ -132,6 +127,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
 //        populateTimePlot();
 
     }// end onCreate
+
 
     /**
      * This method fills out Region, If none exist it will be blank
@@ -253,403 +249,403 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
     }
 
 
-//    /**
-//     * This method creates a Histogram based on experiment
-//     * @author
-//     *  Furmaan Sekhon and Jacques Leong-Sit
-//     */
-//    private void populateHistogram (){
-//
-//        barChart = findViewById(R.id.histogram_owner);
-//
-//        // Get experiment object
-//        Bundle extras = getIntent().getExtras();
-//        experiment = (Experiment) extras.get("experiment");
-//
-//        // Get array of data from experiment
-//        List<BarEntry> entries = new ArrayList<BarEntry>();
-//        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
-//            // make list of data
-//            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-//            BinomialExperiment binomialExperiment = (BinomialExperiment) extras.get("experiment");
-//            dataPoints.add(binomialExperiment.getSuccessCount());
-//            dataPoints.add(binomialExperiment.getFailureCount());
-//
-//            // make list of entries
-//            for (int i = 0; i < dataPoints.size(); i++) {
-//                // turn your data into Entry objects
-//                entries.add(new BarEntry(i, dataPoints.get(i)));
-//            }
-//        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
-//            // make list of data
-//            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-//            dataPoints.add(this.experiment.getTrials().size());
-//
-//            // make list of entries
-//            for (int i = 0; i < dataPoints.size(); i++) {
-//                // turn your data into Entry objects
-//                entries.add(new BarEntry(i, dataPoints.get(i)));
-//            }
-//        }
-//        else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
-//            // make list of data
-//            IntegerExperiment integerExperiment = (IntegerExperiment) extras.get("experiment");
-//            double[] temp = integerExperiment.getTrials().stream()
-//                    .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
-//                    .toArray();
-//
-//            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-//            for(int i=0; i<temp.length; i++) {
-//                dataPoints.add((int) temp[i]);
-//            }
-//
-//            // make dictionary that stores the frequency of each unique data point
-//            Hashtable<Integer, Integer> uniqueDataPoints = new Hashtable<Integer, Integer>();
-//            for (int i = 0; i < dataPoints.size(); i++) {
-//                // Count the number of occurrences of each data point
-//                if (uniqueDataPoints.containsKey(dataPoints.get(i))) {
-//                    uniqueDataPoints.put(dataPoints.get(i), uniqueDataPoints.get(dataPoints.get(i)) + 1);
-//                }else{
-//                    uniqueDataPoints.put(dataPoints.get(i), 1);
-//                }
-//            }
-//
-//            // make list of entries
-//            for (int i : uniqueDataPoints.keySet()) {
-//                // turn your data into Entry objects
-//                entries.add(new BarEntry(i ,uniqueDataPoints.get(i)));
-//            }
-//
-//        }else if (this.experiment.getType() == "Measurement") {
-//            // make list of data
-//            MeasurementExperiment measurementExperiment = (MeasurementExperiment) extras.get("experiment");
-//
-//            double[] temp = measurementExperiment.getTrials().stream()
-//                    .mapToDouble(trial -> ((MeasurementTrial) trial).getMeasurementValue())
-//                    .toArray();
-//
-//            ArrayList<Double> dataPoints = new ArrayList<Double>();
-//            for(int i=0; i<temp.length; i++) {
-//                dataPoints.add(temp[i]);
-//            }
-//
-//            // make dictionary that stores the frequency of each unique data point
-//            Hashtable<Double, Integer> uniqueDataPoints = new Hashtable<Double, Integer>();
-//            for (int i = 0; i < dataPoints.size(); i++) {
-//                // Count the number of occurrences of each data point
-//                if (uniqueDataPoints.containsKey(dataPoints.get(i))) {
-//                    uniqueDataPoints.put(dataPoints.get(i), uniqueDataPoints.get(dataPoints.get(i)) + 1);
-//                }else{
-//                    uniqueDataPoints.put(dataPoints.get(i), 1);
-//                }
-//            }
-//
-//            // make list of entries
-//            for (double i : uniqueDataPoints.keySet()) {
-//                // turn your data into Entry objects
-//                entries.add(new BarEntry((float) i, (float) uniqueDataPoints.get(i)));
-//            }
-//        }
-//
-//        // create data set
-//        BarDataSet barDataSet = new BarDataSet(entries, String.format("%s Trials", experiment.getType()));
-//        BarData barData = new BarData(barDataSet);
-//
-//        // add data to chart
-//        barChart.setData(barData);
-//        barData.setBarWidth(0.9f); // set custom bar width
-//        barChart.setFitBars(true);
-//        barChart.invalidate(); // Refreshes chart
-//    }// end populateHistogram
-//
-//    /**
-//     * This method creates a TimePlot based on experiment
-//     * @author
-//     *  Furmaan Sekhon and Jacques Leong-Sit
-//     */
-//    private void populateTimePlot () {
-//        scatterChart = findViewById(R.id.time_plot_owner);
-//
-//        // Get experiment object
-//        Bundle extras = getIntent().getExtras();
-//        experiment = (Experiment) extras.get("experiment");
-//
-//        // Get array of data from experiment
-//        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
-//
-//            List<Entry> passEntries = new ArrayList<Entry>();
-//            List<Entry> failEntries = new ArrayList<Entry>();
-//
-//            // make list of data
-//            BinomialExperiment binomialExperiment = (BinomialExperiment) this.experiment;
-//
-//            ArrayList<Trial> temp = binomialExperiment.getTrials();
-//            ArrayList<BinomialTrial> binomialTrials = new ArrayList<BinomialTrial>();
-//            for (Trial trial : temp){
-//                binomialTrials.add((BinomialTrial) trial);
-//            }
-//
-//            Hashtable<String, Integer> datePasses = new Hashtable<String, Integer>();
-//            Hashtable<String, Integer> dateFails = new Hashtable<String, Integer>();
-//            for (BinomialTrial trial : binomialTrials){
-//                int passes = trial.getPassCount();
-//                int fails = trial.getFailCount();
-//                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
-//
-//                if (datePasses.containsKey(dateOfTrial)){
-//                    datePasses.put(dateOfTrial, datePasses.get(dateOfTrial) + passes);
-//                }else{
-//                    datePasses.put(dateOfTrial,passes);
-//                }
-//                if (dateFails.containsKey(dateOfTrial)){
-//                    dateFails.put(dateOfTrial, dateFails.get(dateOfTrial) + fails);
-//                }else{
-//                    dateFails.put(dateOfTrial,fails);
-//                }
-//
-//            }
-//
-//            // make list of entries
-//            for (String key : datePasses.keySet()) {
-//                // turn your data into Entry objects
-//                passEntries.add(new Entry(decodeDate(key), datePasses.get(key)));
-//            }
-//            for (String key : dateFails.keySet()) {
-//                // turn your data into Entry objects
-//                failEntries.add(new Entry(decodeDate(key), dateFails.get(key)));
-//            }
-//
-//            ScatterDataSet passDataSet = new ScatterDataSet(passEntries, binomialExperiment.getPassUnit());
-//            ScatterDataSet failDataSet = new ScatterDataSet(failEntries, binomialExperiment.getFailUnit());
-//
-//            passDataSet.setColors(new int[] {R.color.purple_700, R.color.teal_700});
-//
-//            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
-//
-//            dataSets.add(passDataSet);
-//            dataSets.add(failDataSet);
-//
-//            // create data set
-//            ScatterData scatterData = new ScatterData(dataSets);
-//
-//            ValueFormatter formatter = new ValueFormatter() {
-//                @Override
-//                public String getAxisLabel(float value, AxisBase axis) {
-//                    return formatDate(value);
-//                }
-//            };
-//            XAxis xAxis = scatterChart.getXAxis();
-//            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-//            xAxis.setValueFormatter(formatter);
-//
-//            // add data to chart
-//            scatterChart.setData(scatterData);
-//            scatterChart.invalidate(); // Refreshes chart
-//
-//        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
-//            List<Entry> entries = new ArrayList<Entry>();
-//
-//            // make list of data
-//            CountExperiment countExperiment = (CountExperiment) this.experiment;
-//
-//            ArrayList<Trial> temp = countExperiment.getTrials();
-//            ArrayList<CountTrial> countTrials = new ArrayList<CountTrial>();
-//            for (Trial trial : temp){
-//                countTrials.add((CountTrial) trial);
-//            }
-//
-//            Hashtable<String, Integer> dateCounts = new Hashtable<String, Integer>();
-//            for (CountTrial trial : countTrials){
-//                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
-//
-//                if (dateCounts.containsKey(dateOfTrial)){
-//                    dateCounts.put(dateOfTrial, dateCounts.get(dateOfTrial) + 1);
-//                }else{
-//                    dateCounts.put(dateOfTrial, 1);
-//                }
-//            }
-//
-//            // make list of entries
-//            for (String key : dateCounts.keySet()) {
-//                // turn your data into Entry objects
-//                entries.add(new Entry(decodeDate(key), dateCounts.get(key)));
-//            }
-//
-//            ScatterDataSet countDataSet = new ScatterDataSet(entries, countExperiment.getUnit());
-//
-//            countDataSet.setColors(new int[] {R.color.purple_700});
-//
-//            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
-//
-//            dataSets.add(countDataSet);
-//
-//
-//            // create data set
-//            ScatterData scatterData = new ScatterData(dataSets);
-//
-//            ValueFormatter formatter = new ValueFormatter() {
-//                @Override
-//                public String getAxisLabel(float value, AxisBase axis) {
-//                    return formatDate(value);
-//                }
-//            };
-//            XAxis xAxis = scatterChart.getXAxis();
-//            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-//            xAxis.setValueFormatter(formatter);
-//
-//            // add data to chart
-//            scatterChart.setData(scatterData);
-//            scatterChart.invalidate(); // Refreshes chart
-//        } else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
-//            List<Entry> entries = new ArrayList<Entry>();
-//
-//            // make list of data
-//            IntegerExperiment integerExperiment = (IntegerExperiment) this.experiment;
-//
-//            ArrayList<Trial> temp = integerExperiment.getTrials();
-//            ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
-//            for (Trial trial : temp){
-//                integerTrials.add((IntegerTrial) trial);
-//            }
-//
-//            Hashtable<String, ArrayList<Integer>> dateValues = new Hashtable<String, ArrayList<Integer>>();
-//            for (IntegerTrial trial : integerTrials){
-//                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
-//                ArrayList<Integer> values;
-//
-//                if (dateValues.containsKey(dateOfTrial)){
-//                    values = dateValues.get(dateOfTrial);
-//                }else{
-//                    values = new ArrayList<Integer>();
-//                }
-//                values.add(trial.getValue());
-//                dateValues.put(dateOfTrial, values);
-//            }
-//
-//            // make list of entries
-//            for (String key : dateValues.keySet()) {
-//                // turn your data into Entry objects
-//                for (int value : dateValues.get(key)){
-//                    entries.add(new Entry(decodeDate(key), value));
-//                }
-//
-//            }
-//
-//            ScatterDataSet integerDataSet = new ScatterDataSet(entries, integerExperiment.getUnit());
-//
-//            integerDataSet.setColors(new int[] {R.color.purple_700});
-//
-//            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
-//
-//            dataSets.add(integerDataSet);
-//
-//
-//            // create data set
-//            ScatterData scatterData = new ScatterData(dataSets);
-//
-//            ValueFormatter formatter = new ValueFormatter() {
-//                @Override
-//                public String getAxisLabel(float value, AxisBase axis) {
-//                    return formatDate(value);
-//                }
-//            };
-//            XAxis xAxis = scatterChart.getXAxis();
-//            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-//            xAxis.setValueFormatter(formatter);
-//
-//            // add data to chart
-//            scatterChart.setData(scatterData);
-//            scatterChart.invalidate(); // Refreshes chart
-//
-//        }else if (this.experiment.getType() == "Measurement") {
-//            List<Entry> entries = new ArrayList<Entry>();
-//
-//            // make list of data
-//            MeasurementExperiment measurementExperiment = (MeasurementExperiment) this.experiment;
-//
-//            ArrayList<Trial> temp = measurementExperiment.getTrials();
-//            ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
-//            for (Trial trial : temp){
-//                measurementTrials.add((MeasurementTrial) trial);
-//            }
-//
-//            Hashtable<String, ArrayList<Float>> dateValues = new Hashtable<String, ArrayList<Float>>();
-//            for (MeasurementTrial trial : measurementTrials){
-//                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
-//                ArrayList<Float> values;
-//
-//                if (dateValues.containsKey(dateOfTrial)){
-//                    values = dateValues.get(dateOfTrial);
-//                }else{
-//                    values = new ArrayList<Float>();
-//                }
-//                values.add(trial.getMeasurementValue());
-//                dateValues.put(dateOfTrial, values);
-//            }
-//
-//            // make list of entries
-//            for (String key : dateValues.keySet()) {
-//                // turn your data into Entry objects
-//                for (float value : dateValues.get(key)){
-//                    entries.add(new Entry(decodeDate(key), value));
-//                }
-//
-//            }
-//
-//            ScatterDataSet measurementDataSet = new ScatterDataSet(entries, measurementExperiment.getUnit());
-//
-//            measurementDataSet.setColors(new int[] {R.color.purple_700});
-//
-//            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
-//
-//            dataSets.add(measurementDataSet);
-//
-//
-//            // create data set
-//            ScatterData scatterData = new ScatterData(dataSets);
-//
-//            ValueFormatter formatter = new ValueFormatter() {
-//                @Override
-//                public String getAxisLabel(float value, AxisBase axis) {
-//                    return formatDate(value);
-//                }
-//            };
-//            XAxis xAxis = scatterChart.getXAxis();
-//            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-//            xAxis.setValueFormatter(formatter);
-//
-//            // add data to chart
-//            scatterChart.setData(scatterData);
-//            scatterChart.invalidate(); // Refreshes chart
-//        }
-//    }// end populateTimePlot
-//
-//    private String encodeDate (int year, int month,int day){
-//        String stringYear = String.valueOf(year);
-//        stringYear = stringYear.substring(2,4);
-//        String stringMonth;
-//        String stringDay;
-//        if (month < 10){
-//            stringMonth = "0"+String.valueOf(month);
-//        }else{
-//            stringMonth = String.valueOf(month);
-//        }
-//        if (day < 10){
-//            stringDay = "0"+String.valueOf(day);
-//        }else{
-//            stringDay = String.valueOf(day);
-//        }
-//
-//        return stringYear + "/" + stringMonth + "/" + stringDay;
-//
-//    }
-//    private float decodeDate (String date){
-//        return (float) Integer.parseInt(date.replaceAll("/",""));
-//    }
-//    private String formatDate (float date) {
-//        int dateInt = (int) date;
-//        String formattedDate = String.valueOf(dateInt);
-//        return "20" + formattedDate.substring(0,2) + "/" + formattedDate.substring(2,4) + "/" + formattedDate.substring(4,6);
-//    }
+    /**
+     * This method creates a Histogram based on experiment
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    private void populateHistogram (){
+
+        barChart = findViewById(R.id.histogram_owner);
+
+        // Get experiment object
+        Bundle extras = getIntent().getExtras();
+        experiment = (Experiment) extras.get("experiment");
+
+        // Get array of data from experiment
+        List<BarEntry> entries = new ArrayList<BarEntry>();
+        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+            // make list of data
+            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
+            BinomialExperiment binomialExperiment = (BinomialExperiment) extras.get("experiment");
+            dataPoints.add(binomialExperiment.getSuccessCount());
+            dataPoints.add(binomialExperiment.getFailureCount());
+
+            // make list of entries
+            for (int i = 0; i < dataPoints.size(); i++) {
+                // turn your data into Entry objects
+                entries.add(new BarEntry(i, dataPoints.get(i)));
+            }
+        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
+            // make list of data
+            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
+            dataPoints.add(this.experiment.getTrials().size());
+
+            // make list of entries
+            for (int i = 0; i < dataPoints.size(); i++) {
+                // turn your data into Entry objects
+                entries.add(new BarEntry(i, dataPoints.get(i)));
+            }
+        }
+        else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
+            // make list of data
+            IntegerExperiment integerExperiment = (IntegerExperiment) extras.get("experiment");
+            double[] temp = integerExperiment.getTrials().stream()
+                    .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
+                    .toArray();
+
+            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
+            for(int i=0; i<temp.length; i++) {
+                dataPoints.add((int) temp[i]);
+            }
+
+            // make dictionary that stores the frequency of each unique data point
+            Hashtable<Integer, Integer> uniqueDataPoints = new Hashtable<Integer, Integer>();
+            for (int i = 0; i < dataPoints.size(); i++) {
+                // Count the number of occurrences of each data point
+                if (uniqueDataPoints.containsKey(dataPoints.get(i))) {
+                    uniqueDataPoints.put(dataPoints.get(i), uniqueDataPoints.get(dataPoints.get(i)) + 1);
+                }else{
+                    uniqueDataPoints.put(dataPoints.get(i), 1);
+                }
+            }
+
+            // make list of entries
+            for (int i : uniqueDataPoints.keySet()) {
+                // turn your data into Entry objects
+                entries.add(new BarEntry(i ,uniqueDataPoints.get(i)));
+            }
+
+        }else if (this.experiment.getType() == "Measurement") {
+            // make list of data
+            MeasurementExperiment measurementExperiment = (MeasurementExperiment) extras.get("experiment");
+
+            double[] temp = measurementExperiment.getTrials().stream()
+                    .mapToDouble(trial -> ((MeasurementTrial) trial).getMeasurementValue())
+                    .toArray();
+
+            ArrayList<Double> dataPoints = new ArrayList<Double>();
+            for(int i=0; i<temp.length; i++) {
+                dataPoints.add(temp[i]);
+            }
+
+            // make dictionary that stores the frequency of each unique data point
+            Hashtable<Double, Integer> uniqueDataPoints = new Hashtable<Double, Integer>();
+            for (int i = 0; i < dataPoints.size(); i++) {
+                // Count the number of occurrences of each data point
+                if (uniqueDataPoints.containsKey(dataPoints.get(i))) {
+                    uniqueDataPoints.put(dataPoints.get(i), uniqueDataPoints.get(dataPoints.get(i)) + 1);
+                }else{
+                    uniqueDataPoints.put(dataPoints.get(i), 1);
+                }
+            }
+
+            // make list of entries
+            for (double i : uniqueDataPoints.keySet()) {
+                // turn your data into Entry objects
+                entries.add(new BarEntry((float) i, (float) uniqueDataPoints.get(i)));
+            }
+        }
+
+        // create data set
+        BarDataSet barDataSet = new BarDataSet(entries, String.format("%s Trials", experiment.getType()));
+        BarData barData = new BarData(barDataSet);
+
+        // add data to chart
+        barChart.setData(barData);
+        barData.setBarWidth(0.9f); // set custom bar width
+        barChart.setFitBars(true);
+        barChart.invalidate(); // Refreshes chart
+    }// end populateHistogram
+
+    /**
+     * This method creates a TimePlot based on experiment
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    private void populateTimePlot () {
+        scatterChart = findViewById(R.id.time_plot_owner);
+
+        // Get experiment object
+        Bundle extras = getIntent().getExtras();
+        experiment = (Experiment) extras.get("experiment");
+
+        // Get array of data from experiment
+        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+
+            List<Entry> passEntries = new ArrayList<Entry>();
+            List<Entry> failEntries = new ArrayList<Entry>();
+
+            // make list of data
+            BinomialExperiment binomialExperiment = (BinomialExperiment) this.experiment;
+
+            ArrayList<Trial> temp = binomialExperiment.getTrials();
+            ArrayList<BinomialTrial> binomialTrials = new ArrayList<BinomialTrial>();
+            for (Trial trial : temp){
+                binomialTrials.add((BinomialTrial) trial);
+            }
+
+            Hashtable<String, Integer> datePasses = new Hashtable<String, Integer>();
+            Hashtable<String, Integer> dateFails = new Hashtable<String, Integer>();
+            for (BinomialTrial trial : binomialTrials){
+                int passes = trial.getPassCount();
+                int fails = trial.getFailCount();
+                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+
+                if (datePasses.containsKey(dateOfTrial)){
+                    datePasses.put(dateOfTrial, datePasses.get(dateOfTrial) + passes);
+                }else{
+                    datePasses.put(dateOfTrial,passes);
+                }
+                if (dateFails.containsKey(dateOfTrial)){
+                    dateFails.put(dateOfTrial, dateFails.get(dateOfTrial) + fails);
+                }else{
+                    dateFails.put(dateOfTrial,fails);
+                }
+
+            }
+
+            // make list of entries
+            for (String key : datePasses.keySet()) {
+                // turn your data into Entry objects
+                passEntries.add(new Entry(decodeDate(key), datePasses.get(key)));
+            }
+            for (String key : dateFails.keySet()) {
+                // turn your data into Entry objects
+                failEntries.add(new Entry(decodeDate(key), dateFails.get(key)));
+            }
+
+            ScatterDataSet passDataSet = new ScatterDataSet(passEntries, binomialExperiment.getPassUnit());
+            ScatterDataSet failDataSet = new ScatterDataSet(failEntries, binomialExperiment.getFailUnit());
+
+            passDataSet.setColors(new int[] {R.color.purple_700, R.color.teal_700});
+
+            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
+
+            dataSets.add(passDataSet);
+            dataSets.add(failDataSet);
+
+            // create data set
+            ScatterData scatterData = new ScatterData(dataSets);
+
+            ValueFormatter formatter = new ValueFormatter() {
+                @Override
+                public String getAxisLabel(float value, AxisBase axis) {
+                    return formatDate(value);
+                }
+            };
+            XAxis xAxis = scatterChart.getXAxis();
+            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+            xAxis.setValueFormatter(formatter);
+
+            // add data to chart
+            scatterChart.setData(scatterData);
+            scatterChart.invalidate(); // Refreshes chart
+
+        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
+            List<Entry> entries = new ArrayList<Entry>();
+
+            // make list of data
+            CountExperiment countExperiment = (CountExperiment) this.experiment;
+
+            ArrayList<Trial> temp = countExperiment.getTrials();
+            ArrayList<CountTrial> countTrials = new ArrayList<CountTrial>();
+            for (Trial trial : temp){
+                countTrials.add((CountTrial) trial);
+            }
+
+            Hashtable<String, Integer> dateCounts = new Hashtable<String, Integer>();
+            for (CountTrial trial : countTrials){
+                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+
+                if (dateCounts.containsKey(dateOfTrial)){
+                    dateCounts.put(dateOfTrial, dateCounts.get(dateOfTrial) + 1);
+                }else{
+                    dateCounts.put(dateOfTrial, 1);
+                }
+            }
+
+            // make list of entries
+            for (String key : dateCounts.keySet()) {
+                // turn your data into Entry objects
+                entries.add(new Entry(decodeDate(key), dateCounts.get(key)));
+            }
+
+            ScatterDataSet countDataSet = new ScatterDataSet(entries, countExperiment.getUnit());
+
+            countDataSet.setColors(new int[] {R.color.purple_700});
+
+            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
+
+            dataSets.add(countDataSet);
+
+
+            // create data set
+            ScatterData scatterData = new ScatterData(dataSets);
+
+            ValueFormatter formatter = new ValueFormatter() {
+                @Override
+                public String getAxisLabel(float value, AxisBase axis) {
+                    return formatDate(value);
+                }
+            };
+            XAxis xAxis = scatterChart.getXAxis();
+            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+            xAxis.setValueFormatter(formatter);
+
+            // add data to chart
+            scatterChart.setData(scatterData);
+            scatterChart.invalidate(); // Refreshes chart
+        } else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
+            List<Entry> entries = new ArrayList<Entry>();
+
+            // make list of data
+            IntegerExperiment integerExperiment = (IntegerExperiment) this.experiment;
+
+            ArrayList<Trial> temp = integerExperiment.getTrials();
+            ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
+            for (Trial trial : temp){
+                integerTrials.add((IntegerTrial) trial);
+            }
+
+            Hashtable<String, ArrayList<Integer>> dateValues = new Hashtable<String, ArrayList<Integer>>();
+            for (IntegerTrial trial : integerTrials){
+                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                ArrayList<Integer> values;
+
+                if (dateValues.containsKey(dateOfTrial)){
+                    values = dateValues.get(dateOfTrial);
+                }else{
+                    values = new ArrayList<Integer>();
+                }
+                values.add(trial.getValue());
+                dateValues.put(dateOfTrial, values);
+            }
+
+            // make list of entries
+            for (String key : dateValues.keySet()) {
+                // turn your data into Entry objects
+                for (int value : dateValues.get(key)){
+                    entries.add(new Entry(decodeDate(key), value));
+                }
+
+            }
+
+            ScatterDataSet integerDataSet = new ScatterDataSet(entries, integerExperiment.getUnit());
+
+            integerDataSet.setColors(new int[] {R.color.purple_700});
+
+            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
+
+            dataSets.add(integerDataSet);
+
+
+            // create data set
+            ScatterData scatterData = new ScatterData(dataSets);
+
+            ValueFormatter formatter = new ValueFormatter() {
+                @Override
+                public String getAxisLabel(float value, AxisBase axis) {
+                    return formatDate(value);
+                }
+            };
+            XAxis xAxis = scatterChart.getXAxis();
+            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+            xAxis.setValueFormatter(formatter);
+
+            // add data to chart
+            scatterChart.setData(scatterData);
+            scatterChart.invalidate(); // Refreshes chart
+
+        }else if (this.experiment.getType() == "Measurement") {
+            List<Entry> entries = new ArrayList<Entry>();
+
+            // make list of data
+            MeasurementExperiment measurementExperiment = (MeasurementExperiment) this.experiment;
+
+            ArrayList<Trial> temp = measurementExperiment.getTrials();
+            ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
+            for (Trial trial : temp){
+                measurementTrials.add((MeasurementTrial) trial);
+            }
+
+            Hashtable<String, ArrayList<Float>> dateValues = new Hashtable<String, ArrayList<Float>>();
+            for (MeasurementTrial trial : measurementTrials){
+                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                ArrayList<Float> values;
+
+                if (dateValues.containsKey(dateOfTrial)){
+                    values = dateValues.get(dateOfTrial);
+                }else{
+                    values = new ArrayList<Float>();
+                }
+                values.add(trial.getMeasurementValue());
+                dateValues.put(dateOfTrial, values);
+            }
+
+            // make list of entries
+            for (String key : dateValues.keySet()) {
+                // turn your data into Entry objects
+                for (float value : dateValues.get(key)){
+                    entries.add(new Entry(decodeDate(key), value));
+                }
+
+            }
+
+            ScatterDataSet measurementDataSet = new ScatterDataSet(entries, measurementExperiment.getUnit());
+
+            measurementDataSet.setColors(new int[] {R.color.purple_700});
+
+            List<IScatterDataSet> dataSets = new ArrayList<IScatterDataSet>();
+
+            dataSets.add(measurementDataSet);
+
+
+            // create data set
+            ScatterData scatterData = new ScatterData(dataSets);
+
+            ValueFormatter formatter = new ValueFormatter() {
+                @Override
+                public String getAxisLabel(float value, AxisBase axis) {
+                    return formatDate(value);
+                }
+            };
+            XAxis xAxis = scatterChart.getXAxis();
+            xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+            xAxis.setValueFormatter(formatter);
+
+            // add data to chart
+            scatterChart.setData(scatterData);
+            scatterChart.invalidate(); // Refreshes chart
+        }
+    }// end populateTimePlot
+
+    private String encodeDate (int year, int month,int day){
+        String stringYear = String.valueOf(year);
+        stringYear = stringYear.substring(2,4);
+        String stringMonth;
+        String stringDay;
+        if (month < 10){
+            stringMonth = "0"+String.valueOf(month);
+        }else{
+            stringMonth = String.valueOf(month);
+        }
+        if (day < 10){
+            stringDay = "0"+String.valueOf(day);
+        }else{
+            stringDay = String.valueOf(day);
+        }
+
+        return stringYear + "/" + stringMonth + "/" + stringDay;
+
+    }
+    private float decodeDate (String date){
+        return (float) Integer.parseInt(date.replaceAll("/",""));
+    }
+    private String formatDate (float date) {
+        int dateInt = (int) date;
+        String formattedDate = String.valueOf(dateInt);
+        return "20" + formattedDate.substring(0,2) + "/" + formattedDate.substring(2,4) + "/" + formattedDate.substring(4,6);
+    }
 }// end ExperimentDetailsOwnerActivity
 
