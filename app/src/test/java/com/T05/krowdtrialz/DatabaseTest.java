@@ -1,5 +1,8 @@
 package com.T05.krowdtrialz;
 
+import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
@@ -8,6 +11,10 @@ import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
 
+import org.mockito.Mockito;
+import org.mockito.Mockito.*;
+
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
 
-    private Database db = new Database();
+    private Database db;
 
     private String measureExperimentID = "123MES";
     private String binomialExperimentID = "123BIN";
@@ -25,7 +32,7 @@ public class DatabaseTest {
     private String uid = "JB123";
 
     public User mockUser () {
-        User user = new User("Joe Bob","jbeast","jb@gmail.com",uid);
+        User user = new User("Joe Bob","jbeast","jb@gmail.com", "856c7d10-364d-40ea-ad2d-3aedd6993c5b");
         return user;
     }
 
@@ -46,6 +53,13 @@ public class DatabaseTest {
         return experiment;
     }
 
+    @Before
+    void setup() {
+        final SharedPreferences sharedPreferences = Mockito.mock(SharedPreferences.class);
+        Database.initializeInstance(sharedPreferences);
+        db = Database.getInstance();
+    }
+
     @Test
     void smokeTestGetExperimentsByOwner(){
 
@@ -60,6 +74,33 @@ public class DatabaseTest {
             @Override
             public void onFailure() {
                 fail("Empty List Returned");
+            }
+        });
+    }
+
+    @Test
+    void setupAddNewExperiment(){
+        IntegerExperiment experiment = mockIntegerExperiment();
+        experiment.setRegion("China");
+//        db.addExperiment(experiment);
+    }
+
+    @Test
+    void smokeTestGetExperimentsByTags () {
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("bob");
+        db.getExperimentsByTags(tags, new Database.QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                for(Experiment experiment : experiments){
+                    Log.d("test Tags",experiment.getId());
+                }
+
+            }
+
+            @Override
+            public void onFailure() {
+
             }
         });
     }

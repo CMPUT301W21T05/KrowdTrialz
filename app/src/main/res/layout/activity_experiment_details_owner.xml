@@ -5,320 +5,307 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.ExperimentDetailsOwnerActivity">
-
-    <EditText
-        android:id="@+id/description_owner_screen_editText"
-        android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:hint="@string/description_owner"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/region_detail_owner_screen_textView"
-        android:layout_width="335dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/region_owner"
-        app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
-        app:layout_constraintTop_toBottomOf="@+id/description_owner_screen_editText" />
-
-    <TextView
-        android:id="@+id/minimum_trial_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/minimum_trials_owner"
-        app:layout_constraintStart_toStartOf="@+id/region_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/region_detail_owner_screen_textView" />
-
-    <EditText
-        android:id="@+id/minimum_trial_owner_screen_exitText"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="5dp"
-        android:hint="@string/enter_a_number_owner"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@id/minimum_trial_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/region_detail_owner_screen_textView"/>
-
-    <Button
-        android:id="@+id/end_experiment_owner_screen_button"
-        android:layout_width="168dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/end_experiment_owner"
-        app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
-        app:layout_constraintTop_toBottomOf="@+id/minimum_trial_owner_screen_textView" />
-
-    <Button
-        android:id="@+id/unpublish_owner_screen_button"
-        android:layout_width="140dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="30dp"
-        android:text="@string/unpublish_owner"
-        app:layout_constraintStart_toEndOf="@+id/end_experiment_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/minimum_trial_owner_screen_textView"
-        android:layout_marginStart="30dp" />
-
-    <Button
-        android:id="@+id/view_contributors_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/view_contributors_owner"
-        app:layout_constraintStart_toStartOf="@+id/end_experiment_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/end_experiment_owner_screen_button"
-        />
-
-    <Button
-        android:id="@+id/subscribe_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/subscribe_owner"
-        app:layout_constraintStart_toStartOf="@+id/view_contributors_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/view_contributors_owner_screen_button" />
-
-    <Button
-        android:id="@+id/add_trials_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/add_trials_owner"
-        app:layout_constraintStart_toStartOf="@+id/subscribe_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/subscribe_owner_screen_button" />
-
-    <TextView
-        android:id="@+id/mean_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="75dp"
-        android:text="1.23"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/add_trials_owner_screen_button"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/st_dev_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="75dp"
-        android:text="0.98"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/add_trials_owner_screen_button"
-        android:layout_marginEnd="75dp" />
-
-    <TextView
-        android:id="@+id/mean_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/mean_owner"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/mean_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/st_dev_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="75dp"
-        android:text="@string/stdev_owner"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_detail_owner_screen_textView"
-        android:layout_marginEnd="75dp" />
-
-    <TextView
-        android:id="@+id/first_experiment_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/second_experiment_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/third_experiment_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fourth_experiment_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="0.00"
-        app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fifth_experiment_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="0.00"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/first_experiment_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/q0_owner"
-        app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/second_experiment_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/q1_owner"
-        app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/third_experiment_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/q2_owner"
-        app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fourth_experiment_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="75dp"
-        android:text="@string/q3_owner"
-        app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView"
-        android:layout_marginStart="75dp" />
-
-    <TextView
-        android:id="@+id/fifth_experiment_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/q4_owner"
-        app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView" />
-
-    <TextView
-        android:id="@+id/median_text_detail_owner_screen_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/median_owner"
-        app:layout_constraintEnd_toEndOf="@+id/third_experiment_detail_owner_screen_textView"
-        app:layout_constraintTop_toBottomOf="@+id/first_experiment_text_detail_owner_screen_textView" />
-
-    <Button
-        android:id="@+id/view_map_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/view_map_owner"
-        app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
-        app:layout_constraintTop_toBottomOf="@+id/median_text_detail_owner_screen_textView" />
-
-    <Button
-        android:id="@+id/view_QnA_detail_owner_screen_button"
-        android:layout_width="335dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/view_q_amp_a_owner"
-        app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
-        app:layout_constraintTop_toBottomOf="@+id/view_map_owner_screen_button" />
-
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/histogram_owner"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="250dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_QnA_detail_owner_screen_button"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        />
-
-    <com.github.mikephil.charting.charts.ScatterChart
-        android:id="@+id/time_plot_owner"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="350dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_QnA_detail_owner_screen_button"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view" />
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:background="?android:attr/windowBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
-
-    <fragment
-        android:id="@+id/nav_host_fragment"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation" />
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="?attr/actionBarSize">
+
+            <EditText
+                android:id="@+id/description_owner_screen_editText"
+                android:layout_width="335dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:hint="@string/description_owner"
+                android:inputType="textPersonName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/region_detail_owner_screen_textView"
+                android:layout_width="335dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/region_owner"
+                app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
+                app:layout_constraintTop_toBottomOf="@+id/description_owner_screen_editText" />
+
+            <TextView
+                android:id="@+id/minimum_trial_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/minimum_trials_owner"
+                app:layout_constraintStart_toStartOf="@+id/region_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/region_detail_owner_screen_textView" />
+
+            <EditText
+                android:id="@+id/minimum_trial_owner_screen_exitText"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="5dp"
+                android:hint="@string/enter_a_number_owner"
+                android:inputType="number"
+                app:layout_constraintStart_toEndOf="@id/minimum_trial_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/region_detail_owner_screen_textView"/>
+
+            <Button
+                android:id="@+id/end_experiment_owner_screen_button"
+                android:layout_width="168dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/end_experiment_owner"
+                app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
+                app:layout_constraintTop_toBottomOf="@+id/minimum_trial_owner_screen_textView" />
+
+            <Button
+                android:id="@+id/unpublish_owner_screen_button"
+                android:layout_width="140dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="30dp"
+                android:text="@string/unpublish_owner"
+                app:layout_constraintStart_toEndOf="@+id/end_experiment_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/minimum_trial_owner_screen_textView"
+                android:layout_marginStart="30dp" />
+
+            <Button
+                android:id="@+id/view_contributors_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/view_contributors_owner"
+                app:layout_constraintStart_toStartOf="@+id/end_experiment_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/end_experiment_owner_screen_button"
+                />
+
+            <Button
+                android:id="@+id/subscribe_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/subscribe_owner"
+                app:layout_constraintStart_toStartOf="@+id/view_contributors_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/view_contributors_owner_screen_button" />
+
+            <Button
+                android:id="@+id/add_trials_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/add_trials_owner"
+                app:layout_constraintStart_toStartOf="@+id/subscribe_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/subscribe_owner_screen_button" />
+
+            <TextView
+                android:id="@+id/mean_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="75dp"
+                android:text="1.23"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/add_trials_owner_screen_button"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/st_dev_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="75dp"
+                android:text="0.98"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/add_trials_owner_screen_button"
+                android:layout_marginEnd="75dp" />
+
+            <TextView
+                android:id="@+id/mean_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="@string/mean_owner"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/mean_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/st_dev_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="75dp"
+                android:text="@string/stdev_owner"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_detail_owner_screen_textView"
+                android:layout_marginEnd="75dp" />
+
+            <TextView
+                android:id="@+id/first_experiment_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/second_experiment_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/third_experiment_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fourth_experiment_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="0.00"
+                app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fifth_experiment_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="0.00"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/st_dev_text_detail_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/first_experiment_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="q0"
+                app:layout_constraintStart_toStartOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/second_experiment_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="q1"
+                app:layout_constraintStart_toStartOf="@+id/first_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/third_experiment_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="q2"
+                app:layout_constraintStart_toStartOf="@+id/second_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fourth_experiment_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="75dp"
+                android:text="q3"
+                app:layout_constraintStart_toStartOf="@+id/third_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView"
+                android:layout_marginStart="75dp" />
+
+            <TextView
+                android:id="@+id/fifth_experiment_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="q4"
+                app:layout_constraintEnd_toEndOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_detail_owner_screen_textView" />
+
+            <TextView
+                android:id="@+id/median_text_detail_owner_screen_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/median_owner"
+                app:layout_constraintEnd_toEndOf="@+id/third_experiment_detail_owner_screen_textView"
+                app:layout_constraintTop_toBottomOf="@+id/first_experiment_text_detail_owner_screen_textView" />
+
+            <Button
+                android:id="@+id/view_map_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/view_map_owner"
+                app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
+                app:layout_constraintTop_toBottomOf="@+id/median_text_detail_owner_screen_textView" />
+
+            <Button
+                android:id="@+id/view_QnA_detail_owner_screen_button"
+                android:layout_width="335dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/view_q_amp_a_owner"
+                app:layout_constraintStart_toStartOf="@+id/description_owner_screen_editText"
+                app:layout_constraintTop_toBottomOf="@+id/view_map_owner_screen_button" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/histogram_owner"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="250dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/add_trials_owner_screen_button"
+                app:layout_constraintBottom_toTopOf="@+id/nav_view"
+                />
+
+            <com.github.mikephil.charting.charts.ScatterChart
+                android:id="@+id/time_plot_owner"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="350dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_QnA_detail_owner_screen_button"
+                app:layout_constraintBottom_toTopOf="@+id/nav_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,13 @@
 package com.T05.krowdtrialz.model.experiment;
 
 import com.T05.krowdtrialz.model.interfaces.Tagged;
-import com.T05.krowdtrialz.model.location.Region;
 import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-import com.T05.krowdtrialz.model.trial.Trial;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +27,7 @@ public abstract class Experiment implements Tagged {
     private int minTrials = 0;
     private ArrayList<Barcode> barcodes;
     private ArrayList<QRCode> qrCodes;
+    private ArrayList<User> ignoredUsers;
 
     private final boolean active = true;
     private final boolean inactive = false;
@@ -46,6 +44,7 @@ public abstract class Experiment implements Tagged {
         barcodes = new ArrayList<Barcode>();
         qrCodes = new ArrayList<QRCode>();
         status = active;
+        ignoredUsers = new ArrayList<User>();
     }
 
     public String getId() {
@@ -80,6 +79,14 @@ public abstract class Experiment implements Tagged {
 
     public User getOwner() {
         return owner;
+    }
+
+    public boolean isOwner(User user){
+        if(owner.getId().equals(user.getId())){
+            return true;
+        } else{
+            return false;
+        }
     }
 
     public void setOwner(User owner) {
@@ -121,6 +128,33 @@ public abstract class Experiment implements Tagged {
     public String getType() { return type; }
 
     public void setType(String type) { this.type = type; }
+
+    public ArrayList<User> getIgnoredUsers(){
+        return ignoredUsers;
+    }
+
+    public boolean isIgnored(User user){
+        for (User i : ignoredUsers){
+            if(i.getId().equals(user.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void ignoreUser(User user){
+        ignoredUsers.add(user);
+    }
+
+    public void ignoreMultipleUsers(ArrayList<User> users){
+        ignoredUsers.addAll(users);
+    }
+
+    public void removeIgnoredUser(User user){
+        if(ignoredUsers.contains(user)){
+            ignoredUsers.remove(user);
+        }
+    }
 
     /**
      * Set experiment status to active
@@ -180,5 +214,30 @@ public abstract class Experiment implements Tagged {
         tags.add(((Integer) getMinTrials()).toString());
 
         return tags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Experiment)) {
+            return false;
+        }
+
+        Experiment c = (Experiment) o;
+
+        return getId().equals(c.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0x05;
+        result = 31 * result + getId().hashCode();
+        result = 31 * result + getDescription().hashCode();
+        result = 31 * result + getType().hashCode();
+        return result;
     }
 }
