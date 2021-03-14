@@ -144,7 +144,7 @@ public class PublishFragment extends Fragment {
         }
         experiment.setMinTrials(minTrials);
 
-        db.addExperiment(experiment);
+        publishViewModel.sendExperimentToDatabase(experiment);
     }
 
     /**
