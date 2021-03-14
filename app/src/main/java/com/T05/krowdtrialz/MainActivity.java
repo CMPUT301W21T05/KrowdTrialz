@@ -60,14 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // Initialize the Database instance.
-        SharedPreferences sharedPreferences = getSharedPreferences("shared_P", MODE_PRIVATE);
-        Database.initializeInstance(sharedPreferences);
-        db = Database.getInstance();
-        // Generate a new user with unique ID or fetch information for an existing user.
-        db.initializeDeviceUser();
-
     }
 
 }// end MainActivity
