@@ -4,6 +4,9 @@ import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BinomialExperiment extends Experiment {
@@ -45,13 +48,16 @@ public class BinomialExperiment extends Experiment {
      *  Tags to ID this experiment
      */
     @Override
-    public Set<String> getTags() {
-        Set<String> tags = super.getTags();
+    public List<String> getTags() {
+        Set<String> tags = new HashSet<>();
+        tags.addAll(super.getTags());
 
         tags.add(getFailUnit());
         tags.add(getPassUnit());
 
-        return tags;
+        List<String> tagsList = new ArrayList<>();
+        tagsList.addAll(tags);
+        return tagsList;
     }
 
     /**
