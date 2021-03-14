@@ -64,13 +64,34 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_details_owner);
         db = Database.getInstance();
-
         description = findViewById(R.id.description_owner_screen_editText);
         minTrials = findViewById(R.id.minimum_trial_owner_screen_exitText);
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
+
+        populateHistogram();
+        populateTimePlot();
+
+    }// end onCreate
+
+    /**
+     * This method creates a Histogram based on experiment
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    private void populateHistogram (){
+
+        Intent i = getIntent();
+
+        Bundle extras = getIntent().getExtras();
+//        experiment = (Experiment) extras.get("experiment");
+        str = (String) extras.get("experiment");
+        // integers cannot be passed with intents without crashing
+//        num = (Integer) extras.get("experiment");
+//        num = 10;
+        
         //TODO: might need to make sure if these fields are actually filled
         //testing
         description.setText(str);

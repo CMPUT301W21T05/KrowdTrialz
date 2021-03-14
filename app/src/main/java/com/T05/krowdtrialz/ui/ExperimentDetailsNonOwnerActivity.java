@@ -88,6 +88,10 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
         populateMainInfo();
         populateTrialResults();
 
+
+//        populateHistogram();
+//        populateTimePlot();
+
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
