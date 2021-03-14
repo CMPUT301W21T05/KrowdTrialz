@@ -3,7 +3,11 @@ package com.T05.krowdtrialz.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.icu.util.Measure;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
@@ -16,6 +20,7 @@ import com.T05.krowdtrialz.model.trial.CountTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
+import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
@@ -28,8 +33,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -49,58 +56,108 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
+        this.experiment = experiment;
+
         populateHistogram();
         populateTimePlot();
     }
 
     /**
      * This method creates a Histogram based on experiment
+     * NOTE: The experiment attribute of the activity class should contain an experiment before this method is called
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
     private void populateHistogram (){
 
         barChart = findViewById(R.id.histogram_non_owner);
+        BarData barData = new BarData();
 
-        // Get experiment object
-        Bundle extras = getIntent().getExtras();
-        experiment = (Experiment) extras.get("experiment");
+        // Get array of user IDs to ignore
+        ArrayList<User> ignoredUsers = experiment.getIgnoredUsers();
+        ArrayList<String> ignoredIDs = new ArrayList<String>();
+        for (User user : ignoredUsers){
+            ignoredIDs.add(user.getId());
+        }
 
         // Get array of data from experiment
         List<BarEntry> entries = new ArrayList<BarEntry>();
-        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+        if (experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+            List<BarEntry> passEntries = new ArrayList<BarEntry>();
+            List<BarEntry> failEntries = new ArrayList<BarEntry>();
             // make list of data
-            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-            BinomialExperiment binomialExperiment = (BinomialExperiment) extras.get("experiment");
-            dataPoints.add(binomialExperiment.getSuccessCount());
-            dataPoints.add(binomialExperiment.getFailureCount());
+            ArrayList<Integer> passDataPoints = new ArrayList<Integer>();
+            ArrayList<Integer> failDataPoints = new ArrayList<Integer>();
+            BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
+            passDataPoints.add(binomialExperiment.getSuccessCount()); //getSuccessCount() already ignores ignored users
+            failDataPoints.add(binomialExperiment.getFailureCount()); //getFailureCount() already ignores ignored users
 
             // make list of entries
-            for (int i = 0; i < dataPoints.size(); i++) {
+            for (int i = 0; i < passDataPoints.size(); i++) {
                 // turn your data into Entry objects
-                entries.add(new BarEntry(i, dataPoints.get(i)));
+                passEntries.add(new BarEntry(i, passDataPoints.get(i)));
             }
+            for (int i = 0; i < failDataPoints.size(); i++) {
+                // turn your data into Entry objects
+                failEntries.add(new BarEntry(i, failDataPoints.get(i)));
+            }
+
+            BarDataSet passDataSet = new BarDataSet(passEntries, binomialExperiment.getPassUnit());
+            BarDataSet failDataSet = new BarDataSet(failEntries, binomialExperiment.getFailUnit());
+
+            passDataSet.setColors(new int[] {R.color.purple_700, R.color.teal_700});
+
+            List<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+
+            dataSets.add(passDataSet);
+            dataSets.add(failDataSet);
+
+            // create data set
+            barData = new BarData(dataSets);
         }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-            dataPoints.add(this.experiment.getTrials().size());
+            int count = 0;
+            for (Trial trial : experiment.getTrials()){
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())){
+                    count += 1;
+                }
+            }
+            dataPoints.add(count);
 
             // make list of entries
             for (int i = 0; i < dataPoints.size(); i++) {
                 // turn your data into Entry objects
                 entries.add(new BarEntry(i, dataPoints.get(i)));
             }
+            barChart.getXAxis().setDrawLabels(false);
+
+            // create data set
+            BarDataSet barDataSet = new BarDataSet(entries, "Count");
+            barData = new BarData(barDataSet);
         }
-        else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
+        else if (experiment.getType() == "Integer"){ // Integer format: list of data points
             // make list of data
-            IntegerExperiment integerExperiment = (IntegerExperiment) extras.get("experiment");
-            double[] temp = integerExperiment.getTrials().stream()
-                    .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
-                    .toArray();
+            IntegerExperiment integerExperiment = (IntegerExperiment) experiment;
+            ArrayList<Double> values = new ArrayList<Double>();
+            ArrayList<Trial> trials = integerExperiment.getTrials();
+            ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
+
+            //Cast trials to integer trials
+            for (Trial trial : trials){
+                integerTrials.add((IntegerTrial) trial);
+            }
+
+            //Add data, ignoring ignored users
+            for (IntegerTrial trial : integerTrials){
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())){
+                    values.add((double) trial.getValue());
+                }
+            }
 
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-            for(int i=0; i<temp.length; i++) {
-                dataPoints.add((int) temp[i]);
+            for(int i=0; i<values.size(); i++) {
+                dataPoints.add((int) values.get(i).doubleValue());
             }
 
             // make dictionary that stores the frequency of each unique data point
@@ -120,17 +177,32 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
                 entries.add(new BarEntry(i ,uniqueDataPoints.get(i)));
             }
 
-        }else if (this.experiment.getType() == "Measurement") {
-            // make list of data
-            MeasurementExperiment measurementExperiment = (MeasurementExperiment) extras.get("experiment");
+            // create data set
+            BarDataSet barDataSet = new BarDataSet(entries, integerExperiment.getUnit());
+            barData = new BarData(barDataSet);
 
-            double[] temp = measurementExperiment.getTrials().stream()
-                    .mapToDouble(trial -> ((MeasurementTrial) trial).getMeasurementValue())
-                    .toArray();
+        }else if (experiment.getType() == "Measurement") {
+            // make list of data
+            MeasurementExperiment measurementExperiment = (MeasurementExperiment) experiment;
+            ArrayList<Double> values = new ArrayList<Double>();
+            ArrayList<Trial> trials = measurementExperiment.getTrials();
+            ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
+
+            //Cast trials to integer trials
+            for (Trial trial : trials){
+                measurementTrials.add((MeasurementTrial) trial);
+            }
+
+            //Add data, ignoring ignored users
+            for (MeasurementTrial trial : measurementTrials){
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())){
+                    values.add((double) trial.getMeasurementValue());
+                }
+            }
 
             ArrayList<Double> dataPoints = new ArrayList<Double>();
-            for(int i=0; i<temp.length; i++) {
-                dataPoints.add(temp[i]);
+            for(int i=0; i<values.size(); i++) {
+                dataPoints.add(values.get(i));
             }
 
             // make dictionary that stores the frequency of each unique data point
@@ -149,11 +221,10 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
                 // turn your data into Entry objects
                 entries.add(new BarEntry((float) i, (float) uniqueDataPoints.get(i)));
             }
+            // create data set
+            BarDataSet barDataSet = new BarDataSet(entries, measurementExperiment.getUnit());
+            barData = new BarData(barDataSet);
         }
-
-        // create data set
-        BarDataSet barDataSet = new BarDataSet(entries, String.format("%s Trials", experiment.getType()));
-        BarData barData = new BarData(barDataSet);
 
         // add data to chart
         barChart.setData(barData);
@@ -164,29 +235,35 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
 
     /**
      * This method creates a TimePlot based on experiment
+     * NOTE: The experiment attribute of the activity class should contain an experiment before this method is called
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
     private void populateTimePlot () {
         scatterChart = findViewById(R.id.time_plot_non_owner);
 
-        // Get experiment object
-        Bundle extras = getIntent().getExtras();
-        experiment = (Experiment) extras.get("experiment");
+        // Get array of user IDs to ignore
+        ArrayList<User> ignoredUsers = experiment.getIgnoredUsers();
+        ArrayList<String> ignoredIDs = new ArrayList<String>();
+        for (User user : ignoredUsers){
+            ignoredIDs.add(user.getId());
+        }
 
         // Get array of data from experiment
-        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+        if (experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
 
             List<Entry> passEntries = new ArrayList<Entry>();
             List<Entry> failEntries = new ArrayList<Entry>();
 
             // make list of data
-            BinomialExperiment binomialExperiment = (BinomialExperiment) this.experiment;
+            BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
 
             ArrayList<Trial> temp = binomialExperiment.getTrials();
             ArrayList<BinomialTrial> binomialTrials = new ArrayList<BinomialTrial>();
             for (Trial trial : temp){
-                binomialTrials.add((BinomialTrial) trial);
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())) {
+                    binomialTrials.add((BinomialTrial) trial);
+                }
             }
 
             Hashtable<String, Integer> datePasses = new Hashtable<String, Integer>();
@@ -246,16 +323,18 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
             scatterChart.setData(scatterData);
             scatterChart.invalidate(); // Refreshes chart
 
-        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
+        }else if (experiment.getType() == "Count"){ // Count format: {Count}
             List<Entry> entries = new ArrayList<Entry>();
 
             // make list of data
-            CountExperiment countExperiment = (CountExperiment) this.experiment;
+            CountExperiment countExperiment = (CountExperiment) experiment;
 
             ArrayList<Trial> temp = countExperiment.getTrials();
             ArrayList<CountTrial> countTrials = new ArrayList<CountTrial>();
             for (Trial trial : temp){
-                countTrials.add((CountTrial) trial);
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())) {
+                    countTrials.add((CountTrial) trial);
+                }
             }
 
             Hashtable<String, Integer> dateCounts = new Hashtable<String, Integer>();
@@ -300,16 +379,18 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
             // add data to chart
             scatterChart.setData(scatterData);
             scatterChart.invalidate(); // Refreshes chart
-        } else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
+        } else if (experiment.getType() == "Integer"){ // Integer format: list of data points
             List<Entry> entries = new ArrayList<Entry>();
 
             // make list of data
-            IntegerExperiment integerExperiment = (IntegerExperiment) this.experiment;
+            IntegerExperiment integerExperiment = (IntegerExperiment) experiment;
 
             ArrayList<Trial> temp = integerExperiment.getTrials();
             ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
             for (Trial trial : temp){
-                integerTrials.add((IntegerTrial) trial);
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())) {
+                    integerTrials.add((IntegerTrial) trial);
+                }
             }
 
             Hashtable<String, ArrayList<Integer>> dateValues = new Hashtable<String, ArrayList<Integer>>();
@@ -361,16 +442,18 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
             scatterChart.setData(scatterData);
             scatterChart.invalidate(); // Refreshes chart
 
-        }else if (this.experiment.getType() == "Measurement") {
+        }else if (experiment.getType() == "Measurement") {
             List<Entry> entries = new ArrayList<Entry>();
 
             // make list of data
-            MeasurementExperiment measurementExperiment = (MeasurementExperiment) this.experiment;
+            MeasurementExperiment measurementExperiment = (MeasurementExperiment) experiment;
 
             ArrayList<Trial> temp = measurementExperiment.getTrials();
             ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
             for (Trial trial : temp){
-                measurementTrials.add((MeasurementTrial) trial);
+                if (!ignoredIDs.contains(trial.getExperimenter().getId())) {
+                    measurementTrials.add((MeasurementTrial) trial);
+                }
             }
 
             Hashtable<String, ArrayList<Float>> dateValues = new Hashtable<String, ArrayList<Float>>();
