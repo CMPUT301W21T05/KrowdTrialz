@@ -46,7 +46,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="text"
             android:paddingTop="0dp"
             android:paddingRight="1dp"
             android:paddingBottom="0dp"
@@ -175,7 +175,7 @@
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/minumum_trials_layout"
+        android:id="@+id/minimum_trials_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="147dp"
         android:layout_height="51dp"
@@ -232,8 +232,8 @@
         app:hintEnabled="true"
         android:hint="Experiment Region"
         app:hintTextColor="#FF9800"
-        app:layout_constraintStart_toStartOf="@+id/minumum_trials_layout"
-        app:layout_constraintTop_toBottomOf="@+id/minumum_trials_layout">
+        app:layout_constraintStart_toStartOf="@+id/minimum_trials_layout"
+        app:layout_constraintTop_toBottomOf="@+id/minimum_trials_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/experiment_region_input"
@@ -281,7 +281,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="text"
             android:paddingTop="0dp"
             android:paddingRight="1dp"
             android:paddingBottom="0dp"
@@ -321,7 +321,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="text"
             android:paddingTop="0dp"
             android:paddingRight="1dp"
             android:paddingBottom="0dp"

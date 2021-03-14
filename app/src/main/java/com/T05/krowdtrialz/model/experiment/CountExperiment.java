@@ -2,6 +2,9 @@ package com.T05.krowdtrialz.model.experiment;
 
 import com.T05.krowdtrialz.model.user.User;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CountExperiment extends Experiment {
@@ -40,11 +43,14 @@ public class CountExperiment extends Experiment {
      *  Tags to ID this experiment
      */
     @Override
-    public Set<String> getTags() {
-        Set<String> tags = super.getTags();
+    public List<String> getTags() {
+        Set<String> tags = new HashSet<>();
+        tags.addAll(super.getTags());
 
         tags.add(getUnit());
 
-        return tags;
+        List<String> tagsList = new ArrayList<>();
+        tagsList.addAll(tags);
+        return tagsList;
     }
 }
