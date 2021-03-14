@@ -21,6 +21,7 @@ import com.T05.krowdtrialz.model.trial.CountTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
+import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -89,6 +90,12 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
 
 //        populateHistogram();
 //        populateTimePlot();
+        Intent intent = getIntent();
+        // TODO: Use this to get experiment object
+        String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
+
+        populateHistogram();
+        populateTimePlot();
     }
 
     /**

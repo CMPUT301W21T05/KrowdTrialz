@@ -9,22 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KrowdTrialz">
-        <activity android:name=".ui.search.SearchActivity"
-            android:windowSoftInputMode="adjustNothing">
+        <activity android:name=".ui.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ui.owner.ContributorsActivity"
-            android:parentActivityName=".ui.ExperimentDetailsOwnerActivity">
-        </activity>
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".ui.contributors.ContributorsActivity"
+            android:parentActivityName=".ui.ExperimentDetailsOwnerActivity" />
         <activity android:name=".ui.ExperimentDetailsNonOwnerActivity" />
         <activity android:name=".ui.ExperimentDetailsOwnerActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

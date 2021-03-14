@@ -22,6 +22,7 @@ import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
+import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -63,9 +64,23 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_details_owner);
         db = Database.getInstance();
-
         description = findViewById(R.id.description_owner_screen_editText);
         minTrials = findViewById(R.id.minimum_trial_owner_screen_exitText);
+        Intent intent = getIntent();
+        // TODO: Use this to get experiment object
+        String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
+
+        populateHistogram();
+        populateTimePlot();
+
+    }// end onCreate
+
+    /**
+     * This method creates a Histogram based on experiment
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit
+     */
+    private void populateHistogram (){
 
         Intent i = getIntent();
 
