@@ -23,10 +23,14 @@ public abstract class Experiment implements Tagged {
     private String region;
     private String type;
     private boolean locationRequired = false;
+    public boolean status;
     private int minTrials = 0;
     private ArrayList<Barcode> barcodes;
     private ArrayList<QRCode> qrCodes;
     private ArrayList<User> ignoredUsers;
+
+    private final boolean active = true;
+    private final boolean inactive = false;
 
     public Experiment() {
     }
@@ -39,6 +43,7 @@ public abstract class Experiment implements Tagged {
         trials = new ArrayList<Trial>();
         barcodes = new ArrayList<Barcode>();
         qrCodes = new ArrayList<QRCode>();
+        status = active;
         ignoredUsers = new ArrayList<User>();
     }
 
@@ -149,6 +154,28 @@ public abstract class Experiment implements Tagged {
         if(ignoredUsers.contains(user)){
             ignoredUsers.remove(user);
         }
+    }
+
+    /**
+     * Set experiment status to active
+     */
+    public void setActive() {
+        status = active;
+    }
+
+    public boolean isActive() {
+        return status == active;
+    }
+
+    /**
+     * Set experiment status to inactive
+     */
+    public void setInactive() {
+        status = inactive;
+    }
+
+    public boolean isInactive() {
+        return status == inactive;
     }
 
     /**
