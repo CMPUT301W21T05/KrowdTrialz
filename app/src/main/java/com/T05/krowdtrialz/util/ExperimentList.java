@@ -1,31 +1,39 @@
 package com.T05.krowdtrialz.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.ExperimentDetailsNonOwnerActivity;
+import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
 
 import java.util.ArrayList;
 
 public class ExperimentList extends ArrayAdapter<Experiment> {
     private ArrayList<Experiment> experiments;
+    private User deviceUser;
     private Context context;
 
     private com.google.android.material.textview.MaterialTextView experimentOwner;
     private com.google.android.material.textview.MaterialTextView experimentDescription;
     private com.google.android.material.checkbox.MaterialCheckBox experimentStatusCheck;
 
-    public ExperimentList (Context context, ArrayList<Experiment> experiments) {
+    public ExperimentList (Context context, ArrayList<Experiment> experiments, User deviceUser) {
         super(context, 0, experiments);
         this.experiments = experiments;
         this.context = context;
+        this.deviceUser = deviceUser;
     }
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -44,7 +52,27 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
         experimentOwner.setText(experiment.getOwner().getUserName().toString());
         experimentDescription.setText(experiment.getDescription().toString());
         experimentStatusCheck.setChecked(experiment.isActive());
-        
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+
+                if(experiment.isOwner(deviceUser)){
+                    // If user is owner
+                    intent = new Intent(context, ExperimentDetailsOwnerActivity.class);
+                } else {
+                    // If user is not owner
+                    intent = new Intent(context, ExperimentDetailsNonOwnerActivity.class);
+                }
+
+                intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+                context.startActivity(intent);
+            }
+        });
+
         return view;
     }
+
+
 }
