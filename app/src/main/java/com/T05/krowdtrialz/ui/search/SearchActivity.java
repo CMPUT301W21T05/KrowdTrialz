@@ -97,7 +97,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d(TAG, "clicked position" + position);
-                        
+
                         Intent i = new Intent(SearchActivity.this, ExperimentDetailsNonOwnerActivity.class);
 
                         Experiment experiment = experimentAdapter.getItem(position);

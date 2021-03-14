@@ -70,6 +70,11 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Experiment exp) {
                 experiment = exp;
+                populateMainInfo();
+                populateTrialResults();
+
+                populateHistogram();
+                populateTimePlot();
             }
 
             @Override
@@ -77,12 +82,6 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
                 Log.e(TAG, "Error Searching Database for experiment");
             }
         });
-
-        populateMainInfo();
-        populateTrialResults();
-
-        populateHistogram();
-        populateTimePlot();
     }
 
     /**
