@@ -95,9 +95,7 @@ public class PublishFragment extends Fragment {
         View view = getView();
 
         Database db = Database.getInstance();
-        String id = db.getID();
-        // TODO implement a way to get the current User from Database
-        User owner = new User("", "", "", id);
+        User owner = db.getDeviceUser();
 
         EditText descriptionEditText = view.findViewById(R.id.experiment_description_input);
         String description = descriptionEditText.getText().toString();
