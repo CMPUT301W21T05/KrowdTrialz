@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
+import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
@@ -17,6 +21,10 @@ import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
+import com.T05.krowdtrialz.ui.trial.AddBinomialTrialActivity;
+import com.T05.krowdtrialz.ui.trial.AddCountTrialActivity;
+import com.T05.krowdtrialz.ui.trial.AddIntegerTrialActivity;
+import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -36,9 +44,13 @@ import java.util.List;
 
 public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
 
+    private static final String TAG = "ExperimentDetailsOwner";
+
     private Experiment experiment;
     private BarChart barChart;
     private ScatterChart scatterChart;
+
+    private Button addTrialButon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +59,49 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
-        String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
+        String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
+
+        addTrialButon = findViewById(R.id.add_trials_owner_screen_button);
+
+        addTrialButon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Add Trials selected.");
+                addTrial();
+            }
+        });
 
         populateHistogram();
         populateTimePlot();
     }
+
+    /**
+     * This method starts an add trial activity based on the experiment type.
+     * @author Vasu Gupta
+     */
+    void addTrial(){
+        Intent intent = null;
+        String type = experiment.getType();
+
+        if(type.equals("Binomial")){
+            intent = new Intent(this, AddBinomialTrialActivity.class);
+        } else if(type.equals("Count")){
+            intent = new Intent(this, AddCountTrialActivity.class);
+        }else if(type.equals("Measurement")){
+            intent = new Intent(this, AddMeasurementTrialActivity.class);
+        } else if(type.equals("Integer")){
+            intent = new Intent(this, AddIntegerTrialActivity.class);
+        }
+
+        if(intent != null){
+            Log.d(TAG, "Starting Add" + type + "Trial activity.");
+            intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+            startActivity(intent);
+        } else{
+            Log.e(TAG,"Intent is null: Could not get Trial type.");
+        }
+    }
+
 
     /**
      * This method creates a Histogram based on experiment

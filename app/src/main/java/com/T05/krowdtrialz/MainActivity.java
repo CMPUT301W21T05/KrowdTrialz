@@ -33,6 +33,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_EXPERIMENT_ID = "com.T05.krowdtrialz.EXPERIMENT_ID";
+
     private Database db;
     private final String TAG = "MAIN ACTIVITY";
 

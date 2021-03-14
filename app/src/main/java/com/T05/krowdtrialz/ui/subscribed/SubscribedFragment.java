@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 public class SubscribedFragment extends Fragment {
 
-    public static final String EXTRA_EXPERIMENT_ID = "com.T05.krowdtrialz.ui.EXPERIMENT_ID";
     private SubscribedViewModel subscribedViewModel;
 
     ListView experimentsList;
