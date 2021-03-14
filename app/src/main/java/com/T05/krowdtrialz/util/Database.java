@@ -95,6 +95,39 @@ public class Database {
         this.sharedPreferences = sharedPreferences;
     }
 
+
+    /**
+     * This gets an experiment of a unique ID
+     * @param expID An Experiment ID
+     * @author Vasu Gupta
+     */
+    public void getExperimentByID(String expID, GetExperimentCallback callback){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("AllExperiments");
+
+        Query query = userCollectionReference.whereEqualTo("id", expID);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.getResult().size() == 1){
+                    Experiment experiment = null;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        experiment = document.toObject(Experiment.class);
+                    }
+                    Log.d(TAG, "Experiment of ID " + expID.toString() + " found.");
+                    callback.onSuccess(experiment);
+                } else if (task.getResult().size() > 1) {
+                    Log.e(TAG, "Multiple experiments with same ID " + expID.toString() + " found.");
+                    callback.onFailure();
+                } else {
+                    Log.e(TAG, "No experiment of ID: " + expID.toString() + " found.");
+                    callback.onFailure();
+                }
+            }
+        });
+    }
+
+
     /**
      * This saves unique id after initializeDeviceUser generates a unique id
      * @author
@@ -649,6 +682,14 @@ public class Database {
         public void onFailure();
     }
 
+    /**
+     * Callback for methods that query for one experiment
+     * @author Vasu Gupta
+     */
+    public interface GetExperimentCallback {
+        public void onSuccess(Experiment experiment);
+        public void onFailure();
+    }
     /**
      * Callback for when initializeInstance is finished.
      * @author Ryan Shukla

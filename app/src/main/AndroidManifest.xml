@@ -12,7 +12,6 @@
         <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -20,7 +19,7 @@
             android:name=".ui.search.SearchActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:name=".ui.owner.ContributorsActivity"
+            android:name=".ui.contributors.ContributorsActivity"
             android:parentActivityName=".ui.ExperimentDetailsOwnerActivity" />
         <activity android:name=".ui.ExperimentDetailsNonOwnerActivity" />
         <activity android:name=".ui.ExperimentDetailsOwnerActivity" />
