@@ -51,9 +51,6 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
     TextView stdev;
     TextView median;
 
-    //for testing
-    private String str;
-
     private Database db;
     private Experiment experiment;
     private BarChart barChart;
@@ -65,36 +62,24 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_experiment_details_non_owner);
         db = Database.getInstance();
 
-        Intent i = getIntent();
-        // test with string
-//        String name = i.getStringExtra("experiment");
-
-        Bundle extras = getIntent().getExtras();
-//        experiment = (Experiment) extras.get("experiment");
-        str = (String) extras.get("experiment");
-
-        // test with experiment object
-//        experiment = (Experiment) i.getSerializableExtra("Selected_Experiment");
-//        Bundle extras = getIntent().getExtras();
-//        experiment = (Experiment) extras.get("experiment");
-//        if(getIntent().getExtras() != null){
-//            experiment = (Experiment) getIntent().getSerializableExtra("experiment");
-//        }
-
-//        String name = experiment.getOwner().getUserName();
-
-
-
-        populateMainInfo();
-        populateTrialResults();
-
-
-//        populateHistogram();
-//        populateTimePlot();
-
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
+
+        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment exp) {
+                experiment = exp;
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "Error Searching Database for experiment");
+            }
+        });
+
+        populateMainInfo();
+        populateTrialResults();
 
         populateHistogram();
         populateTimePlot();
@@ -108,20 +93,19 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
     private void populateMainInfo() {
         // fill out owner Username
         ownerName = findViewById(R.id.owner_username_detail_non_owner_screen_textView);
-//        ownerName.setText(experiment.getOwner().getUserName());
+        ownerName.setText(experiment.getOwner().getUserName());
 
         // fill out experiment description
         description = findViewById(R.id.description_detail_non_owner_screen_textView);
-//        description.setText(experiment.getDescription());
+        description.setText(experiment.getDescription());
 
         //fill out status
         status = findViewById(R.id.status_detail_non_owner_screen_textView);
 //        // TODO: get status once implemented
-//        status.setText(__need experiment method___);
 
         // fill out region
         region = findViewById(R.id.region_detail_non_owner_screen_textView);
-//        region.setText(experiment.getRegion());
+        region.setText(experiment.getRegion());
 
     }
 
@@ -133,7 +117,7 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
     public void subscribeToExperiment(View view){
         Log.d(TAG, "subscribe to experiment");
         Toast.makeText(ExperimentDetailsNonOwnerActivity.this, "pressed subscribe",Toast.LENGTH_SHORT).show();
-//        db.addSubscription(db.getDeviceUser(), experiment);
+        db.addSubscription(db.getDeviceUser(), experiment);
     }
 
     /**
@@ -157,18 +141,13 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
         // fill out Mean
         mean = findViewById(R.id.mean_detail_non_owner_screen_textView);
         // TODO: get the mean of experiment
-//        mean.setText(__get_mean_of_experiment__);
 
         // TODO: get the standard deviation of experiment
         // fill out Standard deviation
         stdev = findViewById(R.id.st_dev_detail_non_owner_screen_textView);
-//        stdev.setText(__get_stdev_of_experiment__);
 
         // TODO: get mean added to xml then
 //        mean = findViewByID()
-//        stdev.setText(__get_mean_of_experiment__);
-
-        // TODO: maybe we make a button that pulls up a listview of results
 
     }
 

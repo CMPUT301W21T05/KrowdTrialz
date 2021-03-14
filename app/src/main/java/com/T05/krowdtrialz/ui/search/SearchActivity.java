@@ -22,6 +22,7 @@ import android.widget.SearchView;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.ui.ExperimentDetailsNonOwnerActivity;
 import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.ExperimentList;
@@ -96,33 +97,16 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d(TAG, "clicked position" + position);
-                        /*
-                        // if passing activity to NonOwner
+                        
                         Intent i = new Intent(SearchActivity.this, ExperimentDetailsNonOwnerActivity.class);
-//                        Experiment exp = experiments.get(position);
-                        Experiment experiment = experimentAdapter.getItem(position);
-                        // testing getting the name then passing it in
-                        String name = experiment.getOwner().getUserName();
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        // passing string works
-//                        String name = "ABCD EFGHIJK";
-                        i.putExtra("experiment", name);
-                        startActivity(i);
-                        */
 
-                        // if passing activity to NonOwner
-                        Intent i = new Intent(SearchActivity.this, ExperimentDetailsOwnerActivity.class);
-//                        Experiment exp = experiments.get(position);
                         Experiment experiment = experimentAdapter.getItem(position);
-                        // testing getting the name then passing it in
-                        String name = experiment.getDescription();
-//                        String minTrials = String.valueOf(experiment.getMinTrials());
 
-//                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        // passing string works
-//                        String name = "ABCD EFGHIJK";
-                        i.putExtra("experiment", name);
+                        String experimentID = experiment.getId();
+
+                        i.putExtra("experiment", experimentID);
                         startActivity(i);
+
 
 
                     }

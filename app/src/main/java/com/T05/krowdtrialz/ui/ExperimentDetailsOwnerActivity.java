@@ -66,38 +66,26 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
         db = Database.getInstance();
         description = findViewById(R.id.description_owner_screen_editText);
         minTrials = findViewById(R.id.minimum_trial_owner_screen_exitText);
+
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
+        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment exp) {
+                experiment = exp;
+            }
 
-        populateHistogram();
-        populateTimePlot();
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "Error Searching Database for experiment");
+            }
+        });
 
-    }// end onCreate
 
-    /**
-     * This method creates a Histogram based on experiment
-     * @author
-     *  Furmaan Sekhon and Jacques Leong-Sit
-     */
-    private void populateHistogram (){
-
-        Intent i = getIntent();
-
-        Bundle extras = getIntent().getExtras();
-//        experiment = (Experiment) extras.get("experiment");
-        str = (String) extras.get("experiment");
-        // integers cannot be passed with intents without crashing
-//        num = (Integer) extras.get("experiment");
-//        num = 10;
-        
-        //TODO: might need to make sure if these fields are actually filled
-        //testing
-        description.setText(str);
-
-//        description.setText(experiment.getDescription());
-//        minTrials.setText(String.valueOf(experiment.getMinTrials());
+        description.setText(experiment.getDescription());
+        minTrials.setText(String.valueOf(experiment.getMinTrials()));
 
         /**
          * This method updates the Description when the owner edits the text
@@ -112,14 +100,10 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
                     Log.d(TAG, "edited the description");
                     Toast.makeText(ExperimentDetailsOwnerActivity.this, "changed description to " + description.getText().toString(),Toast.LENGTH_SHORT).show();
                     //TODO: currently crashes if you retry to edit Description maybe just have confirm button that saves edit fields
-                    //testing to see if updating the editTextView would fix (doesn't fix)
-//                    str = description.getText().toString();
-//                    description.setText(str);
-
 
                     //TODO: verify this works when we can pass experiment
-//                    experiment.setDescription(description.getText().toString());
-//                    db.updateExperiment(experiment);
+                    experiment.setDescription(description.getText().toString());
+                    db.updateExperiment(experiment);
                 }
             }
         });
@@ -135,8 +119,8 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
                     String numStr = minTrials.getText().toString();
                     int num = Integer.parseInt(numStr);
                     Toast.makeText(ExperimentDetailsOwnerActivity.this, "num trial is now " + num,Toast.LENGTH_SHORT).show();
-//                    experiment.setMinTrials(num);
-//                    db.updateExperiment(experiment);
+                    experiment.setMinTrials(num);
+                    db.updateExperiment(experiment);
                 }
             }
         });
@@ -144,10 +128,8 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
         populateRegionInfo();
         populateTrialResults();
 
-//        populateHistogram();
-//        populateTimePlot();
-
     }// end onCreate
+
 
 
     /**
@@ -159,7 +141,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
 
         // fill out region
         region = findViewById(R.id.region_detail_owner_screen_textView);
-//        region.setText(experiment.getRegion());
+        region.setText(experiment.getRegion());
 
     }
 
@@ -207,7 +189,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
     public void subscribeToExperiment(View view){
         Log.d(TAG, "subscribe to experiment");
         Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed subscribe",Toast.LENGTH_SHORT).show();
-//        db.addSubscription(db.getDeviceUser(), experiment);
+        db.addSubscription(db.getDeviceUser(), experiment);
     }
 
     /**
