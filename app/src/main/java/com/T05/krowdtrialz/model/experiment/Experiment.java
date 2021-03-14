@@ -102,10 +102,6 @@ public abstract class Experiment implements Tagged {
         this.region = region;
     }
 
-    public boolean getStatus() {
-        return status;
-    }
-
     public boolean isLocationRequired() {
         return locationRequired;
     }
@@ -133,11 +129,19 @@ public abstract class Experiment implements Tagged {
         status = active;
     }
 
+    public boolean isActive() {
+        return status == active;
+    }
+
     /**
      * Set experiment status to inactive
      */
     public void setInactive() {
         status = inactive;
+    }
+
+    public boolean isInactive() {
+        return status == inactive;
     }
 
     /**
