@@ -2,6 +2,7 @@ package com.T05.krowdtrialz.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
 import java.util.ArrayList;
 
 public class ExperimentList extends ArrayAdapter<Experiment> {
+
+    private static final String TAG = "ExperimentList";
     private ArrayList<Experiment> experiments;
     private User deviceUser;
     private Context context;
@@ -60,9 +63,11 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
 
                 if(experiment.isOwner(deviceUser)){
                     // If user is owner
+                    Log.d(TAG, "Owner selected experiment");
                     intent = new Intent(context, ExperimentDetailsOwnerActivity.class);
                 } else {
                     // If user is not owner
+                    Log.d(TAG, "Non-Owner selected experiment");
                     intent = new Intent(context, ExperimentDetailsNonOwnerActivity.class);
                 }
 

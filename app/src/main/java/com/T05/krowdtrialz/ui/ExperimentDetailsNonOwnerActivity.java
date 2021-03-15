@@ -50,7 +50,7 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
     private BarChart barChart;
     private ScatterChart scatterChart;
 
-    private Button addTrialButon;
+    private Button addTrialButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +61,9 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
-        addTrialButon = findViewById(R.id.add_trials_owner_screen_button);
+        addTrialButton = findViewById(R.id.add_trials_non_owner_screen_button);
 
-        addTrialButon.setOnClickListener(new View.OnClickListener() {
+        addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Add Trials selected.");

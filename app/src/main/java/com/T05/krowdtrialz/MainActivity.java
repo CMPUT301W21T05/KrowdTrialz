@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Clicked Search");
-                Intent intent = new Intent(navView.getContext(), SearchActivity.class);
+                Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 startActivity(intent);
             }
         });
