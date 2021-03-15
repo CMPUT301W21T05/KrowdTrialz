@@ -31,7 +31,6 @@ import com.google.android.material.tabs.TabLayout;
 public class ExperimentDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "ExperimentDetailsNO";
-    private final String statsString = "stats", plotString = "plots";
 
     private TextView ownerName;
     private TextView description;
