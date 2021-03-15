@@ -56,8 +56,6 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
         // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
 
-        this.experiment = experiment;
-
         populateHistogram();
         populateTimePlot();
     }
