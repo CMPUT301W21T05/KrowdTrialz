@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
@@ -23,6 +25,10 @@ import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
+import com.T05.krowdtrialz.ui.trial.AddBinomialTrialActivity;
+import com.T05.krowdtrialz.ui.trial.AddCountTrialActivity;
+import com.T05.krowdtrialz.ui.trial.AddIntegerTrialActivity;
+import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -43,7 +49,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
-    private final String TAG = "ExperimentDetailsO";
+
+    private static final String TAG = "ExperimentDetailsO";
     private EditText description;
     private TextView region;
     private EditText minTrials;
@@ -59,6 +66,8 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
     private ScatterChart scatterChart;
     private Experiment experiment;
 
+    private Button addTrialButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +78,17 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         // TODO: Use this to get experiment object
-        String experimentID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
+        String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
+
+        addTrialButton = findViewById(R.id.add_trials_owner_screen_button);
+
+        addTrialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Add Trials selected.");
+                addTrial();
+            }
+        });
 
         db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
@@ -130,6 +149,32 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
 
     }// end onCreate
 
+
+    /**
+     * This method starts an add trial activity based on the experiment type.
+     * @author Vasu Gupta
+     */
+    void addTrial(){
+        Intent intent = null;
+        String type = experiment.getType();
+
+        if(type.equals("Binomial")){
+            intent = new Intent(this, AddBinomialTrialActivity.class);
+        } else if(type.equals("Count")){
+            intent = new Intent(this, AddCountTrialActivity.class);
+        }else if(type.equals("Measurement")){
+            intent = new Intent(this, AddMeasurementTrialActivity.class);
+        } else if(type.equals("Integer")){
+            intent = new Intent(this, AddIntegerTrialActivity.class);
+        }
+
+        if(intent != null){
+            Log.d(TAG, "Starting Add" + type + "Trial activity.");
+            intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+            startActivity(intent);
+        } else{
+            Log.e(TAG,"Intent is null: Could not get Trial type.");
+        }
 
 
     /**

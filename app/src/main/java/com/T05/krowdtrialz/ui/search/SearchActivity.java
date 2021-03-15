@@ -52,7 +52,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
 
         searchResultsList = findViewById(R.id.search_results_list);
 
-        experimentAdapter = new ExperimentList(this, new ArrayList<>());
+        experimentAdapter = new ExperimentList(this, new ArrayList<>(), db.getDeviceUser());
 
         searchResultsList.setAdapter(experimentAdapter);
 

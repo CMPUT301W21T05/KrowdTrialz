@@ -37,7 +37,6 @@ import java.util.ArrayList;
 
 public class SubscribedFragment extends Fragment {
 
-    public static final String EXTRA_EXPERIMENT_ID = "com.T05.krowdtrialz.ui.EXPERIMENT_ID";
     private SubscribedViewModel subscribedViewModel;
 
     ListView experimentsList;
@@ -52,8 +51,10 @@ public class SubscribedFragment extends Fragment {
 
         experimentsList = root.findViewById(R.id.subscribed_exp_listView);
 
+        User deviceUser = Database.getInstance().getDeviceUser();
+
         experimentsDataList = new ArrayList<Experiment>();
-        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList);
+        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList, deviceUser);
         experimentsList.setAdapter(experimentArrayAdapter);
 
         subscribedViewModel.getExperimentList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Experiment>>() {
@@ -64,27 +65,9 @@ public class SubscribedFragment extends Fragment {
             }
         });
 
-        User deviceUser = Database.getInstance().getDeviceUser();
 
-        experimentsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Go to experiment details screen (Owner or non-Owner)
-                Experiment currentExperiment = experimentArrayAdapter.getItem(position);
-                Intent intent;
 
-                if(currentExperiment.isOwner(deviceUser)){
-                    // If user is owner
-                    intent = new Intent(root.getContext(), ExperimentDetailsOwnerActivity.class);
-                } else {
-                    // If user is not owner
-                    intent = new Intent(root.getContext(), ExperimentDetailsNonOwnerActivity.class);
-                }
 
-                intent.putExtra(EXTRA_EXPERIMENT_ID, currentExperiment.getId());
-                startActivity(intent);
-            }
-        });
 
         return root;
     }

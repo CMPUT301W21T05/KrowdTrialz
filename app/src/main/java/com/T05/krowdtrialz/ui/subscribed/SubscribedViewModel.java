@@ -23,6 +23,7 @@ public class SubscribedViewModel extends ViewModel {
     }
 
     public LiveData<ArrayList<Experiment>> getExperimentList(){
+        db = Database.getInstance();
         db.getExperimentsBySubscriber(db.getDeviceUser(), new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
