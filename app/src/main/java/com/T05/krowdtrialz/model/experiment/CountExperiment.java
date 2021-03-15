@@ -10,6 +10,7 @@ import java.util.Set;
 public class CountExperiment extends Experiment {
     // The name of the unit of measurement for trials in this experiment.
     private String unit;
+    public static final String type = "Count";
 
     public CountExperiment() {
     }
@@ -17,7 +18,11 @@ public class CountExperiment extends Experiment {
     public CountExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
-        this.setType("Count");
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     /**

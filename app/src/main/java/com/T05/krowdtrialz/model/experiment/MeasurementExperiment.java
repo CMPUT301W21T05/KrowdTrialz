@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MeasurementExperiment extends StatisticsExperiment {
+    public static final String type = "Measurement";
     // The name of the unit of measurement for trials in this experiment.
     private String unit;
 
@@ -18,7 +19,11 @@ public class MeasurementExperiment extends StatisticsExperiment {
     public MeasurementExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
-        this.setType("Measurement");
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     public String getUnit() {
