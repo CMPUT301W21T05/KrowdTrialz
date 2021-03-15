@@ -33,6 +33,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_EXPERIMENT_ID = "com.T05.krowdtrialz.EXPERIMENT_ID";
+
     private Database db;
     private final String TAG = "MAIN ACTIVITY";
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Clicked Search");
-                Intent intent = new Intent(navView.getContext(), SearchActivity.class);
+                Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 startActivity(intent);
             }
         });

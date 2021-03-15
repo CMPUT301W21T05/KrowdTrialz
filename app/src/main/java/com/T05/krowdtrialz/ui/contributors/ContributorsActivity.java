@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
@@ -31,7 +32,7 @@ public class ContributorsActivity extends AppCompatActivity {
         contributorsList = findViewById(R.id.contributors_listView);
 
         Intent intent = getIntent();
-        String expID = intent.getStringExtra(SubscribedFragment.EXTRA_EXPERIMENT_ID);
+        String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
         Database.getInstance().getExperimentByID(expID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {

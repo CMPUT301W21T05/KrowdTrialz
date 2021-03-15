@@ -7,11 +7,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,8 @@ import android.widget.SearchView;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.ui.ExperimentDetailsNonOwnerActivity;
+import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.ExperimentList;
 
@@ -48,7 +52,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
 
         searchResultsList = findViewById(R.id.search_results_list);
 
-        experimentAdapter = new ExperimentList(this, new ArrayList<>());
+        experimentAdapter = new ExperimentList(this, new ArrayList<>(), db.getDeviceUser());
 
         searchResultsList.setAdapter(experimentAdapter);
 
@@ -85,6 +89,28 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                 Log.d(TAG, "Got search results" + experiments.toString());
                 experimentAdapter.clear();
                 experimentAdapter.addAll(experiments);
+
+                /*
+                 * pass the clicked experiment to the Experiment details page
+                 */
+                searchResultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d(TAG, "clicked position" + position);
+
+                        Intent i = new Intent(SearchActivity.this, ExperimentDetailsNonOwnerActivity.class);
+
+                        Experiment experiment = experimentAdapter.getItem(position);
+
+                        String experimentID = experiment.getId();
+
+                        i.putExtra("experiment", experimentID);
+                        startActivity(i);
+
+
+
+                    }
+                });
             }
 
             @Override
