@@ -154,28 +154,28 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
      * This method starts an add trial activity based on the experiment type.
      * @author Vasu Gupta
      */
-    void addTrial(){
+    void addTrial() {
         Intent intent = null;
         String type = experiment.getType();
 
-        if(type.equals("Binomial")){
+        if (type.equals("Binomial")) {
             intent = new Intent(this, AddBinomialTrialActivity.class);
-        } else if(type.equals("Count")){
+        } else if (type.equals("Count")) {
             intent = new Intent(this, AddCountTrialActivity.class);
-        }else if(type.equals("Measurement")){
+        } else if (type.equals("Measurement")) {
             intent = new Intent(this, AddMeasurementTrialActivity.class);
-        } else if(type.equals("Integer")){
+        } else if (type.equals("Integer")) {
             intent = new Intent(this, AddIntegerTrialActivity.class);
         }
 
-        if(intent != null){
+        if (intent != null) {
             Log.d(TAG, "Starting Add" + type + "Trial activity.");
             intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
             startActivity(intent);
-        } else{
-            Log.e(TAG,"Intent is null: Could not get Trial type.");
+        } else {
+            Log.e(TAG, "Intent is null: Could not get Trial type.");
         }
-
+    }
 
     /**
      * This method fills out Region, If none exist it will be blank
