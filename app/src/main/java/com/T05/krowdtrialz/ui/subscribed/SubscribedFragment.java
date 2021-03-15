@@ -1,11 +1,13 @@
 package com.T05.krowdtrialz.ui.subscribed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -21,6 +23,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.ExperimentDetailsNonOwnerActivity;
+import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
+import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.ExperimentList;
 
 import org.apache.commons.math3.analysis.function.Exp;
@@ -45,8 +51,10 @@ public class SubscribedFragment extends Fragment {
 
         experimentsList = root.findViewById(R.id.subscribed_exp_listView);
 
+        User deviceUser = Database.getInstance().getDeviceUser();
+
         experimentsDataList = new ArrayList<Experiment>();
-        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList);
+        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList, deviceUser);
         experimentsList.setAdapter(experimentArrayAdapter);
 
         subscribedViewModel.getExperimentList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Experiment>>() {
@@ -56,6 +64,11 @@ public class SubscribedFragment extends Fragment {
                 experimentArrayAdapter.addAll(experiments);
             }
         });
+
+
+
+
+
         return root;
     }
 }

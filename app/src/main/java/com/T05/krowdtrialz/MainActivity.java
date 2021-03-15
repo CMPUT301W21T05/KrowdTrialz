@@ -33,7 +33,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_EXPERIMENT_ID = "com.T05.krowdtrialz.EXPERIMENT_ID";
+
     private Database db;
+    private final String TAG = "MAIN ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +57,11 @@ public class MainActivity extends AppCompatActivity {
         openSearchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("SUBSCRIBED FRAGMENT", "Clicked Search");
-                Intent intent = new Intent(navView.getContext(), SearchActivity.class);
+                Log.d(TAG, "Clicked Search");
+                Intent intent = new Intent(v.getContext(), SearchActivity.class);
                 startActivity(intent);
             }
         });
-
-        // Initialize the Database instance.
-        SharedPreferences sharedPreferences = getSharedPreferences("shared_P", MODE_PRIVATE);
-        Database.initializeInstance(sharedPreferences);
-        db = Database.getInstance();
-        // Generate a new user with unique ID or fetch information for an existing user.
-        db.initializeDeviceUser();
-
     }
 
 }// end MainActivity
