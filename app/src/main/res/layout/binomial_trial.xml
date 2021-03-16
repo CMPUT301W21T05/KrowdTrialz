@@ -52,66 +52,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
-        android:id="@+id/binomial_location_switch"
-        android:layout_width="wrap_content"
+
+    <include layout="@layout/trial_common"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:text="Use Location"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/binomial1_editText" />
-
-    <Button
-        android:id="@+id/binomial_submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="43dp"
-        android:layout_marginTop="44dp"
-        android:background="#14e356"
-        android:text="Submit"
-        app:backgroundTint="#1AAE9F"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/binomial_location_switch"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/binomial_scan_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Scan"
-        app:backgroundTint="#D3455B"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/binomial_submit_button" />
-
-    <Button
-        android:id="@+id/binomial_qrCode_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Generate QR Code"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/binomial_scan_button"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/binomial_barCode_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Generate Barcode"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/binomial_qrCode_button"
-        app:layout_constraintVertical_bias="0.0" />
-
+        app:layout_constraintTop_toBottomOf="@id/binomial2_editText"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

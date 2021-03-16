@@ -52,6 +52,7 @@
     <string name="trial_use_location">Use Location</string>
     <string name="trial_increment">Increment</string>
     <string name="trial_submit">Submit</string>
+    <string name="trial_scan">Scan</string>
     <string name="trial_generate_qr">Generate QR Code</string>
     <string name="trial_assign_barcode">Assign To Barcode</string>
 </resources>
