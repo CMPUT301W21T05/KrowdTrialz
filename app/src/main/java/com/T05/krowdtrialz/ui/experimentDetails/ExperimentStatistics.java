@@ -97,7 +97,7 @@ public class ExperimentStatistics extends Fragment {
         Double q3Double = 0.0;
         Double q4Double = 0.0;
 
-        if (type.equals("Measurement")) {
+        if (type.equals(MeasurementExperiment.type)) {
             meanDouble = ((MeasurementExperiment) experiment).getMean();
             stdDouble = ((MeasurementExperiment) experiment).getStdDev();
 
@@ -117,7 +117,7 @@ public class ExperimentStatistics extends Fragment {
                 q4Double = Double.NaN;
             }
 
-        } else if (type.equals("Integer")) {
+        } else if (type.equals(IntegerExperiment.type)) {
             meanDouble = ((IntegerExperiment) experiment).getMean();
             stdDouble = ((IntegerExperiment) experiment).getStdDev();
 
