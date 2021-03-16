@@ -81,21 +81,25 @@ public class ExperimentStatistics extends Fragment {
      */
     private void populateTrialResults(View view) {
         String type = experiment.getType();
-        String stdString = "NaN";
-        String meanString = "NaN";
-        String q0String = "NaN";
-        String q1String = "NaN";
-        String q2String = "NaN";
-        String q3String = "NaN";
-        String q4String = "NaN";
+        Double d = Double.NaN;
+        String nan = d.toString();
+        String stdString = nan;
+        String meanString = nan;
+        String q0String = nan;
+        String q1String = nan;
+        String q2String = nan;
+        String q3String = nan;
+        String q4String = nan;
 
-        Double stdDouble = 0.0;
-        Double meanDouble = 0.0;
-        Double q0Double = 0.0;
-        Double q1Double = 0.0;
-        Double q2Double = 0.0;
-        Double q3Double = 0.0;
-        Double q4Double = 0.0;
+
+        Double zero = 0.0;
+        Double stdDouble = zero;
+        Double meanDouble = zero;
+        Double q0Double = zero;
+        Double q1Double = zero;
+        Double q2Double = zero;
+        Double q3Double = zero;
+        Double q4Double = zero;
 
         if (type.equals(MeasurementExperiment.type)) {
             meanDouble = ((MeasurementExperiment) experiment).getMean();
