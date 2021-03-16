@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
+import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +26,11 @@ public class ExperimentStatistics extends Fragment {
 
     private TextView mean;
     private TextView stdev;
-    private TextView median;
+    private TextView quartile0;
+    private TextView quartile1;
+    private TextView quartile2;
+    private TextView quartile3;
+    private TextView quartile4;
 
     public ExperimentStatistics() {
         // Required empty public constructor
@@ -74,16 +80,100 @@ public class ExperimentStatistics extends Fragment {
      *  Ricky Au
      */
     private void populateTrialResults(View view) {
+        String type = experiment.getType();
+        String stdString = "NaN";
+        String meanString = "NaN";
+        String q0String = "NaN";
+        String q1String = "NaN";
+        String q2String = "NaN";
+        String q3String = "NaN";
+        String q4String = "NaN";
+
+        Double stdDouble = 0.0;
+        Double meanDouble = 0.0;
+        Double q0Double = 0.0;
+        Double q1Double = 0.0;
+        Double q2Double = 0.0;
+        Double q3Double = 0.0;
+        Double q4Double = 0.0;
+
+        if (type.equals("Measurement")) {
+            meanDouble = ((MeasurementExperiment) experiment).getMean();
+            stdDouble = ((MeasurementExperiment) experiment).getStdDev();
+
+            // in the case not enough experiments for getQuartile
+            try {
+                q0Double = ((MeasurementExperiment) experiment).getQuartile(0);
+                q1Double = ((MeasurementExperiment) experiment).getQuartile(1);
+                q2Double = ((MeasurementExperiment) experiment).getQuartile(2);
+                q3Double = ((MeasurementExperiment) experiment).getQuartile(3);
+                q4Double = ((MeasurementExperiment) experiment).getQuartile(4);
+            }
+            catch(Exception e){
+                q0Double = Double.NaN;
+                q1Double = Double.NaN;
+                q2Double = Double.NaN;
+                q3Double = Double.NaN;
+                q4Double = Double.NaN;
+            }
+
+        } else if (type.equals("Integer")) {
+            meanDouble = ((IntegerExperiment) experiment).getMean();
+            stdDouble = ((IntegerExperiment) experiment).getStdDev();
+
+            // in the case not enough experiments for getQuartile
+            try {
+                q0Double = ((IntegerExperiment) experiment).getQuartile(0);
+                q1Double = ((IntegerExperiment) experiment).getQuartile(1);
+                q2Double = ((IntegerExperiment) experiment).getQuartile(2);
+                q3Double = ((IntegerExperiment) experiment).getQuartile(3);
+                q4Double = ((IntegerExperiment) experiment).getQuartile(4);
+            }
+            catch(Exception e){
+                q0Double = Double.NaN;
+                q1Double = Double.NaN;
+                q2Double = Double.NaN;
+                q3Double = Double.NaN;
+                q4Double = Double.NaN;
+            }
+        }else{
+            meanDouble = Double.NaN;
+            stdDouble = Double.NaN;
+            q0Double = Double.NaN;
+            q1Double = Double.NaN;
+            q2Double = Double.NaN;
+            q3Double = Double.NaN;
+            q4Double = Double.NaN;
+        }
+
+        meanString = Double.toString(meanDouble);
+        stdString = Double.toString(stdDouble);
+        q0String = Double.toString(q0Double);
+        q1String = Double.toString(q1Double);
+        q2String = Double.toString(q2Double);
+        q3String = Double.toString(q3Double);
+        q4String = Double.toString(q4Double);
+
+
         // fill out Mean
         mean = view.findViewById(R.id.mean);
-        // TODO: get the mean of experiment
+        mean.setText(meanString);
 
-        // TODO: get the standard deviation of experiment
         // fill out Standard deviation
         stdev = view.findViewById(R.id.stddev);
+        stdev.setText(stdString);
 
-        // TODO: get mean added to xml then
-        median = view.findViewById(R.id.median);
+        // fill out Quartiles
+        quartile0 = view.findViewById(R.id.q0);
+        quartile0.setText(q0String);
+        quartile1 = view.findViewById(R.id.q1);
+        quartile1.setText(q1String);
+        quartile2 = view.findViewById(R.id.q2);
+        quartile2.setText(q2String);
+        quartile3 = view.findViewById(R.id.q3);
+        quartile3.setText(q3String);
+        quartile4 = view.findViewById(R.id.q4);
+        quartile4.setText(q4String);
 
     }
 }
