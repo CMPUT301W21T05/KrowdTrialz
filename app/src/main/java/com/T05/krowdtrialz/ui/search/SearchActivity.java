@@ -1,29 +1,20 @@
 package com.T05.krowdtrialz.ui.search;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
-import com.T05.krowdtrialz.ui.ExperimentDetailsNonOwnerActivity;
-import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
+import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.ExperimentList;
 
@@ -98,7 +89,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.d(TAG, "clicked position" + position);
 
-                        Intent i = new Intent(SearchActivity.this, ExperimentDetailsNonOwnerActivity.class);
+                        Intent i = new Intent(SearchActivity.this, ExperimentDetailsActivity.class);
 
                         Experiment experiment = experimentAdapter.getItem(position);
 
