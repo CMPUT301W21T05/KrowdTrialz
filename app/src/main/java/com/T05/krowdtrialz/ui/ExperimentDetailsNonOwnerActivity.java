@@ -89,11 +89,12 @@ public class ExperimentDetailsNonOwnerActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Experiment exp) {
                 experiment = exp;
-                populateMainInfo();
-                populateTrialResults();
-
-                populateHistogram();
-                populateTimePlot();
+                Log.d(TAG, exp.getType());
+//                populateMainInfo();
+//                populateTrialResults();
+//
+//                populateHistogram();
+//                populateTimePlot();
             }
 
             @Override

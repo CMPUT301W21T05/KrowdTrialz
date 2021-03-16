@@ -112,7 +112,19 @@ public class Database {
                 if(task.getResult().size() == 1){
                     Experiment experiment = null;
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        experiment = document.toObject(Experiment.class);
+                        if(document.get("type").toString().equals("Binomial")){
+                            experiment = document.toObject(BinomialExperiment.class);
+                        }else if(document.get("type").toString().equals("Count")){
+                            experiment = document.toObject(CountExperiment.class);
+                        }else if(document.get("type").toString().equals("Measurement")){
+                            experiment = document.toObject(MeasurementExperiment.class);
+                        }else if(document.get("type").toString().equals("Integer")){
+                            experiment = document.toObject(IntegerExperiment.class);
+                        }else {
+                            Log.e(TAG, "Unknown experiment type");
+                            callback.onFailure();
+                            return;
+                        }
                     }
                     Log.d(TAG, "Experiment of ID " + expID.toString() + " found.");
                     callback.onSuccess(experiment);
