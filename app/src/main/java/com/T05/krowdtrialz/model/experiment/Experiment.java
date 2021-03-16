@@ -126,9 +126,7 @@ public abstract class Experiment implements Tagged {
         this.minTrials = minTrials;
     }
 
-    public String getType() { return type; }
-
-    public void setType(String type) { this.type = type; }
+    abstract public String getType();
 
     public ArrayList<User> getIgnoredUsers(){
         return ignoredUsers;

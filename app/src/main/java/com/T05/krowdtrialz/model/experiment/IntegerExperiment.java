@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class IntegerExperiment extends StatisticsExperiment {
+    public static final String type = "Integer";
     private String unit;
 
     public IntegerExperiment() {
@@ -17,7 +18,11 @@ public class IntegerExperiment extends StatisticsExperiment {
     public IntegerExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
-        this.setType("Integer");
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     public String getUnit() {
