@@ -1,6 +1,7 @@
 package com.T05.krowdtrialz.ui.trial;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.trial.Trial;
@@ -13,7 +14,7 @@ public class AddCountTrialActivity extends TrialActivity {
         setContentView(R.layout.activity_add_count_trial);
 
         // Change text from "Submit" to "Increment"
-        submitButton.setText(R.string.trial_increment);
+        getSubmitButton().setText(R.string.trial_increment);
     }
 
     @Override
