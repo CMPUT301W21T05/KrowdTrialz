@@ -6,4 +6,5 @@
     android:layout_height="match_parent"
     tools:context=".ui.trial.AddCountTrialActivity">
 
+    <include layout="@layout/trial_common" />
 </androidx.constraintlayout.widget.ConstraintLayout>

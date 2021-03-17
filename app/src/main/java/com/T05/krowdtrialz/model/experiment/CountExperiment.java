@@ -1,6 +1,10 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import com.T05.krowdtrialz.model.trial.CountTrial;
+import com.T05.krowdtrialz.model.trial.IntegerTrial;
+import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,16 +12,30 @@ import java.util.List;
 import java.util.Set;
 
 public class CountExperiment extends Experiment {
-    // The name of the unit of measurement for trials in this experiment.
-    private String unit;
     public static final String type = "Count";
+    // The name of the unit of measurement for trials in this experiment.
+    private ArrayList<CountTrial> trials;
+
+    private String unit;
 
     public CountExperiment() {
+        trials = new ArrayList<>();
     }
 
     public CountExperiment(User owner, String description, String unit) {
         super(owner, description);
+        trials = new ArrayList<>();
         this.unit = unit;
+    }
+
+    @Override
+    public ArrayList<? extends Trial> getTrials() {
+        return trials;
+    }
+
+    @Override
+    public <E extends Trial> void addTrial(E trial) {
+        trials.add((CountTrial) trial);
     }
 
     @Override

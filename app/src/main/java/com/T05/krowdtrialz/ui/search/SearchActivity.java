@@ -62,6 +62,13 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
         return true;
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        experimentAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Pass query to database and add results to experiment ListView
      *

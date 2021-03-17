@@ -16,12 +16,16 @@ import java.time.LocalDateTime;
 public class IntegerTrial extends Trial {
     private int value;
 
-    public IntegerTrial(User user, Location location) {
-        super(user, location);
+    public IntegerTrial() {
+        super();
     }
 
-    public IntegerTrial(User user, Location location, LocalDateTime dateCreated) {
-        super(user, location, dateCreated);
+    public IntegerTrial(User user, int longitude, int latitude) {
+        super(user, longitude, latitude);
+    }
+
+    public IntegerTrial(User user, int longitude, int latitude, String dateCreated) {
+        super(user, longitude, latitude, dateCreated);
     }
 
     public int getValue() {

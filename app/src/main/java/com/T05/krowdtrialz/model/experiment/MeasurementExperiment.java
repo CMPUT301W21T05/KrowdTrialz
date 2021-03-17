@@ -1,7 +1,12 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.widget.ArrayAdapter;
+
+import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
+import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,12 +18,26 @@ public class MeasurementExperiment extends StatisticsExperiment {
     // The name of the unit of measurement for trials in this experiment.
     private String unit;
 
+    private ArrayList<MeasurementTrial> trials;
+
     public MeasurementExperiment() {
+        trials = new ArrayList<>();
     }
 
     public MeasurementExperiment(User owner, String description, String unit) {
         super(owner, description);
         this.unit = unit;
+        trials = new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<? extends Trial> getTrials() {
+        return trials;
+    }
+
+    @Override
+    public <E extends Trial> void addTrial(E trial) {
+        trials.add((MeasurementTrial) trial);
     }
 
     @Override

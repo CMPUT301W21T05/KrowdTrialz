@@ -35,6 +35,8 @@ import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 
 import org.apache.commons.math3.analysis.function.Exp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -226,7 +228,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             BinomialExperiment binomialExperiment = (BinomialExperiment) this.experiment;
 
-            ArrayList<Trial> temp = binomialExperiment.getTrials();
+            ArrayList<BinomialTrial> temp = (ArrayList<BinomialTrial>) binomialExperiment.getTrials();
             ArrayList<BinomialTrial> binomialTrials = new ArrayList<BinomialTrial>();
             for (Trial trial : temp){
                 binomialTrials.add((BinomialTrial) trial);
@@ -237,7 +239,8 @@ public class ExperimentPlots extends Fragment {
             for (BinomialTrial trial : binomialTrials){
                 int passes = trial.getPassCount();
                 int fails = trial.getFailCount();
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
 
                 if (datePasses.containsKey(dateOfTrial)){
                     datePasses.put(dateOfTrial, datePasses.get(dateOfTrial) + passes);
@@ -295,7 +298,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             CountExperiment countExperiment = (CountExperiment) this.experiment;
 
-            ArrayList<Trial> temp = countExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) countExperiment.getTrials();
             ArrayList<CountTrial> countTrials = new ArrayList<CountTrial>();
             for (Trial trial : temp){
                 countTrials.add((CountTrial) trial);
@@ -303,7 +306,7 @@ public class ExperimentPlots extends Fragment {
 
             Hashtable<String, Integer> dateCounts = new Hashtable<String, Integer>();
             for (CountTrial trial : countTrials){
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
 
                 if (dateCounts.containsKey(dateOfTrial)){
                     dateCounts.put(dateOfTrial, dateCounts.get(dateOfTrial) + 1);
@@ -349,7 +352,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             IntegerExperiment integerExperiment = (IntegerExperiment) this.experiment;
 
-            ArrayList<Trial> temp = integerExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) integerExperiment.getTrials();
             ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
             for (Trial trial : temp){
                 integerTrials.add((IntegerTrial) trial);
@@ -357,7 +360,7 @@ public class ExperimentPlots extends Fragment {
 
             Hashtable<String, ArrayList<Integer>> dateValues = new Hashtable<String, ArrayList<Integer>>();
             for (IntegerTrial trial : integerTrials){
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
                 ArrayList<Integer> values;
 
                 if (dateValues.containsKey(dateOfTrial)){
@@ -410,7 +413,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             MeasurementExperiment measurementExperiment = (MeasurementExperiment) this.experiment;
 
-            ArrayList<Trial> temp = measurementExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) measurementExperiment.getTrials();
             ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
             for (Trial trial : temp){
                 measurementTrials.add((MeasurementTrial) trial);
@@ -418,7 +421,7 @@ public class ExperimentPlots extends Fragment {
 
             Hashtable<String, ArrayList<Float>> dateValues = new Hashtable<String, ArrayList<Float>>();
             for (MeasurementTrial trial : measurementTrials){
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
                 ArrayList<Float> values;
 
                 if (dateValues.containsKey(dateOfTrial)){

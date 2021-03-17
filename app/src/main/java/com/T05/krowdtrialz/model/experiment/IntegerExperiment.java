@@ -1,7 +1,9 @@
 package com.T05.krowdtrialz.model.experiment;
 
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
+import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,12 +14,26 @@ public class IntegerExperiment extends StatisticsExperiment {
     public static final String type = "Integer";
     private String unit;
 
+    private ArrayList<IntegerTrial> trials;
+
     public IntegerExperiment() {
+        trials = new ArrayList<>();
     }
 
     public IntegerExperiment(User owner, String description, String unit) {
         super(owner, description);
+        trials = new ArrayList<>();
         this.unit = unit;
+    }
+
+    @Override
+    public <E extends Trial> void addTrial(E trial) {
+        trials.add((IntegerTrial) trial);
+    }
+
+    @Override
+    public ArrayList<? extends Trial> getTrials() {
+        return trials;
     }
 
     @Override

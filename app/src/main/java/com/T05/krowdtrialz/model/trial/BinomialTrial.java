@@ -16,12 +16,16 @@ import java.time.LocalDateTime;
 public class BinomialTrial extends Trial {
     private int passCount, failCount;
 
-    public BinomialTrial(User user, Location location) {
-        super(user, location);
+    public BinomialTrial() {
+        super();
     }
 
-    public BinomialTrial(User user, Location location, LocalDateTime dateCreated) {
-        super(user, location, dateCreated);
+    public BinomialTrial(User user, int longitude, int latitude) {
+        super(user, longitude, latitude);
+    }
+
+    public BinomialTrial(User user, int longitude, int latitude, String dateCreated) {
+        super(user, longitude, latitude, dateCreated);
     }
 
     public int getPassCount() {

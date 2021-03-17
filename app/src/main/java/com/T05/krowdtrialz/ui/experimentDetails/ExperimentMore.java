@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.T05.krowdtrialz.R;
@@ -92,6 +93,26 @@ public class ExperimentMore extends Fragment {
             @Override
             public void onClick(View v) {
                 viewQnA(v);
+            }
+        });
+
+        endExperimentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                experiment.setInactive();
+                db.updateExperiment(experiment);
+
+                ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+
+                ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
+            }
+        });
+
+        unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteExperiment(experiment);
+                getActivity().finish();
             }
         });
 

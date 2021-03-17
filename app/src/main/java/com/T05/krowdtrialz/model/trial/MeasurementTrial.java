@@ -14,12 +14,16 @@ import java.time.LocalDateTime;
 public class MeasurementTrial extends Trial {
     private Float measurementValue;
 
-    public MeasurementTrial(User user, Location location) {
-        super(user, location);
+    public MeasurementTrial() {
+        super();
     }
 
-    public MeasurementTrial(User user, Location location, LocalDateTime dateCreated) {
-        super(user, location, dateCreated);
+    public MeasurementTrial(User user, int longitude, int latitude) {
+        super(user, longitude, latitude);
+    }
+
+    public MeasurementTrial(User user, int longitude, int latitude, String dateCreated) {
+        super(user, longitude, latitude, dateCreated);
     }
 
     public Float getMeasurementValue() {

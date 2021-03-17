@@ -27,8 +27,9 @@ public class SubscribedViewModel extends ViewModel {
         db.getExperimentsBySubscriber(db.getDeviceUser(), new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
-                experimentsList.getValue().clear();
-                experimentsList.getValue().addAll(experiments);
+                ArrayList<Experiment> newList = new ArrayList<>();
+                newList.addAll(experiments);
+                experimentsList.setValue(newList);
                 Log.d(TAG, "Got query results: " + experiments.toString());
             }
 
