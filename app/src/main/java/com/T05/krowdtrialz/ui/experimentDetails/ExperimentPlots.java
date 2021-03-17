@@ -35,6 +35,8 @@ import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 
 import org.apache.commons.math3.analysis.function.Exp;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -226,7 +228,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             BinomialExperiment binomialExperiment = (BinomialExperiment) this.experiment;
 
-            ArrayList<Trial> temp = binomialExperiment.getTrials();
+            ArrayList<BinomialTrial> temp = (ArrayList<BinomialTrial>) binomialExperiment.getTrials();
             ArrayList<BinomialTrial> binomialTrials = new ArrayList<BinomialTrial>();
             for (Trial trial : temp){
                 binomialTrials.add((BinomialTrial) trial);
@@ -237,6 +239,7 @@ public class ExperimentPlots extends Fragment {
             for (BinomialTrial trial : binomialTrials){
                 int passes = trial.getPassCount();
                 int fails = trial.getFailCount();
+
                 String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
 
                 if (datePasses.containsKey(dateOfTrial)){
@@ -295,7 +298,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             CountExperiment countExperiment = (CountExperiment) this.experiment;
 
-            ArrayList<Trial> temp = countExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) countExperiment.getTrials();
             ArrayList<CountTrial> countTrials = new ArrayList<CountTrial>();
             for (Trial trial : temp){
                 countTrials.add((CountTrial) trial);
@@ -349,7 +352,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             IntegerExperiment integerExperiment = (IntegerExperiment) this.experiment;
 
-            ArrayList<Trial> temp = integerExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) integerExperiment.getTrials();
             ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
             for (Trial trial : temp){
                 integerTrials.add((IntegerTrial) trial);
@@ -410,7 +413,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             MeasurementExperiment measurementExperiment = (MeasurementExperiment) this.experiment;
 
-            ArrayList<Trial> temp = measurementExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) measurementExperiment.getTrials();
             ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
             for (Trial trial : temp){
                 measurementTrials.add((MeasurementTrial) trial);

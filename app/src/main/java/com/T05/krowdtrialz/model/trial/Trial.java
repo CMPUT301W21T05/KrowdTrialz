@@ -17,6 +17,8 @@ public abstract class Trial {
     private Location location;
     private LocalDateTime dateCreated;
 
+    public Trial() {}
+
     public Trial(User user, Location location) {
         this.experimenter = user;
         this.location = location;
