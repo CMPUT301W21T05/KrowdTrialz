@@ -102,6 +102,8 @@ public class ExperimentMore extends Fragment {
                 experiment.setInactive();
                 db.updateExperiment(experiment);
 
+                ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+
                 ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
             }
         });

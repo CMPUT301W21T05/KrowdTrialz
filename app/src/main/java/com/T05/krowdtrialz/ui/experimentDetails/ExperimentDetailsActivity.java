@@ -38,6 +38,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
     private TextView description;
     private CheckBox status;
     private TextView region;
+    private Button addTrialButton;
 
     private Database db;
     private Experiment experiment;
@@ -59,7 +60,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
         Button subscribeButton = findViewById(R.id.subscribe_button_experiment);
-        Button addTrialButton = findViewById(R.id.add_trials_experiment);
+        addTrialButton = findViewById(R.id.add_trials_experiment);
 
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +88,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                 experiment = exp;
                 Log.d(TAG, exp.getType());
                 if (exp != null) {
-                    if(exp.isInactive()){
-                        addTrialButton.setEnabled(false);
-                    }
+                    updateAddTrialsButton();
                     setTabs();
                     populateMainInfo();
                     TabLayout tabLayout = findViewById(R.id.experiment_tabs);
@@ -106,6 +105,11 @@ public class ExperimentDetailsActivity extends AppCompatActivity
 
     }
 
+    public void updateAddTrialsButton(){
+        if(experiment.isInactive()){
+            addTrialButton.setEnabled(false);
+        }
+    }
 
     /**
      * Set the tab layout in experiment details screen
