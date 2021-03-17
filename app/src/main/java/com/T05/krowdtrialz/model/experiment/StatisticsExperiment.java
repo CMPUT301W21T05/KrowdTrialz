@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Statistics;
 
@@ -36,7 +38,11 @@ public abstract class StatisticsExperiment extends Experiment {
      */
     public double getStdDev() {
         double[] data = getDataAsArray();
-        return Statistics.standardDeviation(data);
+        if (data.length == 0){
+            return Double.NaN;
+        }else{
+            return Statistics.standardDeviation(data);
+        }
     }
 
     /**
@@ -58,7 +64,25 @@ public abstract class StatisticsExperiment extends Experiment {
      */
     public double getMean() {
         double[] data = getDataAsArray();
-        return Statistics.mean(getDataAsArray());
+        if (data.length == 0){
+            return Double.NaN;
+        }else{
+            return Statistics.mean(data);
+        }
+    }
+
+    /**
+     * Calculates the median value of all trials in this experiment
+     *
+     * @return The median.
+     */
+    public double getMedian() {
+        double[] data = getDataAsArray();
+        if (data.length == 0){
+            return Double.NaN;
+        }else{
+            return Statistics.median(data);
+        }
     }
 
     /**

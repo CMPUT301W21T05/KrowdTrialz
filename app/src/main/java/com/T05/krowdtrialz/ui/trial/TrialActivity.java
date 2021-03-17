@@ -45,12 +45,12 @@ public abstract class TrialActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                // TODO call Database.addTrial
                 db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
                     @Override
                     public void onSuccess(Experiment experiment) {
                         Trial trial = createTrial();
                         db.addTrial(trial, experiment);
+                        finish();
                     }
 
                     @Override
