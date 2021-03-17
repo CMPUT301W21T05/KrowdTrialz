@@ -18,6 +18,7 @@ public class IntegerExperiment extends StatisticsExperiment {
     private ArrayList<IntegerTrial> trials;
 
     public IntegerExperiment() {
+        trials = new ArrayList<>();
     }
 
     public IntegerExperiment(User owner, String description, String unit) {

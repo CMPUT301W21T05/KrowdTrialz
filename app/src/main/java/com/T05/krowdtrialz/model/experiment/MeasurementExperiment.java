@@ -22,6 +22,7 @@ public class MeasurementExperiment extends StatisticsExperiment {
     private ArrayList<MeasurementTrial> trials;
 
     public MeasurementExperiment() {
+        trials = new ArrayList<>();
     }
 
     public MeasurementExperiment(User owner, String description, String unit) {
