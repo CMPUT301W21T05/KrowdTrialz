@@ -54,7 +54,6 @@ public abstract class Experiment implements Tagged {
 
     public void setId(String id) { this.id = id; }
 
-    @Exclude
     abstract public ArrayList<? extends Trial> getTrials();
 
     abstract public <E extends Trial> void addTrial(E trial);

@@ -18,7 +18,6 @@ public class MeasurementExperiment extends StatisticsExperiment {
     // The name of the unit of measurement for trials in this experiment.
     private String unit;
 
-    @Exclude
     private ArrayList<MeasurementTrial> trials;
 
     public MeasurementExperiment() {
@@ -31,7 +30,7 @@ public class MeasurementExperiment extends StatisticsExperiment {
         trials = new ArrayList<>();
     }
 
-    @Exclude @Override
+    @Override
     public ArrayList<? extends Trial> getTrials() {
         return trials;
     }

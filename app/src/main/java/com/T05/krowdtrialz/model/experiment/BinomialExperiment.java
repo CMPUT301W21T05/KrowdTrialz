@@ -16,7 +16,6 @@ import java.util.Set;
 public class BinomialExperiment extends Experiment {
     public static final String type = "Binomial";
 
-    @Exclude
     private ArrayList<BinomialTrial> trials;
     // The name of a fail event. (e.g. "heads")
     private String passUnit;
@@ -34,7 +33,7 @@ public class BinomialExperiment extends Experiment {
         this.failUnit = failUnit;
     }
 
-    @Exclude @Override
+    @Override
     public ArrayList<? extends Trial> getTrials() {
         return trials;
     }

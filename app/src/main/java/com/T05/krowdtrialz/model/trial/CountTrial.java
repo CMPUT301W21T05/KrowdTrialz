@@ -18,11 +18,11 @@ public class CountTrial extends Trial {
         super();
     }
 
-    public CountTrial(User user, Location location) {
-        super(user, location);
+    public CountTrial(User user, int longitude, int latitude) {
+        super(user, longitude, latitude);
     }
 
-    public CountTrial(User user, Location location, LocalDateTime dateCreated) {
-        super(user, location, dateCreated);
+    public CountTrial(User user, int longitude, int latitude, String dateCreated) {
+        super(user, longitude, latitude, dateCreated);
     }
 }

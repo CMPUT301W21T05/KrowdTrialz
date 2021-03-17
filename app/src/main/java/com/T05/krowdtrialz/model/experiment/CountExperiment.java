@@ -14,7 +14,6 @@ import java.util.Set;
 public class CountExperiment extends Experiment {
     public static final String type = "Count";
     // The name of the unit of measurement for trials in this experiment.
-    @Exclude
     private ArrayList<CountTrial> trials;
 
     private String unit;
@@ -29,7 +28,7 @@ public class CountExperiment extends Experiment {
         this.unit = unit;
     }
 
-    @Exclude @Override
+    @Override
     public ArrayList<? extends Trial> getTrials() {
         return trials;
     }

@@ -3,9 +3,8 @@ package com.T05.krowdtrialz.model.trial;
 import android.location.Location;
 
 import com.T05.krowdtrialz.model.user.User;
-import com.google.type.DateTime;
+import com.google.firebase.firestore.Exclude;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -14,27 +13,41 @@ import java.time.LocalDateTime;
  * */
 public abstract class Trial {
     private User experimenter;
-    private Location location;
-    private LocalDateTime dateCreated;
+    private int longitude;
+    private int latitude;
+    private String dateCreated;
 
     public Trial() {}
 
-    public Trial(User user, Location location) {
+    public Trial(User user, int longitude, int latitude) {
         this.experimenter = user;
-        this.location = location;
-        this.dateCreated = LocalDateTime.now();
+        this.longitude = longitude;
+        this.latitude = latitude;
+        LocalDateTime dateTime = LocalDateTime.now();
+        this.dateCreated = String.format("%s/%s/%s", dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
     }
 
-    public Trial(User user, Location location, LocalDateTime dateCreated) {
-        this(user, location);
+    public Trial(User user, int longitude, int latitude, String dateCreated) {
+        this(user, longitude, latitude);
         this.dateCreated = dateCreated;
     }
 
-    public LocalDateTime getDateCreated() { return dateCreated; }
+    public String getDateCreated() { return dateCreated; }
 
-    public Location getLocation() {
-        return location;
+    @Exclude
+    public int getYearCreated() { return Integer.parseInt(dateCreated.substring(0,dateCreated.indexOf("/")));}
+
+    @Exclude
+    public int getMonthCreated() { return Integer.parseInt(dateCreated.substring(dateCreated.indexOf("/") + 1,dateCreated.lastIndexOf("/")));}
+
+    @Exclude
+    public int getDayCreated() { return Integer.parseInt(dateCreated.substring(dateCreated.lastIndexOf("/") + 1, dateCreated.length()));}
+
+    public int getLongitude() {
+        return longitude;
     }
+
+    public int getLatitude() { return latitude; }
 
     public User getExperimenter() {
         return experimenter;

@@ -14,7 +14,6 @@ public class IntegerExperiment extends StatisticsExperiment {
     public static final String type = "Integer";
     private String unit;
 
-    @Exclude
     private ArrayList<IntegerTrial> trials;
 
     public IntegerExperiment() {
@@ -32,7 +31,7 @@ public class IntegerExperiment extends StatisticsExperiment {
         trials.add((IntegerTrial) trial);
     }
 
-    @Exclude @Override
+    @Override
     public ArrayList<? extends Trial> getTrials() {
         return trials;
     }
