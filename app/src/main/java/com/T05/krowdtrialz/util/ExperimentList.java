@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -16,8 +15,7 @@ import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
-import com.T05.krowdtrialz.ui.ExperimentDetailsNonOwnerActivity;
-import com.T05.krowdtrialz.ui.ExperimentDetailsOwnerActivity;
+import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -61,15 +59,7 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
             public void onClick(View v) {
                 Intent intent;
 
-                if(experiment.isOwner(deviceUser)){
-                    // If user is owner
-                    Log.d(TAG, "Owner selected experiment");
-                    intent = new Intent(context, ExperimentDetailsOwnerActivity.class);
-                } else {
-                    // If user is not owner
-                    Log.d(TAG, "Non-Owner selected experiment");
-                    intent = new Intent(context, ExperimentDetailsNonOwnerActivity.class);
-                }
+                intent = new Intent(context, ExperimentDetailsActivity.class);
 
                 intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
                 context.startActivity(intent);

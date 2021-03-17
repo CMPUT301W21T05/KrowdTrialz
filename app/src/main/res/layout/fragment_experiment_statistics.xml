@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.experimentDetails.ExperimentStatistics">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0">
+
+            <TextView
+                android:id="@+id/quartile0_text"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="@string/q0_non_owner" />
+
+            <TextView
+                android:id="@+id/quartile1_text"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:gravity="center"
+                android:text="@string/q1_non_owner" />
+
+            <TextView
+                android:id="@+id/quartile2_text"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:gravity="center"
+                android:text="@string/q2_non_owner" />
+
+            <TextView
+                android:id="@+id/quartile3_text"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:gravity="center"
+                android:text="@string/q3_non_owner" />
+
+            <TextView
+                android:id="@+id/quartile4_text"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="4"
+                android:gravity="center"
+                android:text="@string/q4_non_owner" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/q0"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="0.00" />
+
+            <TextView
+                android:id="@+id/q1"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="0.00" />
+
+            <TextView
+                android:id="@+id/q2"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="0.00" />
+
+            <TextView
+                android:id="@+id/q3"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="0.00" />
+
+            <TextView
+                android:id="@+id/q4"
+                android:layout_weight="0.2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="0.00" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/st_dev_text_detail_non_owner_screen_textView"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="@string/stdev_non_owner" />
+
+            <TextView
+                android:id="@+id/median_text_detail_non_owner_screen_textView"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="@string/median_non_owner" />
+
+            <TextView
+                android:id="@+id/mean_text_detail_non_owner_screen_textView"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="@string/mean_non_owner" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="82dp">
+
+            <TextView
+                android:id="@+id/stddev"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="0.98" />
+
+            <TextView
+                android:id="@+id/median"
+                android:layout_weight="0.33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/mean"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.33"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:gravity="center"
+                android:text="1.23" />
+        </TableRow>
+    </TableLayout>
+
+</FrameLayout>

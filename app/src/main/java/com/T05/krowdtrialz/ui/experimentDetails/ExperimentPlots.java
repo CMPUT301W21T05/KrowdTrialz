@@ -1,17 +1,14 @@
-package com.T05.krowdtrialz.ui;
+package com.T05.krowdtrialz.ui.experimentDetails;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.T05.krowdtrialz.MainActivity;
+import androidx.fragment.app.Fragment;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
@@ -23,12 +20,6 @@ import com.T05.krowdtrialz.model.trial.CountTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
-import com.T05.krowdtrialz.util.Database;
-import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
-import com.T05.krowdtrialz.ui.trial.AddBinomialTrialActivity;
-import com.T05.krowdtrialz.ui.trial.AddCountTrialActivity;
-import com.T05.krowdtrialz.ui.trial.AddIntegerTrialActivity;
-import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -48,254 +39,65 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ExperimentPlots#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ExperimentPlots extends Fragment {
 
-    private static final String TAG = "ExperimentDetailsO";
-    private EditText description;
-    private TextView region;
-    private EditText minTrials;
-    TextView mean;
-    TextView stdev;
-    TextView median;
+    public static final String tabName = "Plots", TAG = "EXPERIMENT PLOTS";
 
-    //for testing
-    private String str;
+    private Experiment experiment = null;
 
-    private Database db;
     private BarChart barChart;
     private ScatterChart scatterChart;
-    private Experiment experiment;
 
-    private Button addTrialButton;
+    public ExperimentPlots() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Inject experiment into the fragment
+     * @param experiment
+     */
+    public void injectExperiment(Experiment experiment) {
+        this.experiment = experiment;
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param experiment Parameter 1.
+     * @return A new instance of fragment ExperimentPlots.
+     */
+    public static ExperimentPlots newInstance(Experiment experiment) {
+        ExperimentPlots fragment = new ExperimentPlots();
+        fragment.injectExperiment(experiment);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_experiment_details_owner);
-        db = Database.getInstance();
-        description = findViewById(R.id.description_owner_screen_editText);
-        minTrials = findViewById(R.id.minimum_trial_owner_screen_exitText);
-
-        Intent intent = getIntent();
-        // TODO: Use this to get experiment object
-        String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
-
-        addTrialButton = findViewById(R.id.add_trials_owner_screen_button);
-
-        addTrialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Add Trials selected.");
-                addTrial();
-            }
-        });
-
-        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
-            @Override
-            public void onSuccess(Experiment exp) {
-                experiment = exp;
-            }
-
-            @Override
-            public void onFailure() {
-                Log.e(TAG, "Error Searching Database for experiment");
-            }
-        });
-
-
-        description.setText(experiment.getDescription());
-        minTrials.setText(String.valueOf(experiment.getMinTrials()));
-
-        /**
-         * This method updates the Description when the owner edits the text
-         * NOTE: user must click something else to update catch their changes
-         * @author
-         *  Ricky Au
-         */
-        description.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-                    Log.d(TAG, "edited the description");
-                    Toast.makeText(ExperimentDetailsOwnerActivity.this, "changed description to " + description.getText().toString(),Toast.LENGTH_SHORT).show();
-                    //TODO: currently crashes if you retry to edit Description maybe just have confirm button that saves edit fields
-
-                    //TODO: verify this works when we can pass experiment
-                    experiment.setDescription(description.getText().toString());
-                    db.updateExperiment(experiment);
-                }
-            }
-        });
-
-        // For entering minimum number of trials
-        minTrials.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-                    Log.d(TAG, "edited the min number of trials");
-                    //TODO: currently crashes if you retry to edit Description maybe just have confirm button that saves edit fields
-                    //TODO: verify this works when we can pass experiment
-                    String numStr = minTrials.getText().toString();
-                    int num = Integer.parseInt(numStr);
-                    Toast.makeText(ExperimentDetailsOwnerActivity.this, "num trial is now " + num,Toast.LENGTH_SHORT).show();
-                    experiment.setMinTrials(num);
-                    db.updateExperiment(experiment);
-                }
-            }
-        });
-
-        populateRegionInfo();
-        populateTrialResults();
-
-    }// end onCreate
-
-
-    /**
-     * This method starts an add trial activity based on the experiment type.
-     * @author Vasu Gupta
-     */
-    void addTrial(){
-        Intent intent = null;
-        String type = experiment.getType();
-
-        if(type.equals("Binomial")){
-            intent = new Intent(this, AddBinomialTrialActivity.class);
-        } else if(type.equals("Count")){
-            intent = new Intent(this, AddCountTrialActivity.class);
-        }else if(type.equals("Measurement")){
-            intent = new Intent(this, AddMeasurementTrialActivity.class);
-        } else if(type.equals("Integer")){
-            intent = new Intent(this, AddIntegerTrialActivity.class);
-        }
-
-        if(intent != null){
-            Log.d(TAG, "Starting Add" + type + "Trial activity.");
-            intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
-            startActivity(intent);
-        } else{
-            Log.e(TAG,"Intent is null: Could not get Trial type.");
-        }
-
-
-    /**
-     * This method fills out Region, If none exist it will be blank
-     * @author
-     *  Ricky Au
-     */
-    private void populateRegionInfo() {
-
-        // fill out region
-        region = findViewById(R.id.region_detail_owner_screen_textView);
-        region.setText(experiment.getRegion());
 
     }
 
-    /**
-     * This method ends the experiment when button pressed
-     * @author
-     *  Ricky Au
-     */
-    public void endExperiment(View view){
-        Log.d(TAG, "end experiment");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed endExperiment",Toast.LENGTH_SHORT).show();
-        //TODO: need a database method for end experiment
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_experiment_plots, container, false);
 
+        barChart = root.findViewById(R.id.experiment_histogram);
+        scatterChart = root.findViewById(R.id.experiment_time_plot);
+
+        populateHistogram();
+        populateTimePlot();
+
+        return root;
     }
-
-    /**
-     * This method unpublishes the experiment when button is pressed
-     * @author
-     *  Ricky Au
-     */
-    public void unpublishExperiment(View view){
-        Log.d(TAG, "unpublish experiment");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed unpublishExperiment",Toast.LENGTH_SHORT).show();
-        //TODO: need a database method for unpublishing experiment
-
-    }
-
-    /**
-     * This method opens the Contributors page for the experiment when button is pressed
-     * @author
-     *  Ricky Au
-     */
-    public void viewContributors(View view){
-        Log.d(TAG, "view Contributors");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed viewContributors",Toast.LENGTH_SHORT).show();
-        //TODO: connect to view contributors page
-
-    }
-
-    /**
-     * This method subscribes the user to the experiment they are looking at
-     * @author
-     *  Ricky Au
-     */
-    public void subscribeToExperiment(View view){
-        Log.d(TAG, "subscribe to experiment");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed subscribe",Toast.LENGTH_SHORT).show();
-        db.addSubscription(db.getDeviceUser(), experiment);
-    }
-
-    /**
-     * This method subscribes the user to the experiment they are looking at
-     * @author
-     *  Ricky Au
-     */
-    public void addTrialToExperiment(View view){
-        Log.d(TAG, "addTrial");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed add Trial",Toast.LENGTH_SHORT).show();
-        // TODO: pass a trial to add it to this experiment
-//        switch activity to whatever type of trial this experiment is
-    }
-
-    /**
-     * This method fills out Mean, Standard deviation, Mean and some trial results
-     * @author
-     *  Ricky Au
-     */
-    private void populateTrialResults() {
-        // fill out Mean
-        mean = findViewById(R.id.mean_detail_owner_screen_textView);
-        // TODO: get the mean of experiment, Need method
-//        mean.setText(__get_mean_of_experiment__);
-
-        // TODO: get the standard deviation of experiment, Need method
-        // fill out Standard deviation
-        stdev = findViewById(R.id.st_dev_detail_owner_screen_textView);
-//        stdev.setText(__get_stdev_of_experiment__);
-
-        // TODO: get mean added to xml then, Need method
-//        mean = findViewByID()
-//        stdev.setText(__get_mean_of_experiment__);
-
-        // TODO: maybe we make a button that pulls up a listview of all results
-    }
-
-    /**
-     * This method allows user to view map of experiment
-     * @author
-     *  Ricky Au
-     */
-    public void viewMap(View view){
-        Log.d(TAG, "view map");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed view map",Toast.LENGTH_SHORT).show();
-        // TODO: open map activity
-
-    }
-
-    /**
-     * This method allows user to view map Questions and Answers for Experiment
-     * @author
-     *  Ricky Au
-     */
-    public void viewQnA(View view){
-        Log.d(TAG, "view Q&A");
-        Toast.makeText(ExperimentDetailsOwnerActivity.this, "pressed view Q&A",Toast.LENGTH_SHORT).show();
-        // TODO: open Q&A activity
-
-    }
-
 
     /**
      * This method creates a Histogram based on experiment
@@ -303,19 +105,17 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
     private void populateHistogram (){
-
-        barChart = findViewById(R.id.histogram_owner);
-
-        // Get experiment object
-        Bundle extras = getIntent().getExtras();
-        experiment = (Experiment) extras.get("experiment");
+        if (experiment == null || barChart == null) {
+            Log.e(TAG, "Could not create histogram");
+            return;
+        }
 
         // Get array of data from experiment
         List<BarEntry> entries = new ArrayList<BarEntry>();
-        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+        if (this.experiment.getType() == BinomialExperiment.type) { // Binomial format: {successCount, failureCount}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
-            BinomialExperiment binomialExperiment = (BinomialExperiment) extras.get("experiment");
+            BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
             dataPoints.add(binomialExperiment.getSuccessCount());
             dataPoints.add(binomialExperiment.getFailureCount());
 
@@ -324,7 +124,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
                 // turn your data into Entry objects
                 entries.add(new BarEntry(i, dataPoints.get(i)));
             }
-        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
+        }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
             dataPoints.add(this.experiment.getTrials().size());
@@ -335,9 +135,9 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
                 entries.add(new BarEntry(i, dataPoints.get(i)));
             }
         }
-        else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
+        else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             // make list of data
-            IntegerExperiment integerExperiment = (IntegerExperiment) extras.get("experiment");
+            IntegerExperiment integerExperiment = (IntegerExperiment) experiment;
             double[] temp = integerExperiment.getTrials().stream()
                     .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
                     .toArray();
@@ -364,9 +164,9 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
                 entries.add(new BarEntry(i ,uniqueDataPoints.get(i)));
             }
 
-        }else if (this.experiment.getType() == "Measurement") {
+        }else if (this.experiment.getType() == MeasurementExperiment.type) {
             // make list of data
-            MeasurementExperiment measurementExperiment = (MeasurementExperiment) extras.get("experiment");
+            MeasurementExperiment measurementExperiment = (MeasurementExperiment) experiment;
 
             double[] temp = measurementExperiment.getTrials().stream()
                     .mapToDouble(trial -> ((MeasurementTrial) trial).getMeasurementValue())
@@ -412,14 +212,13 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
      *  Furmaan Sekhon and Jacques Leong-Sit
      */
     private void populateTimePlot () {
-        scatterChart = findViewById(R.id.time_plot_owner);
-
-        // Get experiment object
-        Bundle extras = getIntent().getExtras();
-        experiment = (Experiment) extras.get("experiment");
+        if (experiment == null || barChart == null) {
+            Log.e(TAG, "Could not create time plot");
+            return;
+        }
 
         // Get array of data from experiment
-        if (this.experiment.getType() == "Binomial") { // Binomial format: {successCount, failureCount}
+        if (this.experiment.getType() == BinomialExperiment.type) { // Binomial format: {successCount, failureCount}
 
             List<Entry> passEntries = new ArrayList<Entry>();
             List<Entry> failEntries = new ArrayList<Entry>();
@@ -490,7 +289,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
             scatterChart.setData(scatterData);
             scatterChart.invalidate(); // Refreshes chart
 
-        }else if (this.experiment.getType() == "Count"){ // Count format: {Count}
+        }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
             List<Entry> entries = new ArrayList<Entry>();
 
             // make list of data
@@ -544,7 +343,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
             // add data to chart
             scatterChart.setData(scatterData);
             scatterChart.invalidate(); // Refreshes chart
-        } else if (this.experiment.getType() == "Integer"){ // Integer format: list of data points
+        } else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             List<Entry> entries = new ArrayList<Entry>();
 
             // make list of data
@@ -605,7 +404,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
             scatterChart.setData(scatterData);
             scatterChart.invalidate(); // Refreshes chart
 
-        }else if (this.experiment.getType() == "Measurement") {
+        }else if (this.experiment.getType() == MeasurementExperiment.type) {
             List<Entry> entries = new ArrayList<Entry>();
 
             // make list of data
@@ -668,7 +467,7 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
         }
     }// end populateTimePlot
 
-    private String encodeDate (int year, int month,int day){
+    private String encodeDate (int year, int month, int day){
         String stringYear = String.valueOf(year);
         stringYear = stringYear.substring(2,4);
         String stringMonth;
@@ -695,5 +494,4 @@ public class ExperimentDetailsOwnerActivity extends AppCompatActivity {
         String formattedDate = String.valueOf(dateInt);
         return "20" + formattedDate.substring(0,2) + "/" + formattedDate.substring(2,4) + "/" + formattedDate.substring(4,6);
     }
-}// end ExperimentDetailsOwnerActivity
-
+}

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public class BinomialExperiment extends Experiment {
+    public static final String type = "Binomial";
     // The name of a fail event. (e.g. "heads")
     private String passUnit;
     // The name of a fail event. (e.g. "tails")
@@ -24,7 +25,11 @@ public class BinomialExperiment extends Experiment {
         super(owner, description);
         this.passUnit = passUnit;
         this.failUnit = failUnit;
-        this.setType("Binomial");
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     public String getPassUnit() {
