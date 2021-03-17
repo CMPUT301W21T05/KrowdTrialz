@@ -27,6 +27,7 @@ public class AddBinomialTrialActivity extends TrialActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_binomial_trial);
+
         passEditText  = findViewById(R.id.binomial1_editText);
         failEditText  = findViewById(R.id.binomial2_editText);
     }
@@ -37,7 +38,7 @@ public class AddBinomialTrialActivity extends TrialActivity {
         // get user, location and create a trial
         db = Database.getInstance();
         user = db.getDeviceUser();
-        location = new Location(LocationManager.GPS_PROVIDER);
+        location = new Location(LocationManager.GPS_PROVIDER); // This is temporary until Geolocation is implemented
         binomialTrial = new BinomialTrial(user, location);
 
         // set the pass and the fail counts
