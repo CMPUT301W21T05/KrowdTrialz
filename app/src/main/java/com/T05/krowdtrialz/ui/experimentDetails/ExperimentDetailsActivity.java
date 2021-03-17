@@ -213,7 +213,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity {
      * @author
      *  Ricky Au
      */
-    private void populateMainInfo() {
+    public void populateMainInfo() {
         if (experiment == null) {
             return;
         }

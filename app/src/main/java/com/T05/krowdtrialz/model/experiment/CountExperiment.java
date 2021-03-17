@@ -20,6 +20,7 @@ public class CountExperiment extends Experiment {
     private String unit;
 
     public CountExperiment() {
+        trials = new ArrayList<>();
     }
 
     public CountExperiment(User owner, String description, String unit) {

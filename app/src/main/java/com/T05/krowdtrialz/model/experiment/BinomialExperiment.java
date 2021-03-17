@@ -24,6 +24,7 @@ public class BinomialExperiment extends Experiment {
     private String failUnit;
 
     public BinomialExperiment() {
+        trials = new ArrayList<>();
     }
 
     public BinomialExperiment(User owner, String description, String passUnit, String failUnit) {
