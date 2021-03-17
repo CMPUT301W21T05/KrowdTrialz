@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
@@ -83,24 +85,38 @@ public class BinomialExperiment extends Experiment {
 
     /**
      * Calculates the total number of successes across all trials in this experiment.
+     * NOTE: Ignores results of ignored users
      * @return The total number of successes.
      */
     public int getSuccessCount() {
+        ArrayList<String> ignoredIDs = new ArrayList<String>();
+        for (User user : this.getIgnoredUsers()) {
+            ignoredIDs.add(user.getId());
+        }
         int successCount = 0;
         for (Trial trial : getTrials()) {
-            successCount += ((BinomialTrial) trial).getPassCount();
+            if (!ignoredIDs.contains(trial.getExperimenter().getId())) {
+                successCount += ((BinomialTrial) trial).getPassCount();
+            }
         }
         return successCount;
     }
 
     /**
      * Calculates the total number of failures across all trials in this experiment.
+     * NOTE: Ignores results of ignored users
      * @return The total number of failures.
      */
     public int getFailureCount() {
+        ArrayList<String> ignoredIDs = new ArrayList<String>();
+        for (User user : this.getIgnoredUsers()) {
+            ignoredIDs.add(user.getId());
+        }
         int failureCount = 0;
         for (Trial trial : getTrials()) {
-            failureCount += ((BinomialTrial) trial).getFailCount();
+            if (!ignoredIDs.contains(trial.getExperimenter().getId())) {
+                failureCount += ((BinomialTrial) trial).getFailCount();
+            }
         }
         return failureCount;
     }
