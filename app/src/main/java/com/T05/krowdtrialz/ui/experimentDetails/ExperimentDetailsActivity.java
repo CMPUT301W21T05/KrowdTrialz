@@ -87,6 +87,9 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                 experiment = exp;
                 Log.d(TAG, exp.getType());
                 if (exp != null) {
+                    if(exp.isInactive()){
+                        addTrialButton.setEnabled(false);
+                    }
                     setTabs();
                     populateMainInfo();
                     TabLayout tabLayout = findViewById(R.id.experiment_tabs);
@@ -99,6 +102,8 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                 Log.e(TAG, "Error Searching Database for experiment");
             }
         });
+
+
     }
 
 
