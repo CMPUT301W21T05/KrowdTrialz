@@ -18,12 +18,12 @@ public class MeasurementTrial extends Trial {
         super();
     }
 
-    public MeasurementTrial(User user, Location location) {
-        super(user, location);
+    public MeasurementTrial(User user, int longitude, int latitude) {
+        super(user, longitude, latitude);
     }
 
-    public MeasurementTrial(User user, Location location, LocalDateTime dateCreated) {
-        super(user, location, dateCreated);
+    public MeasurementTrial(User user, int longitude, int latitude, String dateCreated) {
+        super(user, longitude, latitude, dateCreated);
     }
 
     public Float getMeasurementValue() {

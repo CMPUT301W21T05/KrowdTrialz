@@ -240,7 +240,7 @@ public class ExperimentPlots extends Fragment {
                 int passes = trial.getPassCount();
                 int fails = trial.getFailCount();
 
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
 
                 if (datePasses.containsKey(dateOfTrial)){
                     datePasses.put(dateOfTrial, datePasses.get(dateOfTrial) + passes);
@@ -306,7 +306,7 @@ public class ExperimentPlots extends Fragment {
 
             Hashtable<String, Integer> dateCounts = new Hashtable<String, Integer>();
             for (CountTrial trial : countTrials){
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
 
                 if (dateCounts.containsKey(dateOfTrial)){
                     dateCounts.put(dateOfTrial, dateCounts.get(dateOfTrial) + 1);
@@ -360,7 +360,7 @@ public class ExperimentPlots extends Fragment {
 
             Hashtable<String, ArrayList<Integer>> dateValues = new Hashtable<String, ArrayList<Integer>>();
             for (IntegerTrial trial : integerTrials){
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
                 ArrayList<Integer> values;
 
                 if (dateValues.containsKey(dateOfTrial)){
@@ -421,7 +421,7 @@ public class ExperimentPlots extends Fragment {
 
             Hashtable<String, ArrayList<Float>> dateValues = new Hashtable<String, ArrayList<Float>>();
             for (MeasurementTrial trial : measurementTrials){
-                String dateOfTrial = encodeDate(trial.getDateCreated().getYear(), trial.getDateCreated().getMonthValue(), trial.getDateCreated().getDayOfMonth());
+                String dateOfTrial = encodeDate(trial.getYearCreated(), trial.getMonthCreated(), trial.getDayCreated());
                 ArrayList<Float> values;
 
                 if (dateValues.containsKey(dateOfTrial)){

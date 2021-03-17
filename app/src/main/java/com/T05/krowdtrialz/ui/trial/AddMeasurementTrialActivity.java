@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.T05.krowdtrialz.R;
+import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
@@ -16,7 +17,8 @@ public class AddMeasurementTrialActivity extends TrialActivity {
 
     private Database db;
     private User user;
-    private Location location;
+    private int longitude;
+    private int latitude;
     private EditText valueEditText;
     private MeasurementTrial measurementTrial;
 
@@ -33,8 +35,10 @@ public class AddMeasurementTrialActivity extends TrialActivity {
         // get user, location and create a trial
         db = Database.getInstance();
         user = db.getDeviceUser();
-        location = new Location(LocationManager.GPS_PROVIDER); // This is temporary until Geolocation is implemented
-        measurementTrial = new MeasurementTrial(user, location);
+        longitude = 90; // This is temporary until Geolocation is implemented
+        latitude = 90; // This is temporary until Geolocation is implemented
+
+        measurementTrial = new MeasurementTrial(user, longitude, latitude);
 
         // set the pass and the fail counts
         float passText = Integer.parseInt(valueEditText.getText().toString());
