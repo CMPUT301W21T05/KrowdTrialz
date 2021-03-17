@@ -1,6 +1,7 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,7 +29,8 @@ import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.tabs.TabLayout;
 
-public class ExperimentDetailsActivity extends AppCompatActivity {
+public class ExperimentDetailsActivity extends AppCompatActivity
+        implements LocationRequiredDialogFragment.LocationRequiredDialogListener {
 
     private static final String TAG = "ExperimentDetailsNO";
 
@@ -54,7 +56,6 @@ public class ExperimentDetailsActivity extends AppCompatActivity {
         db = Database.getInstance();
 
         Intent intent = getIntent();
-        // TODO: Use this to get experiment object
         String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
         Button subscribeButton = findViewById(R.id.subscribe_button_experiment);
@@ -64,7 +65,11 @@ public class ExperimentDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Add Trials selected.");
-                addTrial();
+                if(experiment.isLocationRequired()){
+                    showLocationRequiredDialog();
+                } else {
+                    addTrial();
+                }
             }
         });
 
@@ -284,5 +289,20 @@ public class ExperimentDetailsActivity extends AppCompatActivity {
         } else{
             Log.e(TAG,"Intent is null: Could not get Trial type.");
         }
+    }
+
+    public void showLocationRequiredDialog(){
+        DialogFragment dialog = new LocationRequiredDialogFragment();
+        dialog.show(getSupportFragmentManager(), "LocationRequiredDialogFragment");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        addTrial();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.dismiss();
     }
 }// end ExperimentDetailsNonOwnerActivity
