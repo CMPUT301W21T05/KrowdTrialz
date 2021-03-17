@@ -14,6 +14,10 @@ import java.time.LocalDateTime;
 public class MeasurementTrial extends Trial {
     private Float measurementValue;
 
+    public MeasurementTrial() {
+        super();
+    }
+
     public MeasurementTrial(User user, Location location) {
         super(user, location);
     }

@@ -1,8 +1,10 @@
 package com.T05.krowdtrialz.model.experiment;
 
 import com.T05.krowdtrialz.model.trial.BinomialTrial;
+import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,6 +13,9 @@ import java.util.Set;
 
 public class BinomialExperiment extends Experiment {
     public static final String type = "Binomial";
+
+    @Exclude
+    private ArrayList<BinomialTrial> trials;
     // The name of a fail event. (e.g. "heads")
     private String passUnit;
     // The name of a fail event. (e.g. "tails")
@@ -21,8 +26,19 @@ public class BinomialExperiment extends Experiment {
 
     public BinomialExperiment(User owner, String description, String passUnit, String failUnit) {
         super(owner, description);
+        trials = new ArrayList<>();
         this.passUnit = passUnit;
         this.failUnit = failUnit;
+    }
+
+    @Exclude @Override
+    public ArrayList<? extends Trial> getTrials() {
+        return trials;
+    }
+
+    @Override
+    public <E extends Trial> void addTrial(E trial) {
+        trials.add((BinomialTrial) trial);
     }
 
     @Override

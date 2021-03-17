@@ -1,16 +1,16 @@
 package com.T05.krowdtrialz.model.user;
 
 public class User {
-    private String name;
-    private String userName;
-    private String email;
-    private String id;
+    private String name = "None";
+    private String userName = "None";
+    private String email = "None";
+    private String id = "None";
 
     public User() {
     }
 
     public User(String id) {
-        this(null, null, null, id);
+        this.id = id;
     }
 
     public User(String name, String userName, String email, String id) {

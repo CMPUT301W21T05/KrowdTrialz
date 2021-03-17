@@ -5,6 +5,7 @@ import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
+import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 public abstract class Experiment implements Tagged {
     private String id;
     private User owner;
-    private ArrayList<Trial> trials;
     private String description;
     private String region;
     private String type;
@@ -41,7 +41,7 @@ public abstract class Experiment implements Tagged {
         this.owner = owner;
         this.description = description;
 
-        trials = new ArrayList<Trial>();
+//        trials = new ArrayList<Trial>();
         barcodes = new ArrayList<Barcode>();
         qrCodes = new ArrayList<QRCode>();
         status = active;
@@ -54,13 +54,10 @@ public abstract class Experiment implements Tagged {
 
     public void setId(String id) { this.id = id; }
 
-    public ArrayList<Trial> getTrials() {
-        return trials;
-    }
+    @Exclude
+    abstract public ArrayList<? extends Trial> getTrials();
 
-    public void addTrial(Trial trial) {
-        trials.add(trial);
-    }
+    abstract public <E extends Trial> void addTrial(E trial);
 
     public ArrayList<Barcode> getBarcodes() {
         return barcodes;
@@ -200,9 +197,15 @@ public abstract class Experiment implements Tagged {
         }
 
         if (getOwner() != null) {
-            tags.addAll(Arrays.asList(getOwner().getName().toLowerCase().split(" ")));
-            tags.add(getOwner().getUserName().toLowerCase());
-            tags.add(getOwner().getEmail().toLowerCase());
+            if (!getOwner().getName().equals("None")) {
+                tags.addAll(Arrays.asList(getOwner().getName().toLowerCase().split(" ")));
+            }
+            if (!getOwner().getUserName().equals("None")) {
+                tags.add(getOwner().getUserName().toLowerCase());
+            }
+            if (!getOwner().getEmail().equals("None")) {
+                tags.add(getOwner().getEmail().toLowerCase());
+            }
         }
 
         if (getRegion() != null) {

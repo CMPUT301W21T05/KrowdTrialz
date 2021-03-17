@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 public class IntegerTrial extends Trial {
     private int value;
 
+    public IntegerTrial() {
+        super();
+    }
+
     public IntegerTrial(User user, Location location) {
         super(user, location);
     }
