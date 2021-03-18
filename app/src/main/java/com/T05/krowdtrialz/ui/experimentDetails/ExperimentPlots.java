@@ -23,6 +23,7 @@ import com.T05.krowdtrialz.model.trial.Trial;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -31,6 +32,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.ScatterData;
 import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.IScatterDataSet;
 
 import org.apache.commons.math3.analysis.function.Exp;
@@ -114,21 +116,44 @@ public class ExperimentPlots extends Fragment {
 
         // Get array of data from experiment
         List<BarEntry> entries = new ArrayList<BarEntry>();
+        BarData barData = new BarData();
         if (this.experiment.getType() == BinomialExperiment.type) { // Binomial format: {successCount, failureCount}
             // make list of data
-            ArrayList<Integer> dataPoints = new ArrayList<Integer>();
+            List<BarEntry> passEntries = new ArrayList<BarEntry>();
+            List<BarEntry> failEntries = new ArrayList<BarEntry>();
+            ArrayList<Integer> passDataPoints = new ArrayList<Integer>();
+            ArrayList<Integer> failDataPoints = new ArrayList<Integer>();
             BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
-            dataPoints.add(binomialExperiment.getSuccessCount());
-            dataPoints.add(binomialExperiment.getFailureCount());
+            passDataPoints.add(binomialExperiment.getSuccessCount());
+            failDataPoints.add(binomialExperiment.getFailureCount());
 
             // make list of entries
-            for (int i = 0; i < dataPoints.size(); i++) {
+            for (int i = 0; i < passDataPoints.size(); i++) {
                 // turn your data into Entry objects
-                entries.add(new BarEntry(i, dataPoints.get(i)));
+                passEntries.add(new BarEntry(i, passDataPoints.get(i)));
             }
+            for (int i = 0; i < failDataPoints.size(); i++) {
+                // turn your data into Entry objects
+                failEntries.add(new BarEntry(i, failDataPoints.get(i)));
+            }
+
+            BarDataSet passDataSet = new BarDataSet(passEntries, binomialExperiment.getPassUnit());
+            BarDataSet failDataSet = new BarDataSet(failEntries, binomialExperiment.getFailUnit());
+
+            passDataSet.setColors(new int[] {R.color.purple_700, R.color.teal_700});
+
+            List<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+
+            dataSets.add(passDataSet);
+            dataSets.add(failDataSet);
+
+            // create data set
+            barData = new BarData(dataSets);
+            barData.setDrawValues(false);
         }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
+            CountExperiment countExperiment = (CountExperiment) experiment;
             dataPoints.add(this.experiment.getTrials().size());
 
             // make list of entries
@@ -136,6 +161,10 @@ public class ExperimentPlots extends Fragment {
                 // turn your data into Entry objects
                 entries.add(new BarEntry(i, dataPoints.get(i)));
             }
+            // create data set
+            BarDataSet barDataSet = new BarDataSet(entries, countExperiment.getUnit());
+            barData = new BarData(barDataSet);
+            barData.setDrawValues(false);
         }
         else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             // make list of data
@@ -165,6 +194,10 @@ public class ExperimentPlots extends Fragment {
                 // turn your data into Entry objects
                 entries.add(new BarEntry(i ,uniqueDataPoints.get(i)));
             }
+            // create data set
+            BarDataSet barDataSet = new BarDataSet(entries, integerExperiment.getUnit());
+            barData = new BarData(barDataSet);
+            barData.setDrawValues(false);
 
         }else if (this.experiment.getType() == MeasurementExperiment.type) {
             // make list of data
@@ -195,16 +228,24 @@ public class ExperimentPlots extends Fragment {
                 // turn your data into Entry objects
                 entries.add(new BarEntry((float) i, (float) uniqueDataPoints.get(i)));
             }
+
+            // create data set
+            BarDataSet barDataSet = new BarDataSet(entries, measurementExperiment.getUnit());
+            barData = new BarData(barDataSet);
+            barData.setDrawValues(false);
         }
 
-        // create data set
-        BarDataSet barDataSet = new BarDataSet(entries, String.format("%s Trials", experiment.getType()));
-        BarData barData = new BarData(barDataSet);
 
         // add data to chart
         barChart.setData(barData);
         barData.setBarWidth(0.9f); // set custom bar width
         barChart.setFitBars(true);
+        barChart.getXAxis().setTextSize(11f);
+        barChart.getAxisLeft().setTextSize(11f);
+        barChart.getAxisRight().setEnabled(false);
+        Description description = new Description();
+        description.setText("");
+        barChart.setDescription(description);
         barChart.invalidate(); // Refreshes chart
     }// end populateHistogram
 
@@ -277,6 +318,7 @@ public class ExperimentPlots extends Fragment {
 
             // create data set
             ScatterData scatterData = new ScatterData(dataSets);
+            scatterData.setDrawValues(false);
 
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
@@ -290,6 +332,12 @@ public class ExperimentPlots extends Fragment {
 
             // add data to chart
             scatterChart.setData(scatterData);
+            scatterChart.getXAxis().setTextSize(11f);
+            scatterChart.getAxisLeft().setTextSize(11f);
+            scatterChart.getAxisRight().setEnabled(false);
+            Description description = new Description();
+            description.setText("");
+            scatterChart.setDescription(description);
             scatterChart.invalidate(); // Refreshes chart
 
         }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
@@ -332,6 +380,7 @@ public class ExperimentPlots extends Fragment {
 
             // create data set
             ScatterData scatterData = new ScatterData(dataSets);
+            scatterData.setDrawValues(false);
 
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
@@ -345,6 +394,12 @@ public class ExperimentPlots extends Fragment {
 
             // add data to chart
             scatterChart.setData(scatterData);
+            scatterChart.getXAxis().setTextSize(11f);
+            scatterChart.getAxisLeft().setTextSize(11f);
+            scatterChart.getAxisRight().setEnabled(false);
+            Description description = new Description();
+            description.setText("");
+            scatterChart.setDescription(description);
             scatterChart.invalidate(); // Refreshes chart
         } else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             List<Entry> entries = new ArrayList<Entry>();
@@ -392,6 +447,7 @@ public class ExperimentPlots extends Fragment {
 
             // create data set
             ScatterData scatterData = new ScatterData(dataSets);
+            scatterData.setDrawValues(false);
 
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
@@ -405,6 +461,12 @@ public class ExperimentPlots extends Fragment {
 
             // add data to chart
             scatterChart.setData(scatterData);
+            scatterChart.getXAxis().setTextSize(11f);
+            scatterChart.getAxisLeft().setTextSize(11f);
+            scatterChart.getAxisRight().setEnabled(false);
+            Description description = new Description();
+            description.setText("");
+            scatterChart.setDescription(description);
             scatterChart.invalidate(); // Refreshes chart
 
         }else if (this.experiment.getType() == MeasurementExperiment.type) {
@@ -453,6 +515,7 @@ public class ExperimentPlots extends Fragment {
 
             // create data set
             ScatterData scatterData = new ScatterData(dataSets);
+            scatterData.setDrawValues(false);
 
             ValueFormatter formatter = new ValueFormatter() {
                 @Override
@@ -466,6 +529,12 @@ public class ExperimentPlots extends Fragment {
 
             // add data to chart
             scatterChart.setData(scatterData);
+            scatterChart.getXAxis().setTextSize(11f);
+            scatterChart.getAxisLeft().setTextSize(11f);
+            scatterChart.getAxisRight().setEnabled(false);
+            Description description = new Description();
+            description.setText("");
+            scatterChart.setDescription(description);
             scatterChart.invalidate(); // Refreshes chart
         }
     }// end populateTimePlot

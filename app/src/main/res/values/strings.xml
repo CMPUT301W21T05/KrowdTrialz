@@ -18,11 +18,10 @@
     <string name="_0_98_non_owner">0.98</string>
     <string name="mean_non_owner">Mean</string>
     <string name="stdev_non_owner">stdev</string>
-    <string name="q0_non_owner">q0</string>
-    <string name="q1_non_owner">q1</string>
-    <string name="q2_non_owner">q2</string>
-    <string name="q3_non_owner">q3</string>
-    <string name="q4_non_owner">q4</string>
+    <string name="q1_non_owner">1st Quartile</string>
+    <string name="q2_non_owner">2nd Quartile</string>
+    <string name="q3_non_owner">3rd Quartile</string>
+    <string name="q4_non_owner">4th Quartile</string>
     <string name="median_non_owner">median</string>
     <string name="view_map_non_owner">view map</string>
     <string name="view_q_amp_a_non_owner"><![CDATA[view Q&A]]></string>
