@@ -56,7 +56,15 @@ public class DatabaseTest {
     @Before
     void setup() {
         final SharedPreferences sharedPreferences = Mockito.mock(SharedPreferences.class);
-        Database.initializeInstance(sharedPreferences);
+        Database.initializeInstance(sharedPreferences, new Database.InitializeDatabaseCallback() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onFailure() {
+            }
+        } );
         db = Database.getInstance();
     }
 
