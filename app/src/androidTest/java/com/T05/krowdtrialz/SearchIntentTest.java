@@ -72,7 +72,7 @@ public class SearchIntentTest{
     public void before() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         db = Database.getInstance();
-        addTextExperiment();
+        addTestExperiment();
     }
 
     /**
@@ -90,8 +90,7 @@ public class SearchIntentTest{
      */
     @Test
     public void openSearchView(){
-
-//        Activity activity = rule.getActivity();
+        
         solo.waitForFragmentById(R.id.subscribed_experiment_fragment, 1000);
 
         View search = solo.getView(R.id.search_action_button);
@@ -99,8 +98,6 @@ public class SearchIntentTest{
 
         solo.waitForActivity(SearchActivity.class);
         solo.assertCurrentActivity("Cannot open Search activity", SearchActivity.class);
-
-//        solo.goBack();
     }
 
     /**
@@ -117,7 +114,6 @@ public class SearchIntentTest{
         assertTrue(solo.waitForText("TESTUSERNAME", 1, 1000));
         assertTrue(solo.searchText("TEST1 EXPERIMENT DESCRIPTION"));
         assertTrue(solo.isCheckBoxChecked(0)); // its valid
-//        solo.goBack();
     }
 
     /**
@@ -135,7 +131,6 @@ public class SearchIntentTest{
         assertTrue(solo.searchText("TEST1 EXPERIMENT DESCRIPTION", 1));
         assertTrue(solo.searchText("TEST2 EXPERIMENT DESCRIPTION", 1));
         assertTrue(solo.searchText("TEST3 EXPERIMENT DESCRIPTION", 1));
-//        solo.goBack();
     }
 
     /**
@@ -150,7 +145,6 @@ public class SearchIntentTest{
         assertTrue(solo.waitForText("TESTUSERNAME", 2, 1000));
         assertTrue(solo.searchText("TEST2 EXPERIMENT DESCRIPTION", 1));
         assertTrue(solo.searchText("TEST3 EXPERIMENT DESCRIPTION", 1));
-//        solo.goBack();
     }
 
     /**
@@ -169,12 +163,19 @@ public class SearchIntentTest{
         Database db = Database.getInstance();
     }
 
-    public void addTextExperiment() {
+    /**
+     * Add test experiment to the db
+     */
+    public void addTestExperiment() {
         db.addExperiment(testExperiment1);
         db.addExperiment(testExperiment2);
         db.addExperiment(testExperiment3);
     }
 
+    /**
+     * Clear the test experiments from the db
+     * @throws InterruptedException
+     */
     public void clearTestExperiment() throws InterruptedException {
         db.deleteExperiment(testExperiment1);
         db.deleteExperiment(testExperiment2);
