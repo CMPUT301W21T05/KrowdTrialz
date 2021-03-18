@@ -1,0 +1,16 @@
+com.T05.krowdtrialz
+com.T05.krowdtrialz.model.experiment
+com.T05.krowdtrialz.model.interfaces
+com.T05.krowdtrialz.model.location
+com.T05.krowdtrialz.model.scannable
+com.T05.krowdtrialz.model.trial
+com.T05.krowdtrialz.model.user
+com.T05.krowdtrialz.ui
+com.T05.krowdtrialz.ui.contributors
+com.T05.krowdtrialz.ui.experimentDetails
+com.T05.krowdtrialz.ui.owner
+com.T05.krowdtrialz.ui.publish
+com.T05.krowdtrialz.ui.search
+com.T05.krowdtrialz.ui.subscribed
+com.T05.krowdtrialz.ui.trial
+com.T05.krowdtrialz.util
