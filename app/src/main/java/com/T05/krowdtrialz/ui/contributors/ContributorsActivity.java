@@ -37,6 +37,13 @@ public class ContributorsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
+                contributorsDataList = new ArrayList<User>();
+                if(currentExperiment != null){
+                    contributorsDataList.addAll(currentExperiment.getContributors());
+                }
+
+                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
+                contributorsList.setAdapter(contributorsArrayAdapter);
             }
 
             @Override
@@ -44,12 +51,5 @@ public class ContributorsActivity extends AppCompatActivity {
                 currentExperiment = null;
             }
         });
-        contributorsDataList = new ArrayList<User>();
-        if(currentExperiment != null){
-            contributorsDataList.addAll(currentExperiment.getIgnoredUsers());
-        }
-
-        contributorsArrayAdapter = new ContributorList(this, contributorsDataList, currentExperiment);
-        contributorsList.setAdapter(contributorsArrayAdapter);
     }
 }

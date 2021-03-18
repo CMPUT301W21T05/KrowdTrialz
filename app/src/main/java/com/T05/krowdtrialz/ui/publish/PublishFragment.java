@@ -98,6 +98,9 @@ public class PublishFragment extends Fragment {
         User owner = db.getDeviceUser();
 
         EditText descriptionEditText = view.findViewById(R.id.experiment_description_input);
+        EditText regionEditText = view.findViewById(R.id.experiment_region_input);
+
+        String region = regionEditText.getText().toString();
         String description = descriptionEditText.getText().toString();
 
         // Get fields that are specific to the type of experiment
@@ -132,6 +135,7 @@ public class PublishFragment extends Fragment {
         boolean locationRequired = locationRequiredSwitch.isChecked();
         experiment.setLocationRequired(locationRequired);
 
+        experiment.setRegion(region);
         EditText minTrialsEditText = view.findViewById(R.id.minimum_trials_input);
         String minTrialsString = minTrialsEditText.getText().toString();
         int minTrials = 0;
