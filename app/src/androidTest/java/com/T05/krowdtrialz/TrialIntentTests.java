@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.TextView;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import com.T05.krowdtrialz.ui.SplashActivity;
@@ -21,14 +23,14 @@ import static org.junit.Assert.assertTrue;
  * This class contains tests for user stories related to actions on experiments
  * @author Furmaan Sekhon and Jacques Leong-Sit
  */
-public class ExperimentIntentTests {
+public class TrialIntentTests {
     private Solo solo;
-    private String description = "Determine what rate of success a coin has";
-    private String minTrials = "13";
-    private String region = "Antarctica";
-    private String passCriteria = "Heads";
-    private String failCriteria = "Tails";
-    private String searchTerm = "Determine what rate of success a coin";
+    private String description = "Max jump height";
+    private String minTrials = "16";
+    private String region = "Canada";
+    private String unit = "cm";
+    private String searchTerm = "Max jump";
+    private String value = "50";
 
     @Rule
     public ActivityTestRule<MainActivity> ruleMain =
@@ -54,29 +56,45 @@ public class ExperimentIntentTests {
 
     @Test
     /**
-     * @alert Verification for US 01.01.01
+     * @alert Verification for US 01.05.01 and US 06.03.01
      */
-    public void testPublishExperiment(){
+    public void testAddTrialsAndLocationWarning(){
         publish();
 
         search();
 
         //Make sure the experiment shows up
         assertTrue(solo.waitForText(description));
+
+        //Click on experiment
+        solo.clickOnText(description);
+
+        //Click add trials button
+        solo.waitForView(solo.getView(R.id.add_trials_experiment));
+        solo.clickOnView(solo.getView(R.id.add_trials_experiment));
+
+        //Make sure warning appears
+        assertTrue(solo.waitForText("Warning! This experiment requires your location."));
+
+        //Click through warning
+        solo.clickOnText("Continue");
+
+        //Click measurement value EditText
+        solo.waitForView(solo.getView(R.id.submit_trial_button));
+        EditText measureEditText = (EditText) solo.getView(R.id.measure_editText);
+        solo.clickOnView(measureEditText);
+
+        //Type a measurement value
+        solo.typeText(measureEditText, value);
+
+        //Click submit button
+        solo.clickOnView(solo.getView(R.id.submit_trial_button));
 
         //Go back to subscribed page
+        solo.waitForView(solo.getView(R.id.add_trials_experiment));
+        solo.goBack();
         solo.hideSoftKeyboard();
         solo.goBack();
-
-        unpublish();
-    }
-
-    @Test
-    /**
-     * @alert Verification for US 01.04.01
-     */
-    public void testSubscribe(){
-        publish();
 
         search();
 
@@ -86,34 +104,26 @@ public class ExperimentIntentTests {
         //Click on experiment
         solo.clickOnText(description);
 
-        //Click on subscribe
+        //Click on stats tab
         solo.waitForView(R.id.subscribe_button_experiment);
-        solo.clickOnView(solo.getView(R.id.subscribe_button_experiment));
+        solo.clickOnText("Stats");
 
-        //Go back to search screen
+        //Make sure trial appears in stats
+        assertFalse(((TextView)solo.getView(R.id.q1)).getText().equals("NaN"));
+
+        //Go back to subscribed page
         solo.goBack();
         solo.hideSoftKeyboard();
-        solo.waitForView(R.id.search_experiment_query);
         solo.goBack();
-        solo.waitForView(R.id.navigation_publish);
-
-        //Click on publish tab
-        solo.clickOnView(solo.getView(R.id.navigation_publish));
-        solo.waitForView(R.id.experiment_description_input);
-
-        //Click on subscribed tab
-        solo.clickOnView(solo.getView(R.id.navigation_subscribed));
-        solo.waitForView(R.id.subscribed_exp_listView);
-        assertTrue(solo.waitForText(description));
 
         unpublish();
     }
 
     @Test
     /**
-     * @alert Verification for US 01.02.01 and US 01.03.01
+     * @alert Verification for US 01.08.01
      */
-    public void testEndAndUnpublish(){
+    public void testIgnoreResults(){
         publish();
 
         search();
@@ -123,44 +133,86 @@ public class ExperimentIntentTests {
 
         //Click on experiment
         solo.clickOnText(description);
+
+        //Click add trials button
+        solo.waitForView(solo.getView(R.id.add_trials_experiment));
+        solo.clickOnView(solo.getView(R.id.add_trials_experiment));
+
+        //Make sure warning appears
+        assertTrue(solo.waitForText("Warning! This experiment requires your location."));
+
+        //Click through warning
+        solo.clickOnText("Continue");
+
+        //Click measurement value EditText
+        solo.waitForView(solo.getView(R.id.submit_trial_button));
+        EditText measureEditText = (EditText) solo.getView(R.id.measure_editText);
+        solo.clickOnView(measureEditText);
+
+        //Type a measurement value
+        solo.typeText(measureEditText, value);
+
+        //Click submit button
+        solo.clickOnView(solo.getView(R.id.submit_trial_button));
+
+        //Go back to subscribed page
+        solo.waitForView(solo.getView(R.id.add_trials_experiment));
+        solo.goBack();
+        solo.hideSoftKeyboard();
+        solo.goBack();
+
+        search();
+
+        //Make sure the experiment shows up
+        assertTrue(solo.waitForText(description));
+
+        //Click on experiment
+        solo.clickOnText(description);
+
+        //Click on stats tab
+        solo.waitForView(R.id.subscribe_button_experiment);
+        solo.clickOnText("Stats");
+
+        //Make sure trial appears in stats with the correct value
+        assertTrue(((TextView)solo.getView(R.id.mean)).getText().equals("50.0"));
+
+        //Click on more tab
+        solo.clickOnText("More");
+
+        //Click on view contributors button
+        solo.clickOnView(solo.getView(R.id.view_contributors_button));
+
+        //Check off the contributor
+        solo.waitForView(solo.getView(R.id.contributors_title_textView));
+        solo.clickOnView(solo.getView(R.id.ignore_contributor_checkbox));
+
+        //Go back to subscribed page
+        solo.goBack();
+        solo.goBack();
+        solo.hideSoftKeyboard();
+        solo.goBack();
+
+        search();
+
+        //Make sure the experiment shows up
+        assertTrue(solo.waitForText(description));
+
+        //Click on experiment
+        solo.clickOnText(description);
+
+        //Click on stats tab
+        solo.waitForView(R.id.subscribe_button_experiment);
+        solo.clickOnText("Stats");
+
+        //Make sure no trial appears in the results
+        assertTrue(((TextView)solo.getView(R.id.mean)).getText().equals("NaN"));
 
         //Click on more tab
         solo.waitForView(R.id.subscribe_button_experiment);
         solo.clickOnText("More");
 
-        //Click on end button
-        solo.clickOnView(solo.getView(R.id.end_experiment_button));
-
-        //Go back to subscribed page to refresh
-        solo.goBack();
-        solo.waitForView(solo.getView(R.id.search_experiment_query));
-        solo.hideSoftKeyboard();
-        solo.goBack();
-        solo.waitForView(solo.getView(R.id.experiment_description_input));
-
-        search();
-
-        //Make sure the experiment shows up
-        assertTrue(solo.waitForText(description));
-
-        //Make sure the active checkbox is unchecked
-        assertFalse(solo.isCheckBoxChecked("Active"));
-
-        //Click on experiment
-        solo.clickOnText(description);
-
-        //Make sure the add trials button is not enabled
-        solo.waitForView(R.id.subscribe_button_experiment);
-        Button addTrialsButton = (Button) solo.getView(R.id.add_trials_experiment);
-        solo.sleep(3000);
-        assertFalse(addTrialsButton.isEnabled());
-
-        //Go back to subscribed page
-        solo.goBack();
-        solo.hideSoftKeyboard();
-        solo.goBack();
-
-        unpublish();
+        //Click on unpublish button
+        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
     }
 
     @After
@@ -188,8 +240,8 @@ public class ExperimentIntentTests {
         solo.clickOnView(solo.getView(R.id.navigation_publish));
         solo.waitForView(R.id.geo_location_toggle);
 
-        //Click on binomial
-        solo.clickOnView(solo.getView(R.id.binomial_experiment_radio));
+        //Click on measurement
+        solo.clickOnView(solo.getView(R.id.measurement_experiment_radio));
 
         //Click on add a description editText
         EditText descriptionBox = (EditText) solo.getView(R.id.experiment_description_input);
@@ -218,21 +270,13 @@ public class ExperimentIntentTests {
         //Type in a region
         solo.typeText(regionBox, region);
 
-        //Click on pass criteria
-        EditText passCriteriaBox = (EditText) solo.getView(R.id.binomial_pass_criteria_input);
-        solo.clickOnView(passCriteriaBox);
+        //Click on unit
+        EditText unitBox = (EditText) solo.getView(R.id.experiment_variable_name_input);
+        solo.clickOnView(unitBox);
         solo.sleep(500);
 
-        //Type in a pass criteria
-        solo.typeText(passCriteriaBox, passCriteria);
-
-        //Click on fail criteria
-        EditText failCriteriaBox = (EditText) solo.getView(R.id.binomial_fail_criteria_input);
-        solo.clickOnView(failCriteriaBox);
-        solo.sleep(500);
-
-        //Type in a fail criteria
-        solo.typeText(failCriteriaBox, failCriteria);
+        //Type in a unit
+        solo.typeText(unitBox, unit);
 
         //Click on publish
         solo.clickOnView(solo.getView(R.id.publish_experiment_button));
