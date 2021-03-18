@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,9 @@ import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +30,7 @@ public class ExperimentStatistics extends Fragment {
 
     private TextView mean;
     private TextView stdev;
-    private TextView quartile0;
+    private TextView median;
     private TextView quartile1;
     private TextView quartile2;
     private TextView quartile3;
@@ -85,7 +89,7 @@ public class ExperimentStatistics extends Fragment {
         String nan = d.toString();
         String stdString = nan;
         String meanString = nan;
-        String q0String = nan;
+        String medianString = nan;
         String q1String = nan;
         String q2String = nan;
         String q3String = nan;
@@ -95,46 +99,46 @@ public class ExperimentStatistics extends Fragment {
         Double zero = 0.0;
         Double stdDouble = zero;
         Double meanDouble = zero;
-        Double q0Double = zero;
+        Double medianDouble = zero;
         Double q1Double = zero;
         Double q2Double = zero;
         Double q3Double = zero;
         Double q4Double = zero;
 
-        if (type.equals(MeasurementExperiment.type)) {
+        if (type.equals("Measurement")) {
+            Log.d("test", "Type is measurement");
             meanDouble = ((MeasurementExperiment) experiment).getMean();
             stdDouble = ((MeasurementExperiment) experiment).getStdDev();
+            medianDouble = ((MeasurementExperiment) experiment).getMedian();
 
             // in the case not enough experiments for getQuartile
             try {
-                q0Double = ((MeasurementExperiment) experiment).getQuartile(0);
                 q1Double = ((MeasurementExperiment) experiment).getQuartile(1);
                 q2Double = ((MeasurementExperiment) experiment).getQuartile(2);
                 q3Double = ((MeasurementExperiment) experiment).getQuartile(3);
                 q4Double = ((MeasurementExperiment) experiment).getQuartile(4);
             }
             catch(Exception e){
-                q0Double = Double.NaN;
                 q1Double = Double.NaN;
                 q2Double = Double.NaN;
                 q3Double = Double.NaN;
                 q4Double = Double.NaN;
             }
 
-        } else if (type.equals(IntegerExperiment.type)) {
+        } else if (type.equals("Integer")) {
             meanDouble = ((IntegerExperiment) experiment).getMean();
             stdDouble = ((IntegerExperiment) experiment).getStdDev();
+            medianDouble = ((IntegerExperiment) experiment).getMedian();
 
             // in the case not enough experiments for getQuartile
             try {
-                q0Double = ((IntegerExperiment) experiment).getQuartile(0);
                 q1Double = ((IntegerExperiment) experiment).getQuartile(1);
                 q2Double = ((IntegerExperiment) experiment).getQuartile(2);
                 q3Double = ((IntegerExperiment) experiment).getQuartile(3);
                 q4Double = ((IntegerExperiment) experiment).getQuartile(4);
             }
             catch(Exception e){
-                q0Double = Double.NaN;
+                Log.e("Test",e.toString());
                 q1Double = Double.NaN;
                 q2Double = Double.NaN;
                 q3Double = Double.NaN;
@@ -143,16 +147,40 @@ public class ExperimentStatistics extends Fragment {
         }else{
             meanDouble = Double.NaN;
             stdDouble = Double.NaN;
-            q0Double = Double.NaN;
             q1Double = Double.NaN;
             q2Double = Double.NaN;
             q3Double = Double.NaN;
             q4Double = Double.NaN;
         }
 
-        meanString = Double.toString(meanDouble);
-        stdString = Double.toString(stdDouble);
-        q0String = Double.toString(q0Double);
+        if (meanDouble.equals(Double.NaN)){
+            meanString = Double.toString(meanDouble);
+
+        }else{
+            BigDecimal meanRounded = BigDecimal.valueOf(meanDouble);
+            meanRounded = meanRounded.setScale(5, RoundingMode.HALF_UP);
+            meanString = Double.toString(meanRounded.doubleValue());
+        }
+        if (medianDouble.equals(Double.NaN)){
+
+            medianString = Double.toString(medianDouble);
+
+        }else{
+            BigDecimal medianRounded = BigDecimal.valueOf(medianDouble);
+            medianRounded = medianRounded.setScale(5, RoundingMode.HALF_UP);
+            medianString = Double.toString(medianRounded.doubleValue());
+        }
+        if (stdDouble.equals(Double.NaN)){
+
+            stdString = Double.toString(stdDouble);
+
+        }else{
+            BigDecimal stdRounded = BigDecimal.valueOf(stdDouble);
+            stdRounded = stdRounded.setScale(5, RoundingMode.HALF_UP);
+            stdString = Double.toString(stdRounded.doubleValue());
+        }
+
+
         q1String = Double.toString(q1Double);
         q2String = Double.toString(q2Double);
         q3String = Double.toString(q3Double);
@@ -167,9 +195,11 @@ public class ExperimentStatistics extends Fragment {
         stdev = view.findViewById(R.id.stddev);
         stdev.setText(stdString);
 
+        // fill out Median
+        median = view.findViewById(R.id.median);
+        median.setText(medianString);
+
         // fill out Quartiles
-        quartile0 = view.findViewById(R.id.q0);
-        quartile0.setText(q0String);
         quartile1 = view.findViewById(R.id.q1);
         quartile1.setText(q1String);
         quartile2 = view.findViewById(R.id.q2);

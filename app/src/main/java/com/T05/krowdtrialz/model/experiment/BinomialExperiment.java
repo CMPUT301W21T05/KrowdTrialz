@@ -75,8 +75,8 @@ public class BinomialExperiment extends Experiment {
         Set<String> tags = new HashSet<>();
         tags.addAll(super.getTags());
 
-        tags.add(getFailUnit());
-        tags.add(getPassUnit());
+        tags.add(getFailUnit().toLowerCase());
+        tags.add(getPassUnit().toLowerCase());
 
         List<String> tagsList = new ArrayList<>();
         tagsList.addAll(tags);

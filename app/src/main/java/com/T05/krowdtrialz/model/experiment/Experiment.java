@@ -40,8 +40,6 @@ public abstract class Experiment implements Tagged {
         // TODO generate unique id
         this.owner = owner;
         this.description = description;
-
-//        trials = new ArrayList<Trial>();
         barcodes = new ArrayList<Barcode>();
         qrCodes = new ArrayList<QRCode>();
         status = active;
@@ -149,6 +147,28 @@ public abstract class Experiment implements Tagged {
         if(ignoredUsers.contains(user)){
             ignoredUsers.remove(user);
         }
+    }
+
+    @Exclude
+    public Set<User> getContributors() {
+        ArrayList<Trial> trials = (ArrayList<Trial>) getTrials();
+        Set<User> users = new HashSet<>();
+        trials.stream().forEach(trial -> users.add(trial.getExperimenter()));
+        return users;
+    }
+
+    @Exclude
+    public ArrayList<? extends Trial> getValidTrials() {
+        ArrayList<? extends Trial> trials = getTrials();
+        ArrayList<Trial> validTrials = new ArrayList<>();
+
+        for (Trial trial : trials) {
+            if (!isIgnored(trial.getExperimenter())) {
+                validTrials.add(trial);
+            }
+        }
+
+        return validTrials;
     }
 
     /**

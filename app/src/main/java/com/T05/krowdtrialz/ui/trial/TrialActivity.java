@@ -6,8 +6,10 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.T05.krowdtrialz.MainActivity;
@@ -25,6 +27,8 @@ public abstract class TrialActivity extends AppCompatActivity {
     private Button submitButton;
     private Database db;
 
+    private Experiment experiment = null;
+
     /**
      * This is overidden so that this super class can get UI elements such as submitButton after the
      * activity's layout has been loaded.
@@ -34,30 +38,40 @@ public abstract class TrialActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
 
-        db = Database.getInstance();
-
         Intent intent = getIntent();
         String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
+        com.google.android.material.switchmaterial.SwitchMaterial locationRequired = findViewById(R.id.use_location_switch);
+
+        db = Database.getInstance();
+
+        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment experiment) {
+                TrialActivity.this.experiment  = experiment;
+                locationRequired.setChecked(experiment.isLocationRequired());
+                locationRequired.setEnabled(!experiment.isLocationRequired());
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "Could not get experiment");
+            }
+        });
+
         // This must be done after the layout is loaded
         submitButton = findViewById(R.id.submit_trial_button);
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // TODO call Database.addTrial
-                db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
-                    @Override
-                    public void onSuccess(Experiment experiment) {
-                        Trial trial = createTrial();
-                        db.addTrial(trial, experiment);
-                    }
-
-                    @Override
-                    public void onFailure() {
-                        Log.e(TAG, "Could not get experiment");
-                    }
-                });
+                if (experiment == null) {
+                    Log.e(TAG, "Could not add trial.");
+                    return;
+                }
+                Trial trial = createTrial();
+                db.addTrial(trial, experiment);
+                finish();
             }
         });
     }

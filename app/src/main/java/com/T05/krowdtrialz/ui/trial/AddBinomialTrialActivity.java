@@ -6,9 +6,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
+import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
@@ -22,6 +24,8 @@ public class AddBinomialTrialActivity extends TrialActivity {
     private int latitude;
     private EditText passEditText;
     private EditText failEditText;
+    private TextView passTextView;
+    private TextView failTextView;
     private BinomialTrial binomialTrial;
 
     @Override
@@ -29,8 +33,31 @@ public class AddBinomialTrialActivity extends TrialActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_binomial_trial);
 
+        db = Database.getInstance();
+
         passEditText  = findViewById(R.id.binomial1_editText);
         failEditText  = findViewById(R.id.binomial2_editText);
+
+        passTextView = findViewById(R.id.binomial1_textView);
+        failTextView = findViewById(R.id.binomial2_textView);
+
+        Intent intent = getIntent();
+        db.getExperimentByID(intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID), new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment experiment) {
+                BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
+                passTextView.setText(binomialExperiment.getPassUnit());
+                failTextView.setText(binomialExperiment.getFailUnit());
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
+
+
+
     }
 
     @Override

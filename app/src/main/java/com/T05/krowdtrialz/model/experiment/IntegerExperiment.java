@@ -65,7 +65,7 @@ public class IntegerExperiment extends StatisticsExperiment {
      */
     @Override
     protected double[] getDataAsArray() {
-        return getTrials().stream()
+        return getValidTrials().stream()
                 .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
                 .toArray();
     }
@@ -81,7 +81,7 @@ public class IntegerExperiment extends StatisticsExperiment {
         Set<String> tags = new HashSet<>();
         tags.addAll(super.getTags());
 
-        tags.add(getUnit());
+        tags.add(getUnit().toLowerCase());
 
         List<String> tagsList = new ArrayList<>();
         tagsList.addAll(tags);

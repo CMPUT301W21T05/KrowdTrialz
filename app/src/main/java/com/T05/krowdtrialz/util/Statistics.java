@@ -2,6 +2,7 @@ package com.T05.krowdtrialz.util;
 
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
+import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 /**
@@ -13,6 +14,7 @@ import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 public class Statistics {
     private static final Mean meanInstance = new Mean();
     private static final StandardDeviation standardDeviationInstance = new StandardDeviation();
+    private static final Median medianInstance = new Median();
     private static final Percentile percentileInstance = new Percentile();
 
     /**
@@ -35,6 +37,17 @@ public class Statistics {
      */
     public static double standardDeviation(double[] data) {
         return standardDeviationInstance.evaluate(data);
+    }
+
+    /**
+     * Calculates the median of the data
+     * Returns NaN if data is empty array
+     *
+     * @param data The data to calculate the median for
+     * @return The median
+     */
+    public static double median(double[] data) {
+        return medianInstance.evaluate(data);
     }
 
     /**
