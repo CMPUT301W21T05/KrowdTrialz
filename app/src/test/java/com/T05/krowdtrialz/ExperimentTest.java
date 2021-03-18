@@ -44,12 +44,6 @@ public class ExperimentTest {
         return mTrial;
     }
 
-    public MeasurementTrial mockMeasurementTrial2(){
-        MeasurementTrial mTrial = new MeasurementTrial(mockExperimenter(), 12,55);
-        return mTrial;
-    }
-
-
     @Test
     public void testAddTrial(){
         MeasurementExperiment experiment = mockMeasurementExperiment();
