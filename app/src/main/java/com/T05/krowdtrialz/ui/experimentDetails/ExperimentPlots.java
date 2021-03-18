@@ -154,7 +154,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
             CountExperiment countExperiment = (CountExperiment) experiment;
-            dataPoints.add(this.experiment.getTrials().size());
+            dataPoints.add(this.experiment.getValidTrials().size());
 
             // make list of entries
             for (int i = 0; i < dataPoints.size(); i++) {
@@ -169,7 +169,7 @@ public class ExperimentPlots extends Fragment {
         else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             // make list of data
             IntegerExperiment integerExperiment = (IntegerExperiment) experiment;
-            double[] temp = integerExperiment.getTrials().stream()
+            double[] temp = integerExperiment.getValidTrials().stream()
                     .mapToDouble(trial -> ((IntegerTrial) trial).getValue())
                     .toArray();
 
@@ -203,7 +203,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             MeasurementExperiment measurementExperiment = (MeasurementExperiment) experiment;
 
-            double[] temp = measurementExperiment.getTrials().stream()
+            double[] temp = measurementExperiment.getValidTrials().stream()
                     .mapToDouble(trial -> ((MeasurementTrial) trial).getMeasurementValue())
                     .toArray();
 
@@ -269,7 +269,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             BinomialExperiment binomialExperiment = (BinomialExperiment) this.experiment;
 
-            ArrayList<BinomialTrial> temp = (ArrayList<BinomialTrial>) binomialExperiment.getTrials();
+            ArrayList<BinomialTrial> temp = (ArrayList<BinomialTrial>) binomialExperiment.getValidTrials();
             ArrayList<BinomialTrial> binomialTrials = new ArrayList<BinomialTrial>();
             for (Trial trial : temp){
                 binomialTrials.add((BinomialTrial) trial);
@@ -346,7 +346,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             CountExperiment countExperiment = (CountExperiment) this.experiment;
 
-            ArrayList<Trial> temp = (ArrayList<Trial>) countExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) countExperiment.getValidTrials();
             ArrayList<CountTrial> countTrials = new ArrayList<CountTrial>();
             for (Trial trial : temp){
                 countTrials.add((CountTrial) trial);
@@ -407,7 +407,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             IntegerExperiment integerExperiment = (IntegerExperiment) this.experiment;
 
-            ArrayList<Trial> temp = (ArrayList<Trial>) integerExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) integerExperiment.getValidTrials();
             ArrayList<IntegerTrial> integerTrials = new ArrayList<IntegerTrial>();
             for (Trial trial : temp){
                 integerTrials.add((IntegerTrial) trial);
@@ -475,7 +475,7 @@ public class ExperimentPlots extends Fragment {
             // make list of data
             MeasurementExperiment measurementExperiment = (MeasurementExperiment) this.experiment;
 
-            ArrayList<Trial> temp = (ArrayList<Trial>) measurementExperiment.getTrials();
+            ArrayList<Trial> temp = (ArrayList<Trial>) measurementExperiment.getValidTrials();
             ArrayList<MeasurementTrial> measurementTrials = new ArrayList<MeasurementTrial>();
             for (Trial trial : temp){
                 measurementTrials.add((MeasurementTrial) trial);

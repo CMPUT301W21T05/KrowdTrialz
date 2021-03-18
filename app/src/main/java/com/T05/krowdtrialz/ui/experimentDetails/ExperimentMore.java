@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,9 +14,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.contributors.ContributorsActivity;
 import com.T05.krowdtrialz.util.Database;
 
 import org.apache.commons.math3.analysis.function.Exp;
@@ -72,14 +75,17 @@ public class ExperimentMore extends Fragment {
         Button viewQandAButton = root.findViewById(R.id.view_qanda_button);
         Button endExperimentButton = root.findViewById(R.id.end_experiment_button);
         Button unpublishExperimentButton = root.findViewById(R.id.unpublish_experiment_button);
+        Button viewContributorsButton = root.findViewById(R.id.view_contributors_button);
 
         User user = db.getDeviceUser();
         if (experiment.isOwner(user)) {
             endExperimentButton.setVisibility(Button.VISIBLE);
             unpublishExperimentButton.setVisibility(Button.VISIBLE);
+            viewContributorsButton.setVisibility(Button.VISIBLE);
         } else {
             endExperimentButton.setVisibility(Button.GONE);
             unpublishExperimentButton.setVisibility(Button.GONE);
+            viewContributorsButton.setVisibility(Button.GONE);
         }
 
         viewMapButton.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +119,17 @@ public class ExperimentMore extends Fragment {
             public void onClick(View v) {
                 db.deleteExperiment(experiment);
                 getActivity().finish();
+            }
+        });
+
+        viewContributorsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(root.getContext(), ContributorsActivity.class);
+
+                intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+
+                startActivity(intent);
             }
         });
 

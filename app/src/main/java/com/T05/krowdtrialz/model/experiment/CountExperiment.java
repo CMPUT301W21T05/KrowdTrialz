@@ -70,7 +70,7 @@ public class CountExperiment extends Experiment {
         Set<String> tags = new HashSet<>();
         tags.addAll(super.getTags());
 
-        tags.add(getUnit());
+        tags.add(getUnit().toLowerCase());
 
         List<String> tagsList = new ArrayList<>();
         tagsList.addAll(tags);
