@@ -39,25 +39,36 @@ public class ExperimentTest {
         return experiment;
     }
 
-    public MeasurementTrial mockMeasurementTrial(){
+    public MeasurementTrial mockMeasurementTrial1(){
         MeasurementTrial mTrial = new MeasurementTrial(mockOwner(), 0,0);
         return mTrial;
     }
 
+    public MeasurementTrial mockMeasurementTrial2(){
+        MeasurementTrial mTrial = new MeasurementTrial(mockExperimenter(), 12,55);
+        return mTrial;
+    }
+
+
     @Test
     public void testAddTrial(){
         MeasurementExperiment experiment = mockMeasurementExperiment();
-        MeasurementTrial mTrial = mockMeasurementTrial();
+        MeasurementTrial mTrial = mockMeasurementTrial1();
         experiment.addTrial(mTrial);
+
+        ArrayList<?> trial = experiment.getTrials();
+
+        assertEquals(trial.get(0), mTrial);
+
     }
 
     @Test
     public void testIgnoreUser(){
         MeasurementExperiment experiment = mockMeasurementExperiment();
         User testExperimenter = mockExperimenter();
-
         assertFalse(experiment.isIgnored(testExperimenter));
 
+        // testing ignoring 1 user
         experiment.ignoreUser(testExperimenter);
         assertTrue(experiment.isIgnored(testExperimenter));
     }
@@ -74,9 +85,8 @@ public class ExperimentTest {
         assertFalse(experiment.isIgnored(testExperimenter));
     }
 
-
     @Test
-    public void tags_areCorrect() {
+    public void testGetTags() {
         MeasurementExperiment experiment = mockMeasurementExperiment();
 
         experiment.setMinTrials(12);
