@@ -61,6 +61,7 @@ public class TrialTest {
         return iTrial;
     }
 
+    // test Integer trials sum all trial results
     @Test
     public void testGetTotalIntTrial(){
         IntegerExperiment experiment = mockIntegerExperiment();
@@ -74,6 +75,7 @@ public class TrialTest {
         assertEquals(experiment.getTotal(), 257);
     }
 
+    // tests Binomial trials, getSuccessCount, getFailureCount and getSuccessRate()
     @Test
     public void testBinomialTrial(){
         BinomialExperiment experiment = mockBinomialExperiment();
@@ -85,7 +87,49 @@ public class TrialTest {
         assertEquals(experiment.getFailureCount(), 200);
 
         assertEquals(experiment.getSuccessRate(), 0.33,0.01);
-
     }
+
+    // test binomial trial all success case for getSuccessCount, getFailureCount and getSuccessRate()
+    @Test
+    public void testBinomialTrialAllSuccess(){
+        BinomialExperiment experiment = mockBinomialExperiment();
+        BinomialTrial bTrial = mockBinomialTrial1();
+        bTrial.setPassCount(999);
+        bTrial.setFailCount(0);
+        experiment.addTrial(bTrial);
+        assertEquals(experiment.getSuccessCount(), 999);
+        assertEquals(experiment.getFailureCount(), 0);
+
+        assertEquals(experiment.getSuccessRate(), 1,0.01);
+    }
+
+    // test binomial trial all failure case for getSuccessCount, getFailureCount and getSuccessRate()
+    @Test
+    public void testBinomialTrialAllFailure(){
+        BinomialExperiment experiment = mockBinomialExperiment();
+        BinomialTrial bTrial = mockBinomialTrial1();
+        bTrial.setPassCount(0);
+        bTrial.setFailCount(472);
+        experiment.addTrial(bTrial);
+        assertEquals(experiment.getSuccessCount(), 0);
+        assertEquals(experiment.getFailureCount(), 472);
+
+        assertEquals(experiment.getSuccessRate(), 0,0.01);
+    }
+
+    // test binomial trial for no trial case for getSuccessCount, getFailureCount and getSuccessRate()
+    @Test
+    public void testBinomialTrialNothing(){
+        BinomialExperiment experiment = mockBinomialExperiment();
+        BinomialTrial bTrial = mockBinomialTrial1();
+        bTrial.setPassCount(0);
+        bTrial.setFailCount(0);
+        experiment.addTrial(bTrial);
+        assertEquals(experiment.getSuccessCount(), 0);
+        assertEquals(experiment.getFailureCount(), 0);
+
+        assertEquals(experiment.getSuccessRate(), Double.NaN,0.01);
+    }
+
 
 }
