@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -35,7 +37,64 @@ public class DatabaseTest {
     private String integerExperimentID = "123INT";
     private String uid = "JB123";
 
+    // Time to sleep (in ms) while waiting for firestore to update.
+    private static final int WAIT_TIME_MS = 1000;
+
+    private Experiment returnedExperiment;
+
     private class MockSharedPreferences implements SharedPreferences {
+        private class MockEditor implements SharedPreferences.Editor {
+            @Override
+            public Editor putString(String key, @Nullable String value) {
+                return null;
+            }
+
+            @Override
+            public Editor putStringSet(String key, @Nullable Set<String> values) {
+                return null;
+            }
+
+            @Override
+            public Editor putInt(String key, int value) {
+                return null;
+            }
+
+            @Override
+            public Editor putLong(String key, long value) {
+                return null;
+            }
+
+            @Override
+            public Editor putFloat(String key, float value) {
+                return null;
+            }
+
+            @Override
+            public Editor putBoolean(String key, boolean value) {
+                return null;
+            }
+
+            @Override
+            public Editor remove(String key) {
+                return null;
+            }
+
+            @Override
+            public Editor clear() {
+                return null;
+            }
+
+            @Override
+            public boolean commit() {
+                return false;
+            }
+
+            @Override
+            public void apply() {
+
+            }
+        }
+
         @Override
         public Map<String, ?> getAll() {
             return null;
@@ -80,7 +139,7 @@ public class DatabaseTest {
 
         @Override
         public Editor edit() {
-            return null;
+            return new MockEditor();
         }
 
         @Override
@@ -117,7 +176,7 @@ public class DatabaseTest {
     }
 
     @Before
-    public void setup() {
+    public void setup() throws InterruptedException {
         final SharedPreferences sharedPreferences = new MockSharedPreferences();
         Database.initializeInstance(sharedPreferences, new Database.InitializeDatabaseCallback() {
             @Override
@@ -128,7 +187,9 @@ public class DatabaseTest {
             public void onFailure() {
             }
         } );
+        Thread.sleep(WAIT_TIME_MS);
         db = Database.getInstance();
+        returnedExperiment = null;
     }
 
     @Test
@@ -150,13 +211,6 @@ public class DatabaseTest {
     }
 
     @Test
-    public void testSetupAddNewExperiment(){
-        IntegerExperiment experiment = mockIntegerExperiment();
-        experiment.setRegion("China");
-        //        db.addExperiment(experiment);
-    }
-
-    @Test
     public void testSmokeTestGetExperimentsByTags () {
         ArrayList<String> tags = new ArrayList<>();
         tags.add("bob");
@@ -175,4 +229,39 @@ public class DatabaseTest {
             }
         });
     }
+
+    @Test
+    public void testAddExperiment() throws InterruptedException {
+        Experiment experiment = mockIntegerExperiment();
+        experiment.setRegion("China");
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+        assertNotNull(experiment.getId());
+    }
+
+    @Test
+    public void testGetExperimentById() throws InterruptedException {
+        Experiment experiment = mockIntegerExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.getExperimentByID(experiment.getId(),
+                new Database.GetExperimentCallback() {
+                    @Override
+                    public void onSuccess(Experiment experiment) {
+                        returnedExperiment = experiment;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertNotNull(returnedExperiment);
+        assertEquals(experiment.getId(), returnedExperiment.getId());
+    }
+
 }
