@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Base class to represent all types of experiments.
+ * Base class to represent all types of experiments. Note: experiments are active by default.
  */
 public abstract class Experiment implements Tagged {
     private String id;
@@ -46,36 +46,90 @@ public abstract class Experiment implements Tagged {
         ignoredUsers = new ArrayList<User>();
     }
 
+    /**
+     * Get the trials for this experiment
+     *
+     * @return generic list of trials
+     */
+    abstract public ArrayList<? extends Trial> getTrials();
+
+    /**
+     * Add a new trial to the experiment
+     *
+     * @param trial the trial to be added
+     * @param <E> trial type matching the experiment type
+     *
+     * @alert trial type E must match the experiment type.
+     */
+    abstract public <E extends Trial> void addTrial(E trial);
+
+    /**
+     *
+     * @return
+     *  ID of the current experiment
+     */
     public String getId() {
         return id;
     }
 
     public void setId(String id) { this.id = id; }
 
-    abstract public ArrayList<? extends Trial> getTrials();
-
-    abstract public <E extends Trial> void addTrial(E trial);
-
+    /**
+     * Get the barcodes associated with this Experiment
+     *
+     * @return array of associated barcodes
+     */
     public ArrayList<Barcode> getBarcodes() {
         return barcodes;
     }
 
+    /**
+     * Add a new barcode to be associated with this experiment
+     *
+     * @param barcode
+     *      barcode to add
+     */
     public void addBarcode(Barcode barcode) {
         barcodes.add(barcode);
     }
 
+
+    /**
+     * Get the QR codes associated with this experimet
+     *
+     * @return
+     *  Array of associated QR codes
+     */
     public ArrayList<QRCode> getQrCodes() {
         return qrCodes;
     }
 
+    /**
+     * Add new QR code associated with this experiment
+     *
+     * @param qrCode
+     *  QR code to add
+     */
     public void addQRCode(QRCode qrCode) {
         qrCodes.add(qrCode);
     }
 
+    /**
+     * Get owner of this experiment
+     *
+     * @return
+     */
     public User getOwner() {
         return owner;
     }
 
+    /**
+     * Query if the given user owns the current experiment
+     *
+     * @param user user to check if owner
+     * @return
+     *  true if owner, otherwise false
+     */
     public boolean isOwner(User user){
         if(owner.getId().equals(user.getId())){
             return true;
@@ -122,10 +176,21 @@ public abstract class Experiment implements Tagged {
 
     abstract public String getType();
 
+    /**
+     * Get array of users to be excluded from results
+     *
+     * @return array of ignored users
+     */
     public ArrayList<User> getIgnoredUsers(){
         return ignoredUsers;
     }
 
+    /**
+     * Check if the give user is to be ignored
+     *
+     * @param user
+     * @return true if user is ignored, false otherwise
+     */
     public boolean isIgnored(User user){
         for (User i : ignoredUsers){
             if(i.getId().equals(user.getId())) {
@@ -135,10 +200,20 @@ public abstract class Experiment implements Tagged {
         return false;
     }
 
+    /**
+     * Set user to be ignored in this experiment's results
+     *
+     * @param user user to be ignored
+     */
     public void ignoreUser(User user){
         ignoredUsers.add(user);
     }
 
+    /**
+     * Ignore users as a batch action
+     *
+     * @param users
+     */
     public void ignoreMultipleUsers(ArrayList<User> users){
         ignoredUsers.addAll(users);
     }
@@ -149,6 +224,12 @@ public abstract class Experiment implements Tagged {
         }
     }
 
+    /**
+     * Get all contriubtors to this experiment regardless of if they're ignored
+     *
+     * @return
+     *  Set of users
+     */
     @Exclude
     public Set<User> getContributors() {
         ArrayList<Trial> trials = (ArrayList<Trial>) getTrials();
@@ -157,6 +238,11 @@ public abstract class Experiment implements Tagged {
         return users;
     }
 
+    /**
+     * Get the trials only from the non-ignored contributors
+     *
+     * @return array of trials from valid users
+     */
     @Exclude
     public ArrayList<? extends Trial> getValidTrials() {
         ArrayList<? extends Trial> trials = getTrials();
@@ -189,6 +275,11 @@ public abstract class Experiment implements Tagged {
         status = inactive;
     }
 
+    /**
+     * Query if the experiment is inactive
+     *
+     * @return true if inactive
+     */
     public boolean isInactive() {
         return status == inactive;
     }

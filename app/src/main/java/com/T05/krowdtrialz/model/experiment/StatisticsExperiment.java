@@ -13,6 +13,8 @@ import java.util.Set;
 /**
  * Super class for types of experiments for whiche statistics such as mean and standard deviation
  * can be calculated.
+ * Representation of a statistics experiment, which is an experiment with data
+ * such that standard deviation, mean, median, etc. can be calculated from the results.
  */
 public abstract class StatisticsExperiment extends Experiment {
 

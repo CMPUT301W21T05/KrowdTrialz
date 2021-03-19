@@ -44,7 +44,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Show experiment plots and histograms
+ *
+ * A simple {@link Fragment} subclass with dependency injection.
  * Use the {@link ExperimentPlots#newInstance} factory method to
  * create an instance of this fragment.
  */

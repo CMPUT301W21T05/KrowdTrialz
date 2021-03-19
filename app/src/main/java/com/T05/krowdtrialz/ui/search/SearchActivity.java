@@ -21,6 +21,11 @@ import com.T05.krowdtrialz.util.ExperimentList;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Accept user queries and display results.
+ *
+ * @todo need to update when user re enters the activity, since data may have beed deleted
+ */
 public class SearchActivity extends Activity implements SearchView.OnQueryTextListener{
 
     private Database db;

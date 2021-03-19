@@ -11,6 +11,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Representation of Count experiment. Holds count trials and the units of items
+ * to be counted in this experiment.
+ *
+ * Count experiments store user's count of things like "blue cars on the road"/
+ */
 public class CountExperiment extends Experiment {
     public static final String type = "Count";
     // The name of the unit of measurement for trials in this experiment.
@@ -43,20 +49,20 @@ public class CountExperiment extends Experiment {
         return type;
     }
 
-    /**
-     * Calculates the total count across all trials in this experiment.
-     * @return The total count.
-     */
-    public int getCount() {
-        return getTrials().size();
-    }
-
     public String getUnit() {
         return unit;
     }
 
     public void setUnit(String unit) {
         this.unit = unit;
+    }
+
+    /**
+     * Calculates the total count across all trials in this experiment.
+     * @return The total count.
+     */
+    public int getCount() {
+        return getTrials().size();
     }
 
     /**

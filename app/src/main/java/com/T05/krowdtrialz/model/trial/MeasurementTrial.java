@@ -26,10 +26,20 @@ public class MeasurementTrial extends Trial {
         super(user, longitude, latitude, dateCreated);
     }
 
+    /**
+     * Get value of the measurement trial
+     * @return
+     *  floating point measurement
+     */
     public Float getMeasurementValue() {
         return measurementValue;
     }
 
+    /**
+     * Add result to the trial
+     *
+     * @param measurementValue trial result
+     */
     public void setMeasurementValue(Float measurementValue) {
         this.measurementValue = measurementValue;
     }

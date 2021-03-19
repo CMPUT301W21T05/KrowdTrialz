@@ -28,10 +28,21 @@ public class IntegerTrial extends Trial {
         super(user, longitude, latitude, dateCreated);
     }
 
+    /**
+     * Get integer trial value
+     *
+     * @return
+     *  value of the trial result
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * Set value of the integer trial
+     *
+     * @param value trial result
+     */
     public void setValue(int value) {
         this.value = value;
     }
