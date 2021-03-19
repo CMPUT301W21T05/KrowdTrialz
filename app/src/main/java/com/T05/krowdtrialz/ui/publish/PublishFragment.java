@@ -24,6 +24,12 @@ import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+/**
+ * Get user input to publish a new experiment. This class has the logic to
+ * customize the UI based on the selected experiment type.
+ *
+ * @todo refresh after user has published the experiment
+ */
 public class PublishFragment extends Fragment {
 
     private PublishViewModel publishViewModel;

@@ -19,6 +19,10 @@ import com.T05.krowdtrialz.util.Database;
 
 import java.util.ArrayList;
 
+/**
+ * Custom array adapter for ListView to show the list of contributors of an experiment
+ * along with a checkbox that indicated if they are ignored by the experiment.
+ */
 public class ContributorList extends ArrayAdapter<User> {
 
     private ArrayList<User> contributors;

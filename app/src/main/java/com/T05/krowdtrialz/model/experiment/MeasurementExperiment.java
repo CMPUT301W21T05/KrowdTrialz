@@ -1,18 +1,20 @@
 package com.T05.krowdtrialz.model.experiment;
 
-import android.widget.ArrayAdapter;
-
-import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Representation of a Measurement experiment. Responsible for maintaining a list of measurement
+ * trials, and the name of the unit.
+ *
+ * Measurement experiments store things like height, or length.
+ */
 public class MeasurementExperiment extends StatisticsExperiment {
     public static final String type = "Measurement";
     // The name of the unit of measurement for trials in this experiment.

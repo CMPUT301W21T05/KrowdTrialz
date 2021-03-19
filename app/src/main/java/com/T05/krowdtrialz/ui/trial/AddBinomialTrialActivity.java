@@ -55,11 +55,13 @@ public class AddBinomialTrialActivity extends TrialActivity {
 
             }
         });
-
-
-
     }
 
+    /**
+     * Construct a trial from the current application state
+     *
+     * @return trial
+     */
     @Override
     protected Trial createTrial() {
 

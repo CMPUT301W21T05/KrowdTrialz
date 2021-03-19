@@ -29,6 +29,10 @@ import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.tabs.TabLayout;
 
+/**
+ * Set up tabs and common informaiton about the selected experiment.
+ * Tab are created based on experiment type
+ */
 public class ExperimentDetailsActivity extends AppCompatActivity
         implements LocationRequiredDialogFragment.LocationRequiredDialogListener {
 

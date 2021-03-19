@@ -1,13 +1,9 @@
 package com.T05.krowdtrialz.ui.trial;
 
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.EditText;
 
 import com.T05.krowdtrialz.R;
-import com.T05.krowdtrialz.model.trial.BinomialTrial;
-import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
@@ -30,6 +26,11 @@ public class AddMeasurementTrialActivity extends TrialActivity {
         valueEditText  = findViewById(R.id.measure_editText);
     }
 
+    /**
+     * Construct a trial from the current application state
+     *
+     * @return trial
+     */
     @Override
     protected Trial createTrial() {
         // get user, location and create a trial

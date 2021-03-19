@@ -44,8 +44,6 @@ import static android.content.ContentValues.TAG;
  * @author
  *  Furmaan Sekhon and Jacques Leong-Sit
  */
-
-
 public class Database {
 
     private FirebaseFirestore db;

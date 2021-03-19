@@ -9,7 +9,10 @@ import java.time.LocalDateTime;
 
 /**
  * The Trial class maintains metadata needed by all
- * trial types.
+ * trial types such as location, creator, and date created.
+ *
+ * @alert non-serializable classes cannot be used in this class because of the
+ * restrictions imposed by firestore
  * */
 public abstract class Trial {
     private User experimenter;
@@ -49,6 +52,11 @@ public abstract class Trial {
 
     public int getLatitude() { return latitude; }
 
+    /**
+     * Get the user who created the trial
+     *
+     * @return user who added this trial
+     */
     public User getExperimenter() {
         return experimenter;
     }

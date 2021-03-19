@@ -26,8 +26,11 @@ import com.T05.krowdtrialz.util.ExperimentList;
 
 import java.util.ArrayList;
 
-
-
+/**
+ * View all subscribed experiments in the MainActivity
+ *
+ * @todo This needs to be updated properly. Currently the fragment must be reloaded to see all experiments.
+ */
 public class SubscribedFragment extends Fragment {
 
     private SubscribedViewModel subscribedViewModel;
