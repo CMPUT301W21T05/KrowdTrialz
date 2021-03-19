@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * The Trial class maintains metadata needed by all
- * trial types such as locaiton, creator, and date created.
+ * trial types such as location, creator, and date created.
  *
  * @alert non-serializable classes cannot be used in this class because of the
  * restrictions imposed by firestore

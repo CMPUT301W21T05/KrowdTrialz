@@ -20,7 +20,7 @@ import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
 import java.util.ArrayList;
 
 /**
- * Custom Array Adapter for ListView to show breif experiment info such as user
+ * Custom Array Adapter for ListView to show brief experiment info such as user
  * description, and the status of the experiment.
  */
 public class ExperimentList extends ArrayAdapter<Experiment> {
