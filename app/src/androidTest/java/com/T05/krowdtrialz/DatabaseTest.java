@@ -11,6 +11,8 @@ import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
+import com.T05.krowdtrialz.model.trial.CountTrial;
+import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
 
@@ -24,6 +26,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,16 +34,11 @@ import static org.junit.Assert.fail;
 public class DatabaseTest {
     private Database db;
 
-    private String measureExperimentID = "123MES";
-    private String binomialExperimentID = "123BIN";
-    private String countExperimentID = "123COU";
-    private String integerExperimentID = "123INT";
-    private String uid = "JB123";
-
     // Time to sleep (in ms) while waiting for firestore to update.
     private static final int WAIT_TIME_MS = 1000;
 
     private Experiment returnedExperiment;
+    private User returnedUser;
 
     private class MockSharedPreferences implements SharedPreferences {
         private class MockEditor implements SharedPreferences.Editor {
@@ -175,6 +173,10 @@ public class DatabaseTest {
         return experiment;
     }
 
+    public CountTrial mockCountTrial() {
+        return new CountTrial();
+    }
+
     @Before
     public void setup() throws InterruptedException {
         final SharedPreferences sharedPreferences = new MockSharedPreferences();
@@ -190,6 +192,7 @@ public class DatabaseTest {
         Thread.sleep(WAIT_TIME_MS);
         db = Database.getInstance();
         returnedExperiment = null;
+        returnedUser = null;
     }
 
     @Test
@@ -231,6 +234,27 @@ public class DatabaseTest {
     }
 
     @Test
+    public void testGetUserById() throws InterruptedException {
+        String id = db.getDeviceUser().getId();
+        db.getUserById(id, new Database.GetUserCallback() {
+            @Override
+            public void onSuccess(User user) {
+                returnedUser = user;
+            }
+
+            @Override
+            public void onFailure() {
+                fail("onFailure called");
+            }
+        });
+
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertNotNull(returnedUser);
+        assertEquals(id, returnedUser.getId());
+    }
+
+    @Test
     public void testAddExperiment() throws InterruptedException {
         Experiment experiment = mockIntegerExperiment();
         experiment.setRegion("China");
@@ -264,4 +288,176 @@ public class DatabaseTest {
         assertEquals(experiment.getId(), returnedExperiment.getId());
     }
 
+    /**
+     * Tests addSubscription and getExperimentsBySubscriber.
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSubscribe() throws InterruptedException {
+        Experiment experiment = mockIntegerExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.addSubscription(db.getDeviceUser(), experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        ArrayList<Experiment> returnedExperiments = new ArrayList<>();
+        db.getExperimentsBySubscriber(db.getDeviceUser(),
+                new Database.QueryExperimentsCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Experiment> experiments) {
+                        experiments.forEach(
+                                e -> returnedExperiments.add(e)
+                        );
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertTrue(returnedExperiments.contains(experiment));
+    }
+
+    /**
+     * FAILING
+     * @throws InterruptedException
+     */
+    @Test
+    public void testGetExperimentsByOwner() throws InterruptedException {
+        Experiment experiment = mockIntegerExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        ArrayList<Experiment> returnedExperiments = new ArrayList<>();
+        db.getExperimentsByOwner(db.getDeviceUser(),
+                new Database.QueryExperimentsCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Experiment> experiments) {
+                        experiments.forEach(
+                                e -> returnedExperiments.add(e)
+                        );
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertTrue(returnedExperiments.contains(experiment));
+    }
+
+    @Test
+    public void testGetExperimentsByTags() throws InterruptedException {
+        BinomialExperiment experiment = mockBinomialExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add(experiment.getPassUnit());
+        tags.add(experiment.getFailUnit());
+
+        ArrayList<Experiment> returnedExperiments = new ArrayList<>();
+        db.getExperimentsByTags(tags,
+                new Database.QueryExperimentsCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Experiment> experiments) {
+                        experiments.forEach(
+                                e -> returnedExperiments.add(e)
+                        );
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertTrue(returnedExperiments.contains(experiment));
+    }
+
+    @Test
+    public void testAddTrial() throws InterruptedException {
+        Experiment experiment = mockCountExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        Trial trial = mockCountTrial();
+        db.addTrial(trial, experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.getExperimentByID(experiment.getId(),
+                new Database.GetExperimentCallback() {
+                    @Override
+                    public void onSuccess(Experiment experiment) {
+                        returnedExperiment = experiment;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertTrue(returnedExperiment.getTrials().size() > 0);
+    }
+
+    @Test
+    public void testUpdateExperiment() throws InterruptedException {
+        MeasurementExperiment experiment = mockMeasurementExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        experiment.setUnit("new unit");
+        db.updateExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.getExperimentByID(experiment.getId(),
+                new Database.GetExperimentCallback() {
+                    @Override
+                    public void onSuccess(Experiment experiment) {
+                        returnedExperiment = experiment;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertEquals("new unit", ((MeasurementExperiment) returnedExperiment).getUnit());
+    }
+
+    @Test
+    public void testDeleteExperiment() throws InterruptedException {
+        MeasurementExperiment experiment = mockMeasurementExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.deleteExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.getExperimentByID(experiment.getId(),
+                new Database.GetExperimentCallback() {
+                    @Override
+                    public void onSuccess(Experiment experiment) {
+                        fail("onSuccess called but should have failed");
+                    }
+
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertNull(returnedExperiment);
+    }
 }
