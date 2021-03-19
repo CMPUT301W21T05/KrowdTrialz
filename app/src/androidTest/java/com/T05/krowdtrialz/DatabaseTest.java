@@ -3,6 +3,7 @@ package com.T05.krowdtrialz;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
@@ -16,10 +17,10 @@ import com.T05.krowdtrialz.util.Database;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -33,6 +34,65 @@ public class DatabaseTest {
     private String countExperimentID = "123COU";
     private String integerExperimentID = "123INT";
     private String uid = "JB123";
+
+    private class MockSharedPreferences implements SharedPreferences {
+        @Override
+        public Map<String, ?> getAll() {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public String getString(String key, @Nullable String defValue) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Set<String> getStringSet(String key, @Nullable Set<String> defValues) {
+            return null;
+        }
+
+        @Override
+        public int getInt(String key, int defValue) {
+            return 0;
+        }
+
+        @Override
+        public long getLong(String key, long defValue) {
+            return 0;
+        }
+
+        @Override
+        public float getFloat(String key, float defValue) {
+            return 0;
+        }
+
+        @Override
+        public boolean getBoolean(String key, boolean defValue) {
+            return false;
+        }
+
+        @Override
+        public boolean contains(String key) {
+            return false;
+        }
+
+        @Override
+        public Editor edit() {
+            return null;
+        }
+
+        @Override
+        public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+
+        }
+
+        @Override
+        public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+
+        }
+    }
 
     public User mockUser () {
         User user = new User("Joe Bob","jbeast","jb@gmail.com", "856c7d10-364d-40ea-ad2d-3aedd6993c5b");
@@ -58,7 +118,7 @@ public class DatabaseTest {
 
     @Before
     public void setup() {
-        final SharedPreferences sharedPreferences = Mockito.mock(SharedPreferences.class);
+        final SharedPreferences sharedPreferences = new MockSharedPreferences();
         Database.initializeInstance(sharedPreferences, new Database.InitializeDatabaseCallback() {
             @Override
             public void onSuccess() {
