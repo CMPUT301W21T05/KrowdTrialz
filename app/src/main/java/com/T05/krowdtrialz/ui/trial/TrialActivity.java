@@ -1,10 +1,12 @@
 package com.T05.krowdtrialz.ui.trial;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +28,7 @@ public abstract class TrialActivity extends AppCompatActivity {
 
     private Button submitButton;
     private Button qrGenerateButton;
+    private Button barcodeButton;
     private Database db;
 
     private EditText passText;
@@ -85,12 +88,10 @@ public abstract class TrialActivity extends AppCompatActivity {
                 if (type != "Count"){
                     if(valueText == null){
                         if (passText.getText().toString().equals("")|| failText.getText().toString().equals("")){
-                            Log.d("test","returning");
                             return;
                         }
                     }else{
                         if (valueText.getText().toString().equals("")){
-                            Log.d("test","returning1");
                             return;
                         }
                     }
@@ -101,6 +102,13 @@ public abstract class TrialActivity extends AppCompatActivity {
                 }
                 Trial trial = createTrial();
                 db.addTrial(trial, experiment);
+
+                // Toast to confirm adding trial
+                Context context = getApplicationContext();
+                CharSequence text = "Added Trial";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
                 finish();
             }
         });
@@ -132,12 +140,10 @@ public abstract class TrialActivity extends AppCompatActivity {
                 if (type != "Count"){
                     if(valueText == null){
                         if (passText.getText().toString().equals("")|| failText.getText().toString().equals("")){
-                            Log.d("test","returning");
                             return;
                         }
                     }else{
                         if (valueText.getText().toString().equals("")){
-                            Log.d("test","returning1");
                             return;
                         }
                     }
@@ -151,7 +157,59 @@ public abstract class TrialActivity extends AppCompatActivity {
                 }
 
                 if(intent != null){
-                    Log.d("test",qrString);
+                    Log.d(TAG, "Starting Generate" + type + "Trial activity.");
+                    intent.putExtra("Data",qrString);
+                    startActivity(intent);
+                } else{
+                    Log.e(TAG,"Intent is null: Could not get Trial type.");
+                }
+            }
+        });
+
+        barcodeButton = findViewById(R.id.assign_barcode_button);
+
+        barcodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SaveBarCodeActivity.class);
+                String type = experiment.getType();
+                // format will be ExperimentID/Type/Pass/Fail/Value/Longitude/Latitude
+                String qrString = "";
+
+                if(type == BinomialExperiment.type){
+                    passText = findViewById(R.id.binomial1_editText);
+                    failText = findViewById(R.id.binomial2_editText);
+                    qrString = String.format("%s/Binomial/%s/%s/None", experimentID, passText.getText().toString(),failText.getText().toString());
+                } else if(type == CountExperiment.type){
+                    qrString = String.format("%s/Count/None/None/None", experimentID);
+                }else if(type == MeasurementExperiment.type){
+                    valueText = findViewById(R.id.measure_editText);
+                    qrString = String.format("%s/Measurement/None/None/%s", experimentID, valueText.getText().toString());
+                } else if(type == IntegerExperiment.type){
+                    valueText = findViewById(R.id.integer_editText);
+                    qrString = String.format("%s/Integer/None/None/%s", experimentID, valueText.getText().toString());
+                }
+
+                if (type != "Count"){
+                    if(valueText == null){
+                        if (passText.getText().toString().equals("")|| failText.getText().toString().equals("")){
+                            return;
+                        }
+                    }else{
+                        if (valueText.getText().toString().equals("")){
+                            return;
+                        }
+                    }
+                }
+
+                // TODO Actually get users location when submitting trial
+                if (locationRequired.isChecked()){
+                    qrString = qrString+String.format("/%s/%s", "90","90");
+                }else{
+                    qrString = qrString+"/None/None";
+                }
+
+                if(intent != null){
                     Log.d(TAG, "Starting Generate" + type + "Trial activity.");
                     intent.putExtra("Data",qrString);
                     startActivity(intent);
