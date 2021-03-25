@@ -1,20 +1,20 @@
 package com.T05.krowdtrialz.ui.trial;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ToggleButton;
+import android.widget.EditText;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
+import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
+import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
+import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
 
@@ -25,7 +25,12 @@ public abstract class TrialActivity extends AppCompatActivity {
     private final String TAG = "Trial Activity";
 
     private Button submitButton;
+    private Button qrGenerateButton;
     private Database db;
+
+    private EditText passText;
+    private EditText failText;
+    private EditText valueText;
 
     private Experiment experiment = null;
 
@@ -65,6 +70,31 @@ public abstract class TrialActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String type = experiment.getType();
+                if(type == BinomialExperiment.type){
+                    passText = findViewById(R.id.binomial1_editText);
+                    failText = findViewById(R.id.binomial2_editText);
+                }else if(type == MeasurementExperiment.type){
+                    valueText = findViewById(R.id.measure_editText);
+                } else if(type == IntegerExperiment.type){
+                    valueText = findViewById(R.id.integer_editText);
+                }
+
+
+                if (type != "Count"){
+                    if(valueText == null){
+                        if (passText.getText().toString().equals("")|| failText.getText().toString().equals("")){
+                            Log.d("test","returning");
+                            return;
+                        }
+                    }else{
+                        if (valueText.getText().toString().equals("")){
+                            Log.d("test","returning1");
+                            return;
+                        }
+                    }
+                }
                 if (experiment == null) {
                     Log.e(TAG, "Could not add trial.");
                     return;
@@ -74,6 +104,63 @@ public abstract class TrialActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        qrGenerateButton = findViewById(R.id.generate_qr_button);
+
+        qrGenerateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), GenerateTrialQRActivity.class);
+                String type = experiment.getType();
+                // format will be ExperimentID/Type/Pass/Fail/Value/Longitude/Latitude
+                String qrString = "";
+
+                if(type == BinomialExperiment.type){
+                    passText = findViewById(R.id.binomial1_editText);
+                    failText = findViewById(R.id.binomial2_editText);
+                    qrString = String.format("%s/Binomial/%s/%s/None", experimentID, passText.getText().toString(),failText.getText().toString());
+                } else if(type == CountExperiment.type){
+                    qrString = String.format("%s/Count/None/None/None", experimentID);
+                }else if(type == MeasurementExperiment.type){
+                    valueText = findViewById(R.id.measure_editText);
+                    qrString = String.format("%s/Measurement/None/None/%s", experimentID, valueText.getText().toString());
+                } else if(type == IntegerExperiment.type){
+                    valueText = findViewById(R.id.integer_editText);
+                    qrString = String.format("%s/Integer/None/None/%s", experimentID, valueText.getText().toString());
+                }
+
+                if (type != "Count"){
+                    if(valueText == null){
+                        if (passText.getText().toString().equals("")|| failText.getText().toString().equals("")){
+                            Log.d("test","returning");
+                            return;
+                        }
+                    }else{
+                        if (valueText.getText().toString().equals("")){
+                            Log.d("test","returning1");
+                            return;
+                        }
+                    }
+                }
+
+                // TODO Actually get users location when submitting trial
+                if (locationRequired.isChecked()){
+                    qrString = qrString+String.format("/%s/%s", "90","90");
+                }else{
+                    qrString = qrString+"/None/None";
+                }
+
+                if(intent != null){
+                    Log.d("test",qrString);
+                    Log.d(TAG, "Starting Generate" + type + "Trial activity.");
+                    intent.putExtra("Data",qrString);
+                    startActivity(intent);
+                } else{
+                    Log.e(TAG,"Intent is null: Could not get Trial type.");
+                }
+            }
+        });
+
     }
 
     /**
