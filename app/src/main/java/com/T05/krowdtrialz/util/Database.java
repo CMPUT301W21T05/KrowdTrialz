@@ -497,17 +497,19 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param subscriber
      *  This is the user that is subscribed to the experiments
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      */
-    public void getExperimentsBySubscriber (User subscriber, QueryExperimentsCallback callback) {
+    public ListenerRegistration getExperimentsBySubscriber (User subscriber, QueryExperimentsCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
         String subscriberID = subscriber.getId();
-        ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
-        userCollectionReference.document(subscriberID).collection("SubscribedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ListenerRegistration registration = userCollectionReference.document(subscriberID).collection("SubscribedExperiments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
+                for (QueryDocumentSnapshot document : value) {
                     if(document.get("type").toString().equals("Binomial")){
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                         subscribedExperiments.add(experiment);
@@ -523,14 +525,11 @@ public class Database {
                     }
 
                 }
-                if(subscribedExperiments.size() > 0){
-                    callback.onSuccess(subscribedExperiments);
-
-                }else{
-                    callback.onFailure();
-                }
+                callback.onSuccess(subscribedExperiments);
             }
         });
+
+        return registration;
     }// end getExperimentsBySubscriber
 
     /**

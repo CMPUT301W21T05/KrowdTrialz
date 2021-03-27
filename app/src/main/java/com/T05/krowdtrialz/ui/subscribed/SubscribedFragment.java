@@ -1,6 +1,7 @@
 package com.T05.krowdtrialz.ui.subscribed;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class SubscribedFragment extends Fragment {
             public void onChanged(ArrayList<Experiment> experiments) {
                 experimentArrayAdapter.clear();
                 experimentArrayAdapter.addAll(experiments);
+                experimentArrayAdapter.notifyDataSetChanged();
             }
         });
 
