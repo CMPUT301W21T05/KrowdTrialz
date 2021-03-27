@@ -24,7 +24,10 @@ import com.T05.krowdtrialz.util.Database;
 import org.apache.commons.math3.analysis.function.Exp;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Display misc. information about the experiment. Customized based on whether or not the user
+ * is the owner of the current experiment
+ *
+ * A simple {@link Fragment} subclass with dependency injection
  * Use the {@link ExperimentMore#newInstance} factory method to
  * create an instance of this fragment.
  */

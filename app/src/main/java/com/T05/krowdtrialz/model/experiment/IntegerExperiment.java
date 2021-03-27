@@ -10,6 +10,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Representation of an integer experiment. The integer experiment is a statistics experiment
+ * and is responsible for maintaining a list of the associated integer trials.
+ *
+ * Integer experiments hold results such as "number of stories in my building".
+ */
 public class IntegerExperiment extends StatisticsExperiment {
     public static final String type = "Integer";
     private String unit;

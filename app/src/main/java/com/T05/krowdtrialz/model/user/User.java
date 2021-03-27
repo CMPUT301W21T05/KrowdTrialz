@@ -2,6 +2,10 @@ package com.T05.krowdtrialz.model.user;
 
 import com.T05.krowdtrialz.model.experiment.Experiment;
 
+/**
+ * User of the KrowdTrialz applicaiton. The user is not forced to enter
+ * their information, so "None" is the default for all fields.
+ */
 public class User {
     private String name = "None";
     private String userName = "None";
