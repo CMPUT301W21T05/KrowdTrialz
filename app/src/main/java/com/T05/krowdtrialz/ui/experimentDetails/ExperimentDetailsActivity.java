@@ -45,7 +45,8 @@ public class ExperimentDetailsActivity extends AppCompatActivity
     private Button addTrialButton;
 
     private Database db;
-    private Experiment experiment;
+    private Experiment experiment = null;
+    private String experimentID = null;
 
 
 
@@ -61,7 +62,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         db = Database.getInstance();
 
         Intent intent = getIntent();
-        String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
+        experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
         Button subscribeButton = findViewById(R.id.subscribe_button_experiment);
         addTrialButton = findViewById(R.id.add_trials_experiment);
@@ -106,6 +107,41 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             }
         });
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "ASDFASDFASDFASDFASDF");
+
+        if (experimentID == null) {
+            return;
+        }
+
+        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment exp) {
+                Log.d(TAG, "IN ON SUCCESSS");
+                experiment = exp;
+                Log.d(TAG, exp.getType());
+                Log.d(TAG, String.valueOf(exp.getTrials().size()));
+                if (exp != null) {
+
+                    updateAddTrialsButton();
+                    setTabs();
+                    populateMainInfo();
+                    TabLayout tabLayout = findViewById(R.id.experiment_tabs);
+                    tabLayout.getTabAt(0).select();
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "Error Searching Database for experiment");
+            }
+        });
 
     }
 

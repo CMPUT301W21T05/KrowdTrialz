@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/experiment_variable_name_input"
+            android:id="@+id/edit_username_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="244dp"
             android:layout_height="44dp"

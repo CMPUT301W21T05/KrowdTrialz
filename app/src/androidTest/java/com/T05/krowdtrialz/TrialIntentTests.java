@@ -1,7 +1,6 @@
 package com.T05.krowdtrialz;
 
 import android.app.Activity;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -271,7 +270,7 @@ public class TrialIntentTests {
         solo.typeText(regionBox, region);
 
         //Click on unit
-        EditText unitBox = (EditText) solo.getView(R.id.experiment_variable_name_input);
+        EditText unitBox = (EditText) solo.getView(R.id.edit_username_text);
         solo.clickOnView(unitBox);
         solo.sleep(500);
 

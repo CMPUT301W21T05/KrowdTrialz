@@ -48,7 +48,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
 
         searchResultsList = findViewById(R.id.search_results_list);
 
-        experimentAdapter = new ExperimentList(this, new ArrayList<>(), db.getDeviceUser());
+        experimentAdapter = new ExperimentList(this, new ArrayList<>());
 
         searchResultsList.setAdapter(experimentAdapter);
 
@@ -92,28 +92,6 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                 Log.d(TAG, "Got search results" + experiments.toString());
                 experimentAdapter.clear();
                 experimentAdapter.addAll(experiments);
-
-                /*
-                 * pass the clicked experiment to the Experiment details page
-                 */
-                searchResultsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Log.d(TAG, "clicked position" + position);
-
-                        Intent i = new Intent(SearchActivity.this, ExperimentDetailsActivity.class);
-
-                        Experiment experiment = experimentAdapter.getItem(position);
-
-                        String experimentID = experiment.getId();
-
-                        i.putExtra("experiment", experimentID);
-                        startActivity(i);
-
-
-
-                    }
-                });
             }
 
             @Override
