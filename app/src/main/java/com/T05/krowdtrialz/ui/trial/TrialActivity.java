@@ -1,15 +1,10 @@
 package com.T05.krowdtrialz.ui.trial;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ToggleButton;
 
-import androidx.annotation.IdRes;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.T05.krowdtrialz.MainActivity;
@@ -17,6 +12,7 @@ import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 /**
  * Base class for common functionality across trial activities.
@@ -28,6 +24,8 @@ public abstract class TrialActivity extends AppCompatActivity {
     private Database db;
 
     private Experiment experiment = null;
+    private ListenerRegistration expRegistration;
+
 
     /**
      * This is overidden so that this super class can get UI elements such as submitButton after the
@@ -45,7 +43,7 @@ public abstract class TrialActivity extends AppCompatActivity {
 
         db = Database.getInstance();
 
-        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+        expRegistration = db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 TrialActivity.this.experiment  = experiment;
@@ -74,6 +72,13 @@ public abstract class TrialActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database.
+        expRegistration.remove();
     }
 
     /**
