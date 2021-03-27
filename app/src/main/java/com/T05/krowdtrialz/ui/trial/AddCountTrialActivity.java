@@ -21,8 +21,6 @@ public class AddCountTrialActivity extends TrialActivity {
 
     private Database db;
     private User user;
-    private int longitude;
-    private int latitude;
     private CountTrial countTrial;
 
     @Override
@@ -46,10 +44,7 @@ public class AddCountTrialActivity extends TrialActivity {
         // get user, location and create a trial
         db = Database.getInstance();
         user = db.getDeviceUser();
-        longitude = 90; // This is temporary until Geolocation is implemented
-        latitude = 90; // This is temporary until Geolocation is implemented
-
-        countTrial = new CountTrial(user, longitude, latitude);
+        countTrial = new CountTrial(user);
 
         return countTrial;
     } // end createTrial

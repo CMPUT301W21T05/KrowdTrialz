@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
@@ -20,7 +21,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -96,45 +100,58 @@ public class Database {
 
     /**
      * This gets an experiment of a unique ID
+     *
      * @param expID An Experiment ID
+     * @param callback Callback to call when query is finished
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      * @author Vasu Gupta
      */
-    public void getExperimentByID(String expID, GetExperimentCallback callback){
+    public ListenerRegistration getExperimentByID(String expID, GetExperimentCallback callback){
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("AllExperiments");
 
         Query query = userCollectionReference.whereEqualTo("id", expID);
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.getResult().size() == 1){
-                    Experiment experiment = null;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if(document.get("type").toString().equals("Binomial")){
-                            experiment = document.toObject(BinomialExperiment.class);
-                        }else if(document.get("type").toString().equals("Count")){
-                            experiment = document.toObject(CountExperiment.class);
-                        }else if(document.get("type").toString().equals("Measurement")){
-                            experiment = document.toObject(MeasurementExperiment.class);
-                        }else if(document.get("type").toString().equals("Integer")){
-                            experiment = document.toObject(IntegerExperiment.class);
-                        }else {
-                            Log.e(TAG, "Unknown experiment type");
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException error) {
+                if(error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+
+                Experiment experiment = null;
+
+                if(value.size() == 1){
+                    for(QueryDocumentSnapshot doc : value){
+                        if(doc.get("type").toString().equals("Binomial")){
+                            experiment = doc.toObject(BinomialExperiment.class);
+                        }else if(doc.get("type").toString().equals("Count")){
+                            experiment = doc.toObject(CountExperiment.class);
+                        }else if(doc.get("type").toString().equals("Measurement")){
+                            experiment = doc.toObject(MeasurementExperiment.class);
+                        }else if(doc.get("type").toString().equals("Integer")){
+                            experiment = doc.toObject(IntegerExperiment.class);
+                        } else{
+                            Log.e(TAG, "Unknown Experiment Type.");
                             callback.onFailure();
                             return;
                         }
                     }
                     Log.d(TAG, "Experiment of ID " + expID + " found.");
                     callback.onSuccess(experiment);
-                } else if (task.getResult().size() > 1) {
-                    Log.e(TAG, "Multiple experiments with same ID " + expID + " found.");
+                } else if(value.size() > 1) {
+                    Log.e(TAG, "Multiple experiments with same ID " + expID.toString() + " found.");
                     callback.onFailure();
-                } else {
-                    Log.e(TAG, "No experiment of ID: " + expID + " found.");
+                } else{
+                    Log.e(TAG, "No experiment of ID: " + expID.toString() + " found.");
                     callback.onFailure();
                 }
             }
         });
+
+        return registration;
     }
 
 

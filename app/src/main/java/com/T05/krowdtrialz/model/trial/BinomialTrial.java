@@ -20,11 +20,15 @@ public class BinomialTrial extends Trial {
         super();
     }
 
-    public BinomialTrial(User user, int longitude, int latitude) {
+    public BinomialTrial(User user) {
+        super(user);
+    }
+
+    public BinomialTrial(User user, double longitude, double latitude) {
         super(user, longitude, latitude);
     }
 
-    public BinomialTrial(User user, int longitude, int latitude, String dateCreated) {
+    public BinomialTrial(User user, double longitude, double latitude, String dateCreated) {
         super(user, longitude, latitude, dateCreated);
     }
 

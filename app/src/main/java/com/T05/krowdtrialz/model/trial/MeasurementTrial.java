@@ -18,11 +18,15 @@ public class MeasurementTrial extends Trial {
         super();
     }
 
-    public MeasurementTrial(User user, int longitude, int latitude) {
+    public MeasurementTrial(User user) {
+        super(user);
+    }
+
+    public MeasurementTrial(User user, double longitude, double latitude) {
         super(user, longitude, latitude);
     }
 
-    public MeasurementTrial(User user, int longitude, int latitude, String dateCreated) {
+    public MeasurementTrial(User user, double longitude, double latitude, String dateCreated) {
         super(user, longitude, latitude, dateCreated);
     }
 

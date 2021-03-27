@@ -1,14 +1,28 @@
 package com.T05.krowdtrialz.ui.trial;
 
 import android.content.Context;
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
@@ -19,11 +33,15 @@ import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Base class for common functionality across trial activities.
  */
-public abstract class TrialActivity extends AppCompatActivity {
+public abstract class TrialActivity extends AppCompatActivity implements LocationListener {
     private final String TAG = "Trial Activity";
 
     private Button submitButton;
@@ -36,6 +54,8 @@ public abstract class TrialActivity extends AppCompatActivity {
     private EditText valueText;
 
     private Experiment experiment = null;
+    private LocationManager locationManager;
+    private ListenerRegistration expRegistration;
 
     /**
      * This is overidden so that this super class can get UI elements such as submitButton after the
@@ -53,12 +73,23 @@ public abstract class TrialActivity extends AppCompatActivity {
 
         db = Database.getInstance();
 
-        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+        expRegistration = db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 TrialActivity.this.experiment  = experiment;
                 locationRequired.setChecked(experiment.isLocationRequired());
                 locationRequired.setEnabled(!experiment.isLocationRequired());
+
+                if (locationRequired.isChecked()){
+                    //Runtime permissions
+                    if (ContextCompat.checkSelfPermission(TrialActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED){
+                        ActivityCompat.requestPermissions(TrialActivity.this,new String[]{
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        },100);
+                    }
+                }
+
             }
 
             @Override
@@ -100,16 +131,25 @@ public abstract class TrialActivity extends AppCompatActivity {
                     Log.e(TAG, "Could not add trial.");
                     return;
                 }
-                Trial trial = createTrial();
-                db.addTrial(trial, experiment);
 
-                // Toast to confirm adding trial
-                Context context = getApplicationContext();
-                CharSequence text = "Added Trial";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                finish();
+                if (locationRequired.isChecked()){
+                    // get location
+                    getLocation();
+
+                }
+                else{
+                    Trial trial = createTrial();
+                    db.addTrial(trial, experiment);
+                  
+                    // Toast to confirm adding trial
+                    Context context = getApplicationContext();
+                    CharSequence text = "Added Trial";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                  
+                    finish();
+                }
             }
         });
 
@@ -218,6 +258,65 @@ public abstract class TrialActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database.
+        expRegistration.remove();
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getLocation() {
+
+        try {
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,5,TrialActivity.this);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(this, ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show();
+        try {
+            Trial trial = createTrial();
+            trial.setLatitude(location.getLatitude());
+            trial.setLongitude(location.getLongitude());
+            db.addTrial(trial, experiment);
+          
+            // Toast to confirm adding trial
+            Context context = getApplicationContext();
+            CharSequence text = "Added Trial";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+          
+            finish();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 
