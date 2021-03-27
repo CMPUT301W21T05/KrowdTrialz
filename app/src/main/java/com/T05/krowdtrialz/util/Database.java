@@ -457,17 +457,19 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param owner
      *  This is the user that owns the experiments
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      */
-    public void getExperimentsByOwner (User owner, QueryExperimentsCallback callback) {
+    public ListenerRegistration getExperimentsByOwner (User owner, QueryExperimentsCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
         String ownerID = owner.getId();
         ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
-        userCollectionReference.document(ownerID).collection("OwnedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ListenerRegistration registration = userCollectionReference.document(ownerID).collection("OwnedExperiments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                for (QueryDocumentSnapshot document : value) {
                     if(document.get("type").toString().equals("Binomial")){
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                         ownedExperiments.add(experiment);
@@ -483,13 +485,10 @@ public class Database {
                     }
 
                 }
-                if(ownedExperiments.size() > 0){
-                    callback.onSuccess(ownedExperiments);
-                }else{
-                    callback.onFailure();
-                }
+                callback.onSuccess(ownedExperiments);
             }
         });
+        return registration;
     }// end getExperimentsByOwner
 
     /**
