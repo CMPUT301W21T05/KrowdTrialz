@@ -56,6 +56,7 @@ public class Database {
     // The user with a unique id associated with this device.
     // This is populated when the app is opened.
     private User deviceUser;
+    private ListenerRegistration deviceUserListenerRegistration;
 
     // The single instance for the singleton pattern
     private static Database instance = null;
@@ -215,12 +216,13 @@ public class Database {
             });
         } else {
             // User exists, restore the user's info from the database
-            getUserById(localID, new GetUserCallback() {
+            deviceUserListenerRegistration = getUserById(localID, new GetUserCallback() {
                 @Override
                 public void onSuccess(User user) {
                     deviceUser = user;
                     Log.d(TAG, "Successfully retrieved existing user information from database."
                             + " ID: " + deviceUser.getId());
+                    deviceUserListenerRegistration.remove();
                     callback.onSuccess();
                 }
 
@@ -270,23 +272,25 @@ public class Database {
      * Queries for the user associated with the given ID.
      * @param id The ID of the user to search for.
      * @param callback The callback to be called when the query is finished.
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      * @author Ryan Shukla
      */
-    public void getUserById(String id, GetUserCallback callback) {
+    public ListenerRegistration getUserById(String id, GetUserCallback callback) {
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
 
         Query query = userCollectionReference.whereEqualTo("id", id); // Create a query to check if ID exists in the database already
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.getResult().size() == 1) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(value.size() == 1) {
                     User user = null;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : value) {
                         user = document.toObject(User.class);
                     }
                     callback.onSuccess(user);
-                } else if (task.getResult().size() > 1) {
+                } else if (value.size() > 1) {
                     Log.e(TAG, "Multiple users with same ID found.");
                     callback.onFailure();
                 } else {
@@ -295,6 +299,8 @@ public class Database {
                 }
             }
         });
+
+        return registration;
     }
 
     /**
