@@ -1,11 +1,13 @@
 package com.T05.krowdtrialz.ui.subscribed;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 public class SubscribedFragment extends Fragment {
 
     private SubscribedViewModel subscribedViewModel;
+    private Button scanButton;
 
     ListView experimentsList;
     ArrayAdapter<Experiment> experimentArrayAdapter;
@@ -58,6 +61,16 @@ public class SubscribedFragment extends Fragment {
             public void onChanged(ArrayList<Experiment> experiments) {
                 experimentArrayAdapter.clear();
                 experimentArrayAdapter.addAll(experiments);
+            }
+        });
+
+        scanButton = root.findViewById(R.id.scan_button);
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ScanActivity.class);
+                startActivity(intent);
             }
         });
 
