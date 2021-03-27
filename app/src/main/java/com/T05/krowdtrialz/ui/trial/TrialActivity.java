@@ -17,6 +17,7 @@ import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 /**
  * Base class for common functionality across trial activities.
@@ -33,6 +34,8 @@ public abstract class TrialActivity extends AppCompatActivity {
     private EditText valueText;
 
     private Experiment experiment = null;
+    private ListenerRegistration expRegistration;
+
 
     /**
      * This is overidden so that this super class can get UI elements such as submitButton after the
@@ -50,7 +53,7 @@ public abstract class TrialActivity extends AppCompatActivity {
 
         db = Database.getInstance();
 
-        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+        expRegistration = db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 TrialActivity.this.experiment  = experiment;
@@ -161,6 +164,13 @@ public abstract class TrialActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database.
+        expRegistration.remove();
     }
 
     /**
