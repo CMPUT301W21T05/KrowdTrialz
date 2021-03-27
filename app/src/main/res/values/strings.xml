@@ -54,4 +54,6 @@
     <string name="trial_scan">Scan</string>
     <string name="trial_generate_qr">Generate QR Code</string>
     <string name="trial_assign_barcode">Assign To Barcode</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="qr_image">qrImage</string>
 </resources>
