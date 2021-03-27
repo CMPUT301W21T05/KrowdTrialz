@@ -1,7 +1,5 @@
 package com.T05.krowdtrialz.model.trial;
 
-import android.location.Location;
-
 import com.T05.krowdtrialz.model.user.User;
 import com.google.firebase.firestore.Exclude;
 
@@ -16,8 +14,8 @@ import java.time.LocalDateTime;
  * */
 public abstract class Trial {
     private User experimenter;
-    private int longitude;
-    private int latitude;
+    private double longitude;
+    private double latitude;
     private String dateCreated;
 
     public Trial() {}
@@ -46,11 +44,19 @@ public abstract class Trial {
     @Exclude
     public int getDayCreated() { return Integer.parseInt(dateCreated.substring(dateCreated.lastIndexOf("/") + 1, dateCreated.length()));}
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public int getLatitude() { return latitude; }
+    public double getLatitude() { return latitude; }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
     /**
      * Get the user who created the trial

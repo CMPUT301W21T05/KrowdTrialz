@@ -1,13 +1,25 @@
 package com.T05.krowdtrialz.ui.trial;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 public class AddIntegerTrialActivity extends TrialActivity {
 
@@ -18,12 +30,14 @@ public class AddIntegerTrialActivity extends TrialActivity {
     private EditText valueEditText;
     private IntegerTrial integerTrial;
 
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_integer_trial);
 
-        valueEditText  = findViewById(R.id.integer_editText);
+        valueEditText = findViewById(R.id.integer_editText);
     }
 
     /**
@@ -38,7 +52,6 @@ public class AddIntegerTrialActivity extends TrialActivity {
         user = db.getDeviceUser();
         longitude = 90; // This is temporary until Geolocation is implemented
         latitude = 90; // This is temporary until Geolocation is implemented
-
         integerTrial = new IntegerTrial(user, longitude, latitude);
 
         // set the pass and the fail counts
@@ -47,4 +60,8 @@ public class AddIntegerTrialActivity extends TrialActivity {
 
         return integerTrial;
     } // end createTrial
+
+
+
+
 } // end AddIntegerTrialActivity
