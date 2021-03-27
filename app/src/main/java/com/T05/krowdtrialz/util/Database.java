@@ -139,7 +139,7 @@ public class Database {
                             return;
                         }
                     }
-                    Log.d(TAG, "Experiment of ID " + expID.toString() + " found.");
+                    Log.d(TAG, "Experiment of ID " + expID + " found.");
                     callback.onSuccess(experiment);
                 } else if(value.size() > 1) {
                     Log.e(TAG, "Multiple experiments with same ID " + expID.toString() + " found.");
@@ -659,6 +659,11 @@ public class Database {
         });
     }// end updateExperiment
 
+    /**
+     *  This method deletes the given experiment from the database
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     * @param experiment
+     */
     public void deleteExperiment (Experiment experiment) {
         db = FirebaseFirestore.getInstance();
         CollectionReference lookupCollectionReference = db.collection("ExperimentLookups");
@@ -676,6 +681,67 @@ public class Database {
             }
         });
     }// end removeExperiment
+
+    /**
+     *  This method saves barcode and related trial info to database
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     * @param data this is the trial info and barcode to be saved
+     */
+    public void saveBarcode (String[] data) {
+        db = FirebaseFirestore.getInstance();
+        CollectionReference barcodeCollectionReference = db.collection("Barcodes");
+
+        // Add Barcode
+        HashMap<String, String> newBarcode = new HashMap<>();
+        newBarcode.put("ExperimentID", data[1]);
+        newBarcode.put("ExperimentType", data[2]);
+        newBarcode.put("PassCount", data[3]);
+        newBarcode.put("FailCount", data[4]);
+        newBarcode.put("Value", data[5]);
+        newBarcode.put("Longitude", data[6]);
+        newBarcode.put("Latitude", data[7]);
+        barcodeCollectionReference.document(data[0]).set(newBarcode);
+    }
+
+    /**
+     *  This method takes a barcode and searches for related trial info in the database
+     *
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     * @param barcode This is the barcode to search
+     * @param callback
+     */
+    public void getTrialInfoByBarcode(String barcode, GetTrialInfoCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        DocumentReference barcodeDocumentReference = db.collection("Barcodes").document(barcode);
+
+        String[] results = new String[7];
+        barcodeDocumentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                results[0] = (String) documentSnapshot.get("ExperimentID");
+                results[1] = (String) documentSnapshot.get("ExperimentType");
+                results[2] = (String) documentSnapshot.get("PassCount");
+                results[3] = (String) documentSnapshot.get("FailCount");
+                results[4] = (String) documentSnapshot.get("Value");
+                results[5] = (String) documentSnapshot.get("Longitude");
+                results[6] = (String) documentSnapshot.get("Latitude");
+
+                for (int i = 0; i < results.length; i++){
+                    if(results[i] == null) {
+                        callback.onFailure();
+                        return;
+                    }
+                }
+
+                callback.onSuccess(results);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure();
+            }
+        });
+    }
 
     /**
      * For this call back onSuccess indicates that the id does not exist in the database
@@ -723,6 +789,15 @@ public class Database {
      */
     public interface InitializeDatabaseCallback {
         public void onSuccess();
+        public void onFailure();
+    }
+
+    /**
+     * Callback for methods that query trial info
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     */
+    public interface GetTrialInfoCallback {
+        public void onSuccess(String[] trialInfo);
         public void onFailure();
     }
 }// end Database

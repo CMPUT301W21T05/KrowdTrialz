@@ -69,7 +69,7 @@ public class SubscribedFragment extends Fragment {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ScanQRCodeActivity.class);
+                Intent intent = new Intent(v.getContext(), ScanActivity.class);
                 startActivity(intent);
             }
         });
