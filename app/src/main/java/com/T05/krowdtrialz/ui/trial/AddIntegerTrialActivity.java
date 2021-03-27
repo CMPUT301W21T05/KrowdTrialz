@@ -25,8 +25,6 @@ public class AddIntegerTrialActivity extends TrialActivity {
 
     private Database db;
     private User user;
-    private int longitude;
-    private int latitude;
     private EditText valueEditText;
     private IntegerTrial integerTrial;
 
@@ -50,9 +48,7 @@ public class AddIntegerTrialActivity extends TrialActivity {
         // get user, location and create a trial
         db = Database.getInstance();
         user = db.getDeviceUser();
-        longitude = 90; // This is temporary until Geolocation is implemented
-        latitude = 90; // This is temporary until Geolocation is implemented
-        integerTrial = new IntegerTrial(user, longitude, latitude);
+        integerTrial = new IntegerTrial(user);
 
         // set the pass and the fail counts
         int passText = Integer.parseInt(valueEditText.getText().toString());

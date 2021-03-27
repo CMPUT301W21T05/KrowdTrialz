@@ -20,7 +20,11 @@ public abstract class Trial {
 
     public Trial() {}
 
-    public Trial(User user, int longitude, int latitude) {
+    public Trial(User user) {
+        this.experimenter = user;
+    }
+
+    public Trial(User user, double longitude, double latitude) {
         this.experimenter = user;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -28,7 +32,7 @@ public abstract class Trial {
         this.dateCreated = String.format("%s/%s/%s", dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
     }
 
-    public Trial(User user, int longitude, int latitude, String dateCreated) {
+    public Trial(User user, double longitude, double latitude, String dateCreated) {
         this(user, longitude, latitude);
         this.dateCreated = dateCreated;
     }
