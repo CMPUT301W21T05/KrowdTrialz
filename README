@@ -14,3 +14,9 @@ Yuriy Budiyev, December 24th, 2020, The MIT License, https://github.com/yuriy-bu
 
 To save images to the device we used code from:
 Ketul Patel, July 16th, 2020, Youtube Standard License, https://www.youtube.com/watch?v=FcCtT1C7NGI&ab_channel=KetulPatel
+
+To get location from a device we used code from:
+Coding with Dev, May 25th, 2020, Youtube Standard License, https://www.youtube.com/watch?v=qY-xFxZ7HKY
+
+To show a map we used the library from:
+osmdroid, January 30th, 2021, Apache 2.0, https://github.com/osmdroid/osmdroid

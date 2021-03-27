@@ -2,9 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.T05.krowdtrialz">
-
+  
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -16,6 +19,8 @@
         android:theme="@style/Theme.KrowdTrialz"
         tools:targetApi="m">
         <activity android:name=".ui.trial.AddMeasurementTrialActivity"></activity>
+        <activity android:name=".ui.subscribed.ScanQRCodeActivity"></activity>
+        <activity android:name=".ui.trial.GenerateTrialQRActivity" />
         <activity android:name=".ui.trial.AddIntegerTrialActivity" />
         <activity android:name=".ui.trial.AddCountTrialActivity" />
         <activity android:name=".ui.trial.AddBinomialTrialActivity" />
@@ -29,12 +34,13 @@
         <activity
             android:name=".ui.search.SearchActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity
-            android:name=".ui.contributors.ContributorsActivity" />
+        <activity android:name=".ui.contributors.ContributorsActivity" />
         <activity android:name=".ui.experimentDetails.ExperimentDetailsActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
+
     </application>
+
 
 </manifest>
