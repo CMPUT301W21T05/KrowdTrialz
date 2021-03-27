@@ -13,8 +13,6 @@ public class AddMeasurementTrialActivity extends TrialActivity {
 
     private Database db;
     private User user;
-    private int longitude;
-    private int latitude;
     private EditText valueEditText;
     private MeasurementTrial measurementTrial;
 
@@ -36,10 +34,8 @@ public class AddMeasurementTrialActivity extends TrialActivity {
         // get user, location and create a trial
         db = Database.getInstance();
         user = db.getDeviceUser();
-        longitude = 90; // This is temporary until Geolocation is implemented
-        latitude = 90; // This is temporary until Geolocation is implemented
 
-        measurementTrial = new MeasurementTrial(user, longitude, latitude);
+        measurementTrial = new MeasurementTrial(user);
 
         // set the pass and the fail counts
         float passText = Integer.parseInt(valueEditText.getText().toString());

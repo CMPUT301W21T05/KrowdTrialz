@@ -28,6 +28,9 @@ import com.T05.krowdtrialz.ui.trial.AddIntegerTrialActivity;
 import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.ListenerRegistration;
+
+import java.util.List;
 
 /**
  * Set up tabs and common informaiton about the selected experiment.
@@ -47,13 +50,13 @@ public class ExperimentDetailsActivity extends AppCompatActivity
     private Database db;
     private Experiment experiment = null;
     private String experimentID = null;
-
-
+    private ListenerRegistration expRegistration;
 
     private Fragment plotFragment = null, statsFragment = null, moreFragment = null;
 
-    private enum StatsTabLayout {stats, plots, moreOption};
-    private enum NonStatsTabLayout {plots, moreOption};
+//    private enum StatsTabLayout {stats, plots, moreOption};
+//
+//    private enum NonStatsTabLayout {plots, moreOption};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Add Trials selected.");
-                if(experiment.isLocationRequired()){
+                if (experiment.isLocationRequired()) {
                     showLocationRequiredDialog();
                 } else {
                     addTrial();
@@ -87,7 +90,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             }
         });
 
-        db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+        expRegistration = db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment exp) {
                 experiment = exp;
@@ -106,8 +109,13 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                 Log.e(TAG, "Error Searching Database for experiment");
             }
         });
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        expRegistration.remove();
     }
 
     @Override
