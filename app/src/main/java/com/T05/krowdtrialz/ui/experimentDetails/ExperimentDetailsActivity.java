@@ -22,6 +22,10 @@ import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
+import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.owner.OwnerFragment;
+import com.T05.krowdtrialz.ui.owner.UserActivity;
+import com.T05.krowdtrialz.ui.search.SearchActivity;
 import com.T05.krowdtrialz.ui.trial.AddBinomialTrialActivity;
 import com.T05.krowdtrialz.ui.trial.AddCountTrialActivity;
 import com.T05.krowdtrialz.ui.trial.AddIntegerTrialActivity;
@@ -99,6 +103,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                     updateAddTrialsButton();
                     setTabs();
                     populateMainInfo();
+
                     TabLayout tabLayout = findViewById(R.id.experiment_tabs);
                     tabLayout.getTabAt(0).select();
                 }
@@ -122,8 +127,6 @@ public class ExperimentDetailsActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG, "ASDFASDFASDFASDFASDF");
-
         if (experimentID == null) {
             return;
         }
@@ -131,7 +134,6 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment exp) {
-                Log.d(TAG, "IN ON SUCCESSS");
                 experiment = exp;
                 Log.d(TAG, exp.getType());
                 Log.d(TAG, String.valueOf(exp.getTrials().size()));
@@ -282,6 +284,19 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         // fill out owner Username
         ownerName = findViewById(R.id.owner_textView_experiment);
         ownerName.setText(experiment.getOwner().getUserName());
+
+        ownerName.setClickable(true);
+        ownerName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * Start user activity for this user
+                 */
+                Intent intent = new Intent(v.getContext(), UserActivity.class);
+                intent.putExtra(UserActivity.USER_ID_EXTRA, experiment.getOwner().getId());
+                startActivity(intent);
+            }
+        });
 
         // fill out experiment description
         description = findViewById(R.id.description_textView_experiment);

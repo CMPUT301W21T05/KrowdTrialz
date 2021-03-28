@@ -270,7 +270,7 @@ public class TrialIntentTests {
         solo.typeText(regionBox, region);
 
         //Click on unit
-        EditText unitBox = (EditText) solo.getView(R.id.edit_username_text);
+        EditText unitBox = (EditText) solo.getView(R.id.edit_user_text);
         solo.clickOnView(unitBox);
         solo.sleep(500);
 
