@@ -221,7 +221,7 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
             public void onClick(View v) {
                 saveBarcodeClicked = true;
 
-                Intent intent = new Intent(v.getContext(), SaveBarCodeActivity.class);
+                intent = new Intent(v.getContext(), SaveBarCodeActivity.class);
                 String type = experiment.getType();
                 // format will be ExperimentID/Type/Pass/Fail/Value/Longitude/Latitude
                 qrString = "";
@@ -309,6 +309,8 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
                 toast.show();
 
                 submitClicked = false;
+                finish();
+
             } else if (generateQRClicked){
                 qrString = qrString+String.format("/%s/%s", location.getLongitude(), location.getLatitude());
 
@@ -322,7 +324,6 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
                 }
             } else if (saveBarcodeClicked){
                 qrString = qrString+String.format("/%s/%s", location.getLongitude(), location.getLatitude());
-
                 saveBarcodeClicked = false;
 
                 if(intent != null){
@@ -332,8 +333,6 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
                     Log.e(TAG,"Intent is null");
                 }
             }
-          
-            finish();
 
         }catch (Exception e){
             e.printStackTrace();
