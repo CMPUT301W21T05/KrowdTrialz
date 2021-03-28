@@ -581,8 +581,10 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param tags
      *  This is the tags to search for
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      */
-    public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
+    public ListenerRegistration getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
 
         for (int i = 0; i < tags.size(); i++) {
             tags.set(i, tags.get(i).toLowerCase());
@@ -592,14 +594,17 @@ public class Database {
 
         Set<Experiment> resultSet = new HashSet<>();
 
+        // Stores the registration for each sub query
+        MultipleListenerRegistration registrations = new MultipleListenerRegistration();
+
         CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
 
         for (String tag: tags) {
-            allExperimentsCollectionReference.whereArrayContains("tags", tag).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            ListenerRegistration registration = allExperimentsCollectionReference.whereArrayContains("tags", tag).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     Set<Experiment> matchingExperiments = new HashSet<>();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    for (QueryDocumentSnapshot document : value) {
                         if (document.get("type").toString().equals("Binomial")) {
                             BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                             matchingExperiments.add(experiment);
@@ -615,28 +620,22 @@ public class Database {
                         }
                     }
 
+                    // Intersect the new set of experiments with the previous set
                     if (resultSet.isEmpty()) {
                         resultSet.addAll(matchingExperiments);
                     } else {
                         resultSet.retainAll(matchingExperiments);
                     }
 
-                    if (matchingExperiments.size() > 0) {
-                        ArrayList<Experiment> output = new ArrayList<>();
-                        output.addAll(resultSet);
-                        callback.onSuccess(output);
-                    } else {
-                        callback.onFailure();
-                    }
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    callback.onFailure();
+                    ArrayList<Experiment> output = new ArrayList<>();
+                    output.addAll(resultSet);
+                    callback.onSuccess(output);
                 }
             });
+            registrations.add(registration);
         }
+
+        return registrations;
     }// end getExperimentsByTags
 
     /**

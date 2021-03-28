@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -413,13 +414,12 @@ public class DatabaseTest {
         tags.add(experiment.getFailUnit());
 
         ArrayList<Experiment> returnedExperiments = new ArrayList<>();
-        db.getExperimentsByTags(tags,
+        registration = db.getExperimentsByTags(tags,
                 new Database.QueryExperimentsCallback() {
                     @Override
                     public void onSuccess(ArrayList<Experiment> experiments) {
-                        experiments.forEach(
-                                e -> returnedExperiments.add(e)
-                        );
+                        returnedExperiments.clear();
+                        returnedExperiments.addAll(experiments);
                     }
 
                     @Override
@@ -534,5 +534,45 @@ public class DatabaseTest {
         // Verify that the onSuccess callback was called twice.
         // (Once when the experiment was first queried and again when it was updated)
         assertEquals(2, callback.onSuccessCount);
+    }
+
+    /**
+     * Test to see if getExperimentByTags updates properly after deleting an experiment.
+     */
+    @Test
+    public void testSearchThenDelete() throws InterruptedException {
+        BinomialExperiment experiment = mockBinomialExperiment();
+        db.addExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add(experiment.getPassUnit());
+        tags.add(experiment.getFailUnit());
+        db.updateExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        ArrayList<Experiment> returnedExperiments = new ArrayList<>();
+        registration = db.getExperimentsByTags(tags,
+                new Database.QueryExperimentsCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Experiment> experiments) {
+                        returnedExperiments.clear();
+                        returnedExperiments.addAll(experiments);
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertTrue(returnedExperiments.contains(experiment));
+
+        db.deleteExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        // returnedExperiments should no longer contain the deleted experiment
+        assertFalse(returnedExperiments.contains(experiment));
     }
 }
