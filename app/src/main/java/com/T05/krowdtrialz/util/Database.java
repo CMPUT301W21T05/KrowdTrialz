@@ -698,8 +698,13 @@ public class Database {
         newBarcode.put("PassCount", data[3]);
         newBarcode.put("FailCount", data[4]);
         newBarcode.put("Value", data[5]);
-        newBarcode.put("Longitude", data[6]);
-        newBarcode.put("Latitude", data[7]);
+        if (data[6] == null || data[7] == null) {
+            newBarcode.put("Longitude", null);
+            newBarcode.put("Latitude", null);
+        } else {
+            newBarcode.put("Longitude", data[6]);
+            newBarcode.put("Latitude", data[7]);
+        }
         barcodeCollectionReference.document(data[0]).set(newBarcode);
     }
 

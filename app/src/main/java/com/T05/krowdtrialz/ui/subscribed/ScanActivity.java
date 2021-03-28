@@ -69,6 +69,10 @@ public class ScanActivity extends AppCompatActivity {
                 // When Barcode or QrCode is detected give appropriate popup
                 // resultArray has the following format {experimentID, type, Pass Count, Fail Count, Value, Longitude, latitude}
                 String[] resultArray = result.getText().split("/");
+                if (resultArray[6] == "None" || resultArray[7] == "None"){
+                    resultArray[6] = null;
+                    resultArray[7] = null;
+                }
 
                 if (resultArray.length > 1) { // QRCode
                     db = Database.getInstance();
@@ -183,8 +187,15 @@ public class ScanActivity extends AppCompatActivity {
     private Trial makeTrial(Experiment experiment, String[] resultArray){
         String type = experiment.getType();
         User user = db.getDeviceUser();
-        int longitude = Integer.parseInt(resultArray[5]);
-        int latitude = Integer.parseInt(resultArray[6]);
+        double longitude;
+        double latitude;
+        if (resultArray[6] == null || resultArray[7] == null) {
+            longitude = 999d;
+            latitude = 999d;
+        } else {
+            longitude = Double.parseDouble(resultArray[5]);
+            latitude = Double.parseDouble(resultArray[6]);
+        }
 
         Trial trial = null;
         if (type == BinomialExperiment.type) {

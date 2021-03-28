@@ -65,7 +65,9 @@ public class ExperimentMap extends AppCompatActivity {
                 ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
 
                 for (Trial trial: experiment.getTrials()){
-                    items.add(new OverlayItem(trial.getExperimenter().getUserName(), trial.getDateCreated(), new GeoPoint(trial.getLatitude(),trial.getLongitude()))); // Lat/Lon decimal degrees
+                    if (! (trial.getLatitude() == 999d)) {
+                        items.add(new OverlayItem(trial.getExperimenter().getUserName(), trial.getDateCreated(), new GeoPoint(trial.getLatitude(), trial.getLongitude()))); // Lat/Lon decimal degrees
+                    }
                 }
                 //the overlay
                 ItemizedIconOverlay<OverlayItem> mOverlay = new ItemizedIconOverlay<OverlayItem>(items,
