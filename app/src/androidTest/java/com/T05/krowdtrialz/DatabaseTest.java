@@ -160,6 +160,24 @@ public class DatabaseTest {
         }
     }
 
+    /**
+     * Mock callback that just counts the number of times onSuccess and onFailure were called.
+     */
+    private class MockGetExperimentCallback implements Database.GetExperimentCallback {
+        public int onSuccessCount = 0;
+        public int onFailureCount = 0;
+
+        @Override
+        public void onSuccess(Experiment experiment) {
+            ++onSuccessCount;
+        }
+
+        @Override
+        public void onFailure() {
+            ++onFailureCount;
+        }
+    }
+
     public User mockUser () {
         User user = new User("Joe Bob","jbeast","jb@gmail.com", "856c7d10-364d-40ea-ad2d-3aedd6993c5b");
         return user;
@@ -494,5 +512,27 @@ public class DatabaseTest {
         Thread.sleep(WAIT_TIME_MS);
 
         assertNull(returnedExperiment);
+    }
+
+    /**
+     * Tests to see if the callback is called each time an experiment is updated.
+     */
+    @Test
+    public void testLiveUpdateExperiment() throws InterruptedException {
+        MeasurementExperiment experiment = mockMeasurementExperiment();
+        db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        MockGetExperimentCallback callback = new MockGetExperimentCallback();
+        registration = db.getExperimentByID(experiment.getId(), callback);
+
+        experiment.setUnit("new unit");
+        db.updateExperiment(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        // Verify that the onSuccess callback was called twice.
+        // (Once when the experiment was first queried and again when it was updated)
+        assertEquals(2, callback.onSuccessCount);
     }
 }
