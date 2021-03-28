@@ -465,10 +465,10 @@ public class Database {
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
         String ownerID = owner.getId();
-        ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
         ListenerRegistration registration = userCollectionReference.document(ownerID).collection("OwnedExperiments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
                 for (QueryDocumentSnapshot document : value) {
                     if(document.get("type").toString().equals("Binomial")){
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);

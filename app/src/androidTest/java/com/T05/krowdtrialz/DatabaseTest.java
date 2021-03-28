@@ -15,12 +15,16 @@ import com.T05.krowdtrialz.model.trial.CountTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
+import org.apache.commons.math3.analysis.function.Exp;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,6 +43,11 @@ public class DatabaseTest {
 
     private Experiment returnedExperiment;
     private User returnedUser;
+
+    // List of experiments to be deleted from the Database after a test is run.
+    private ArrayList<Experiment> experimentsToDelete;
+
+    ListenerRegistration registration;
 
     private class MockSharedPreferences implements SharedPreferences {
         private class MockEditor implements SharedPreferences.Editor {
@@ -193,17 +202,34 @@ public class DatabaseTest {
         db = Database.getInstance();
         returnedExperiment = null;
         returnedUser = null;
+        experimentsToDelete = new ArrayList<>();
+    }
+
+    @After
+    public void cleanup() {
+        if (registration != null) {
+            // Stop listening for changes to the database
+            registration.remove();
+        }
+        for (Experiment experiment : experimentsToDelete) {
+            db.deleteExperiment(experiment);
+        }
     }
 
     @Test
-    public void testSmokeTestGetExperimentsByOwner(){
+    public void testSmokeTestGetExperimentsByOwner() throws InterruptedException {
 
-        db.addExperiment(mockBinomialExperiment());
+        Experiment experiment = mockBinomialExperiment();
 
-        db.getExperimentsByOwner(mockUser(), new Database.QueryExperimentsCallback() {
+        db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
+
+        Thread.sleep(WAIT_TIME_MS);
+
+        registration = db.getExperimentsByOwner(mockUser(), new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
-                assertTrue(experiments.size() == 1);
+                assertEquals(1, experiments.size());
             }
 
             @Override
@@ -211,6 +237,7 @@ public class DatabaseTest {
                 fail("Empty List Returned");
             }
         });
+
     }
 
     @Test
@@ -236,7 +263,7 @@ public class DatabaseTest {
     @Test
     public void testGetUserById() throws InterruptedException {
         String id = db.getDeviceUser().getId();
-        db.getUserById(id, new Database.GetUserCallback() {
+        registration = db.getUserById(id, new Database.GetUserCallback() {
             @Override
             public void onSuccess(User user) {
                 returnedUser = user;
@@ -259,6 +286,7 @@ public class DatabaseTest {
         Experiment experiment = mockIntegerExperiment();
         experiment.setRegion("China");
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
         assertNotNull(experiment.getId());
     }
@@ -267,9 +295,10 @@ public class DatabaseTest {
     public void testGetExperimentById() throws InterruptedException {
         Experiment experiment = mockIntegerExperiment();
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
-        db.getExperimentByID(experiment.getId(),
+        registration = db.getExperimentByID(experiment.getId(),
                 new Database.GetExperimentCallback() {
                     @Override
                     public void onSuccess(Experiment experiment) {
@@ -296,13 +325,14 @@ public class DatabaseTest {
     public void testSubscribe() throws InterruptedException {
         Experiment experiment = mockIntegerExperiment();
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
         db.addSubscription(db.getDeviceUser(), experiment);
         Thread.sleep(WAIT_TIME_MS);
 
         ArrayList<Experiment> returnedExperiments = new ArrayList<>();
-        db.getExperimentsBySubscriber(db.getDeviceUser(),
+        registration = db.getExperimentsBySubscriber(db.getDeviceUser(),
                 new Database.QueryExperimentsCallback() {
                     @Override
                     public void onSuccess(ArrayList<Experiment> experiments) {
@@ -323,16 +353,18 @@ public class DatabaseTest {
 
     /**
      * FAILING
+     *  The assertTrue at the end of this method fails.
      * @throws InterruptedException
      */
     @Test
     public void testGetExperimentsByOwner() throws InterruptedException {
         Experiment experiment = mockIntegerExperiment();
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
         ArrayList<Experiment> returnedExperiments = new ArrayList<>();
-        db.getExperimentsByOwner(db.getDeviceUser(),
+        registration = db.getExperimentsByOwner(db.getDeviceUser(),
                 new Database.QueryExperimentsCallback() {
                     @Override
                     public void onSuccess(ArrayList<Experiment> experiments) {
@@ -355,6 +387,7 @@ public class DatabaseTest {
     public void testGetExperimentsByTags() throws InterruptedException {
         BinomialExperiment experiment = mockBinomialExperiment();
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
         ArrayList<String> tags = new ArrayList<>();
@@ -385,13 +418,14 @@ public class DatabaseTest {
     public void testAddTrial() throws InterruptedException {
         Experiment experiment = mockCountExperiment();
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
         Trial trial = mockCountTrial();
         db.addTrial(trial, experiment);
         Thread.sleep(WAIT_TIME_MS);
 
-        db.getExperimentByID(experiment.getId(),
+        registration = db.getExperimentByID(experiment.getId(),
                 new Database.GetExperimentCallback() {
                     @Override
                     public void onSuccess(Experiment experiment) {
@@ -412,13 +446,14 @@ public class DatabaseTest {
     public void testUpdateExperiment() throws InterruptedException {
         MeasurementExperiment experiment = mockMeasurementExperiment();
         db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
         experiment.setUnit("new unit");
         db.updateExperiment(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
-        db.getExperimentByID(experiment.getId(),
+        registration = db.getExperimentByID(experiment.getId(),
                 new Database.GetExperimentCallback() {
                     @Override
                     public void onSuccess(Experiment experiment) {
@@ -444,7 +479,7 @@ public class DatabaseTest {
         db.deleteExperiment(experiment);
         Thread.sleep(WAIT_TIME_MS);
 
-        db.getExperimentByID(experiment.getId(),
+        registration = db.getExperimentByID(experiment.getId(),
                 new Database.GetExperimentCallback() {
                     @Override
                     public void onSuccess(Experiment experiment) {
