@@ -82,6 +82,11 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
      *  String with search query
      */
     public void searchExperiments(String searchString) {
+        if (expRegistration != null) {
+            // Remove old ListenerRegistration
+            expRegistration.remove();
+        }
+
         experimentAdapter.clear();
 
         Log.e(TAG, "Query: " + searchString);
@@ -128,7 +133,9 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Stop listening to changes in the Database
-        expRegistration.remove();
+        if (expRegistration != null) {
+            // Stop listening to changes in the Database
+            expRegistration.remove();
+        }
     }
 }
