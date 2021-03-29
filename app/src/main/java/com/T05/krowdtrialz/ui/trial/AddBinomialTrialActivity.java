@@ -16,6 +16,7 @@ import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 public class AddBinomialTrialActivity extends TrialActivity {
     private Database db;
@@ -25,6 +26,8 @@ public class AddBinomialTrialActivity extends TrialActivity {
     private TextView passTextView;
     private TextView failTextView;
     private BinomialTrial binomialTrial;
+
+    private ListenerRegistration expRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class AddBinomialTrialActivity extends TrialActivity {
         failTextView = findViewById(R.id.binomial2_textView);
 
         Intent intent = getIntent();
-        db.getExperimentByID(intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID), new Database.GetExperimentCallback() {
+        expRegistration = db.getExperimentByID(intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID), new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
@@ -77,4 +80,11 @@ public class AddBinomialTrialActivity extends TrialActivity {
 
         return binomialTrial;
     } // end createTrial
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        expRegistration.remove();
+    }
 }// end AddBinomialTrialActivity
