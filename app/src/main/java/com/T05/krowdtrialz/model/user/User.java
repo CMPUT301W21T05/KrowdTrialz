@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.user;
 
+import java.util.Objects;
+
 /**
  * User of the KrowdTrialz applicaiton. The user is not forced to enter
  * their information, so "None" is the default for all fields.
@@ -63,5 +65,10 @@ public class User {
         User c = (User) o;
 
         return c.getId().equals(this.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, userName, email, id);
     }
 }

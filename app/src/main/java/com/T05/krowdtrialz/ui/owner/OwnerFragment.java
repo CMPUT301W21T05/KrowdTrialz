@@ -19,6 +19,7 @@ import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.ExperimentList;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,8 @@ public class OwnerFragment extends Fragment {
     private User user;
     private Database db;
     private ArrayAdapter<Experiment> experimentAdapter;
+
+    private ListenerRegistration listener;
 
     public static final int DIALOG_FRAGMENT = 1;
 
@@ -153,7 +156,7 @@ public class OwnerFragment extends Fragment {
             profileEmail.setClickable(false);
         }
 
-        db.getExperimentsByOwner(user, new Database.QueryExperimentsCallback() {
+        listener = db.getExperimentsByOwner(user, new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
                 Log.d(TAG, "Got owned experiments");
@@ -168,6 +171,13 @@ public class OwnerFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        listener.remove();
     }
 
     /**
