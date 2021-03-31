@@ -98,7 +98,6 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             @Override
             public void onSuccess(Experiment exp) {
                 experiment = exp;
-                Log.d(TAG, exp.getType());
                 if (exp != null) {
                     updateAddTrialsButton();
                     setTabs();

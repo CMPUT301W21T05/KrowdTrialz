@@ -57,6 +57,13 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
     private LocationManager locationManager;
     private ListenerRegistration expRegistration;
 
+    private boolean generateQRClicked = false;
+    private boolean saveBarcodeClicked = false;
+    private boolean submitClicked = false;
+
+    private String qrString;
+    private Intent intent;
+
     /**
      * This is overidden so that this super class can get UI elements such as submitButton after the
      * activity's layout has been loaded.
@@ -66,7 +73,7 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
 
-        Intent intent = getIntent();
+        intent = getIntent();
         String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
         com.google.android.material.switchmaterial.SwitchMaterial locationRequired = findViewById(R.id.use_location_switch);
@@ -104,6 +111,7 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                submitClicked = true;
 
                 String type = experiment.getType();
                 if(type == BinomialExperiment.type){
@@ -158,10 +166,12 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
         qrGenerateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), GenerateTrialQRActivity.class);
+                generateQRClicked = true;
+
+                intent = new Intent(v.getContext(), GenerateTrialQRActivity.class);
                 String type = experiment.getType();
                 // format will be ExperimentID/Type/Pass/Fail/Value/Longitude/Latitude
-                String qrString = "";
+                qrString = "";
 
                 if(type == BinomialExperiment.type){
                     passText = findViewById(R.id.binomial1_editText);
@@ -189,19 +199,17 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
                     }
                 }
 
-                // TODO Actually get users location when submitting trial
                 if (locationRequired.isChecked()){
-                    qrString = qrString+String.format("/%s/%s", "90","90");
+                    getLocation();
                 }else{
                     qrString = qrString+"/None/None";
-                }
-
-                if(intent != null){
-                    Log.d(TAG, "Starting Generate" + type + "Trial activity.");
-                    intent.putExtra("Data",qrString);
-                    startActivity(intent);
-                } else{
-                    Log.e(TAG,"Intent is null: Could not get Trial type.");
+                    if(intent != null){
+                        Log.d(TAG, "Starting Generate" + type + "Trial activity.");
+                        intent.putExtra("Data",qrString);
+                        startActivity(intent);
+                    } else{
+                        Log.e(TAG,"Intent is null: Could not get Trial type.");
+                    }
                 }
             }
         });
@@ -211,10 +219,12 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
         barcodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SaveBarCodeActivity.class);
+                saveBarcodeClicked = true;
+
+                intent = new Intent(v.getContext(), SaveBarCodeActivity.class);
                 String type = experiment.getType();
                 // format will be ExperimentID/Type/Pass/Fail/Value/Longitude/Latitude
-                String qrString = "";
+                qrString = "";
 
                 if(type == BinomialExperiment.type){
                     passText = findViewById(R.id.binomial1_editText);
@@ -242,19 +252,18 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
                     }
                 }
 
-                // TODO Actually get users location when submitting trial
                 if (locationRequired.isChecked()){
-                    qrString = qrString+String.format("/%s/%s", "90","90");
+                    getLocation();
                 }else{
                     qrString = qrString+"/None/None";
-                }
 
-                if(intent != null){
-                    Log.d(TAG, "Starting Generate" + type + "Trial activity.");
-                    intent.putExtra("Data",qrString);
-                    startActivity(intent);
-                } else{
-                    Log.e(TAG,"Intent is null: Could not get Trial type.");
+                    if(intent != null){
+                        Log.d(TAG, "Starting Generate" + type + "Trial activity.");
+                        intent.putExtra("Data",qrString);
+                        startActivity(intent);
+                    } else{
+                        Log.e(TAG,"Intent is null: Could not get Trial type.");
+                    }
                 }
             }
         });
@@ -288,16 +297,42 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
             Trial trial = createTrial();
             trial.setLatitude(location.getLatitude());
             trial.setLongitude(location.getLongitude());
-            db.addTrial(trial, experiment);
-          
-            // Toast to confirm adding trial
-            Context context = getApplicationContext();
-            CharSequence text = "Added Trial";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
-          
-            finish();
+
+            if (submitClicked) {
+                db.addTrial(trial, experiment);
+
+                // Toast to confirm adding trial
+                Context context = getApplicationContext();
+                CharSequence text = "Added Trial";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+                submitClicked = false;
+                finish();
+
+            } else if (generateQRClicked){
+                qrString = qrString+String.format("/%s/%s", location.getLongitude(), location.getLatitude());
+
+                generateQRClicked = false;
+
+                if(intent != null){
+                    intent.putExtra("Data",qrString);
+                    startActivity(intent);
+                } else{
+                    Log.e(TAG,"Intent is null");
+                }
+            } else if (saveBarcodeClicked){
+                qrString = qrString+String.format("/%s/%s", location.getLongitude(), location.getLatitude());
+                saveBarcodeClicked = false;
+
+                if(intent != null){
+                    intent.putExtra("Data",qrString);
+                    startActivity(intent);
+                } else{
+                    Log.e(TAG,"Intent is null");
+                }
+            }
 
         }catch (Exception e){
             e.printStackTrace();

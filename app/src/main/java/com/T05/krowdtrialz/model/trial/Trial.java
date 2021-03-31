@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.trial;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.user.User;
 import com.google.firebase.firestore.Exclude;
 
@@ -22,6 +24,11 @@ public abstract class Trial {
 
     public Trial(User user) {
         this.experimenter = user;
+        LocalDateTime dateTime = LocalDateTime.now();
+        this.dateCreated = String.format("%s/%s/%s", dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
+
+        this.longitude = 999d;
+        this.latitude = 999d;
     }
 
     public Trial(User user, double longitude, double latitude) {
@@ -40,7 +47,7 @@ public abstract class Trial {
     public String getDateCreated() { return dateCreated; }
 
     @Exclude
-    public int getYearCreated() { return Integer.parseInt(dateCreated.substring(0,dateCreated.indexOf("/")));}
+    public int getYearCreated() { return Integer.parseInt(dateCreated.substring(0,dateCreated.indexOf("/"))); }
 
     @Exclude
     public int getMonthCreated() { return Integer.parseInt(dateCreated.substring(dateCreated.indexOf("/") + 1,dateCreated.lastIndexOf("/")));}
