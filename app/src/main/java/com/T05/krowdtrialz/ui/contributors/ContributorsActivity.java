@@ -13,6 +13,7 @@ import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.ui.subscribed.SubscribedFragment;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,8 @@ public class ContributorsActivity extends AppCompatActivity {
 
     private Experiment currentExperiment;
 
+    private ListenerRegistration expRegistration;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +36,7 @@ public class ContributorsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
-        Database.getInstance().getExperimentByID(expID, new Database.GetExperimentCallback() {
+        expRegistration = Database.getInstance().getExperimentByID(expID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
@@ -51,5 +54,12 @@ public class ContributorsActivity extends AppCompatActivity {
                 currentExperiment = null;
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        expRegistration.remove();
     }
 }
