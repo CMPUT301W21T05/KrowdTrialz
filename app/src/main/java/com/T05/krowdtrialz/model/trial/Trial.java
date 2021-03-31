@@ -1,6 +1,6 @@
 package com.T05.krowdtrialz.model.trial;
 
-import android.location.Location;
+import android.util.Log;
 
 import com.T05.krowdtrialz.model.user.User;
 import com.google.firebase.firestore.Exclude;
@@ -16,13 +16,22 @@ import java.time.LocalDateTime;
  * */
 public abstract class Trial {
     private User experimenter;
-    private int longitude;
-    private int latitude;
+    private double longitude;
+    private double latitude;
     private String dateCreated;
 
     public Trial() {}
 
-    public Trial(User user, int longitude, int latitude) {
+    public Trial(User user) {
+        this.experimenter = user;
+        LocalDateTime dateTime = LocalDateTime.now();
+        this.dateCreated = String.format("%s/%s/%s", dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
+
+        this.longitude = 999d;
+        this.latitude = 999d;
+    }
+
+    public Trial(User user, double longitude, double latitude) {
         this.experimenter = user;
         this.longitude = longitude;
         this.latitude = latitude;
@@ -30,7 +39,7 @@ public abstract class Trial {
         this.dateCreated = String.format("%s/%s/%s", dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth());
     }
 
-    public Trial(User user, int longitude, int latitude, String dateCreated) {
+    public Trial(User user, double longitude, double latitude, String dateCreated) {
         this(user, longitude, latitude);
         this.dateCreated = dateCreated;
     }
@@ -38,7 +47,7 @@ public abstract class Trial {
     public String getDateCreated() { return dateCreated; }
 
     @Exclude
-    public int getYearCreated() { return Integer.parseInt(dateCreated.substring(0,dateCreated.indexOf("/")));}
+    public int getYearCreated() { return Integer.parseInt(dateCreated.substring(0,dateCreated.indexOf("/"))); }
 
     @Exclude
     public int getMonthCreated() { return Integer.parseInt(dateCreated.substring(dateCreated.indexOf("/") + 1,dateCreated.lastIndexOf("/")));}
@@ -46,11 +55,19 @@ public abstract class Trial {
     @Exclude
     public int getDayCreated() { return Integer.parseInt(dateCreated.substring(dateCreated.lastIndexOf("/") + 1, dateCreated.length()));}
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public int getLatitude() { return latitude; }
+    public double getLatitude() { return latitude; }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
     /**
      * Get the user who created the trial

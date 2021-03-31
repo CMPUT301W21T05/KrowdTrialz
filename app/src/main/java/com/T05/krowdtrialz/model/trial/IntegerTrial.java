@@ -20,11 +20,15 @@ public class IntegerTrial extends Trial {
         super();
     }
 
-    public IntegerTrial(User user, int longitude, int latitude) {
+    public IntegerTrial(User user) {
+        super(user);
+    }
+
+    public IntegerTrial(User user, double longitude, double latitude) {
         super(user, longitude, latitude);
     }
 
-    public IntegerTrial(User user, int longitude, int latitude, String dateCreated) {
+    public IntegerTrial(User user, double longitude, double latitude, String dateCreated) {
         super(user, longitude, latitude, dateCreated);
     }
 

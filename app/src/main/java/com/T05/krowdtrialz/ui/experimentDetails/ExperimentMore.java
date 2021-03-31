@@ -148,6 +148,11 @@ public class ExperimentMore extends Fragment {
         Log.d(TAG, "view map");
         Toast.makeText(view.getContext(), "pressed view map",Toast.LENGTH_SHORT).show();
         // TODO: open map activity
+        Intent intent = new Intent(view.getContext(), ExperimentMap.class);
+
+        intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+
+        startActivity(intent);
     }
 
     /**

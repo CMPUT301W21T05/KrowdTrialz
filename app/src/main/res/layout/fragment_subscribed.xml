@@ -2,12 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/subscribed_experiment_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:layout_marginTop="50dp"
-    tools:context=".ui.subscribed.SubscribedFragment"
-    android:id="@+id/subscribed_experiment_fragment">
+    tools:context=".ui.subscribed.SubscribedFragment">
 
     <ListView
         android:id="@+id/subscribed_exp_listView"
@@ -20,5 +19,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.021" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:text="@string/trial_scan"
+        app:backgroundTint="#D3455B"
+        app:layout_constraintBottom_toBottomOf="@+id/subscribed_exp_listView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

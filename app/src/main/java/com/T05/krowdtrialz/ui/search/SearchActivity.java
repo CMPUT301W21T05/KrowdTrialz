@@ -17,14 +17,13 @@ import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.ExperimentList;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Accept user queries and display results.
- *
- * @todo need to update when user re enters the activity, since data may have beed deleted
  */
 public class SearchActivity extends Activity implements SearchView.OnQueryTextListener{
 
@@ -33,6 +32,8 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
     private final String TAG = "SearchActivity";
     private SearchView searchExperimentsQuery;
     private ListView searchResultsList;
+
+    private ListenerRegistration expRegistration;
 
     public SearchActivity() {
         super();
@@ -81,17 +82,23 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
      *  String with search query
      */
     public void searchExperiments(String searchString) {
+        if (expRegistration != null) {
+            // Remove old ListenerRegistration
+            expRegistration.remove();
+        }
+
         experimentAdapter.clear();
 
         Log.e(TAG, "Query: " + searchString);
         ArrayList<String> tags = new ArrayList<>(Arrays.asList(searchString.split("[^A-Za-z1-9]")));
 
-        db.getExperimentsByTags(tags, new Database.QueryExperimentsCallback() {
+        expRegistration = db.getExperimentsByTags(tags, new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
                 Log.d(TAG, "Got search results" + experiments.toString());
                 experimentAdapter.clear();
                 experimentAdapter.addAll(experiments);
+                experimentAdapter.notifyDataSetChanged();
 
                 /*
                  * pass the clicked experiment to the Experiment details page
@@ -121,5 +128,14 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                 Log.e(TAG, "Error Searching Database");
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (expRegistration != null) {
+            // Stop listening to changes in the Database
+            expRegistration.remove();
+        }
     }
 }
