@@ -34,6 +34,7 @@ import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.budiyev.android.codescanner.ScanMode;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.zxing.Result;
 
 public class ScanActivity extends AppCompatActivity {
@@ -43,6 +44,7 @@ public class ScanActivity extends AppCompatActivity {
     private CodeScanner codeScanner;
     private CodeScannerView scannerView;
     private Database db;
+    private ListenerRegistration expRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +74,13 @@ public class ScanActivity extends AppCompatActivity {
 
                 if (resultArray.length > 1) { // QRCode
                     db = Database.getInstance();
-                    db.getExperimentByID(resultArray[0], new Database.GetExperimentCallback() {
+                    expRegistration = db.getExperimentByID(resultArray[0], new Database.GetExperimentCallback() {
                         @Override
                         public void onSuccess(Experiment experiment) {
+                            if (resultArray[5] == "None" || resultArray[6] == "None"){
+                                resultArray[5] = null;
+                                resultArray[6] = null;
+                            }
                             Trial trial = makeTrial(experiment, resultArray);
                             fillDialog(experiment, trial, resultArray);
                         }
@@ -103,10 +109,13 @@ public class ScanActivity extends AppCompatActivity {
                     db.getTrialInfoByBarcode(result.getText(), new Database.GetTrialInfoCallback() {
                         @Override
                         public void onSuccess(String[] trialInfo) {
-                            Log.d(TAG,"SUCCESS");
-                            db.getExperimentByID(trialInfo[0], new Database.GetExperimentCallback() {
+                            expRegistration = db.getExperimentByID(trialInfo[0], new Database.GetExperimentCallback() {
                                 @Override
                                 public void onSuccess(Experiment experiment) {
+                                    if (trialInfo[5] == "None" || trialInfo[6] == "None"){
+                                        trialInfo[5] = null;
+                                        trialInfo[6] = null;
+                                    }
                                     Trial trial = makeTrial(experiment, trialInfo);
                                     fillDialog(experiment, trial, trialInfo);
                                 }
@@ -183,8 +192,15 @@ public class ScanActivity extends AppCompatActivity {
     private Trial makeTrial(Experiment experiment, String[] resultArray){
         String type = experiment.getType();
         User user = db.getDeviceUser();
-        int longitude = Integer.parseInt(resultArray[5]);
-        int latitude = Integer.parseInt(resultArray[6]);
+        double longitude;
+        double latitude;
+        if (resultArray[5] == null || resultArray[6] == null) {
+            longitude = 999d;
+            latitude = 999d;
+        } else {
+            longitude = Double.parseDouble(resultArray[5]);
+            latitude = Double.parseDouble(resultArray[6]);
+        }
 
         Trial trial = null;
         if (type == BinomialExperiment.type) {
@@ -268,9 +284,15 @@ public class ScanActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    expRegistration.remove();
                     db.addTrial(finalTrial, experiment);
                     dialog.dismiss();
                     codeScanner.startPreview();
+                    Context context = getApplicationContext();
+                    CharSequence text = "Submitted";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             });
 
@@ -288,5 +310,12 @@ public class ScanActivity extends AppCompatActivity {
             });
             dialog.show();
         }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database.
+        expRegistration.remove();
+        codeScanner.releaseResources();
     }
 }
