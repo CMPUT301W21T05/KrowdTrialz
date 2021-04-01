@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.interfaces.Tagged;
 import com.T05.krowdtrialz.model.scannable.Barcode;
 import com.T05.krowdtrialz.model.scannable.QRCode;
@@ -29,6 +30,7 @@ public abstract class Experiment implements Tagged {
     private ArrayList<Barcode> barcodes;
     private ArrayList<QRCode> qrCodes;
     private ArrayList<User> ignoredUsers;
+    private ArrayList<Question> questions;
 
     private final boolean active = true;
     private final boolean inactive = false;
@@ -44,6 +46,7 @@ public abstract class Experiment implements Tagged {
         qrCodes = new ArrayList<QRCode>();
         status = active;
         ignoredUsers = new ArrayList<User>();
+        questions = new ArrayList<Question>();
     }
 
     /**
@@ -175,6 +178,14 @@ public abstract class Experiment implements Tagged {
     }
 
     abstract public String getType();
+
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
+    public void addQuestion(Question question) {
+        this.questions.add(question);
+    }
 
     /**
      * Get array of users to be excluded from results

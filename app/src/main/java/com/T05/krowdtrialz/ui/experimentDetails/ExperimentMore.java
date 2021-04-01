@@ -18,6 +18,7 @@ import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.QnA.QuestionsActivity;
 import com.T05.krowdtrialz.ui.contributors.ContributorsActivity;
 import com.T05.krowdtrialz.util.Database;
 
@@ -163,6 +164,10 @@ public class ExperimentMore extends Fragment {
     public void viewQnA(View view){
         Log.d(TAG, "view Q&A");
         Toast.makeText(view.getContext(), "pressed view Q&A",Toast.LENGTH_SHORT).show();
-        // TODO: open Q&A activity
+        Intent intent = new Intent(view.getContext(), QuestionsActivity.class);
+
+        intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+
+        startActivity(intent);
     }
 }

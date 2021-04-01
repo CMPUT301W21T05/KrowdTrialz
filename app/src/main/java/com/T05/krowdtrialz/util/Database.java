@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
@@ -450,6 +451,43 @@ public class Database {
         });
 
     }// end addTrial
+
+    /**
+     * This method adds the given question to the given experiment
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit and Ricky Au
+     * @param question
+     *  this is the question to be added
+     * @param experiment
+     *  this is the experiment that the question is being added to
+     */
+    public void addQuestion(Question question, Experiment experiment) {
+
+        db = FirebaseFirestore.getInstance();
+        CollectionReference lookupCollectionReference = db.collection("ExperimentLookups");
+
+        lookupCollectionReference.document(String.valueOf(experiment.getId())).collection("Paths").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // if successful get list of all paths that need updating
+                    List<String> pathList = new ArrayList<>();
+                    experiment.addQuestion(question);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        pathList.add(String.valueOf(document.get("Path")));
+                    }
+                    // update each path
+                    for (int i = 0; i < pathList.size(); i++) {
+                        db.document(pathList.get(i)).set(experiment);
+                    }
+
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }// end on complete
+        });
+
+    }// end addQuestion
 
     /**
      * This method returns a list of experiments that are owned by a given user
