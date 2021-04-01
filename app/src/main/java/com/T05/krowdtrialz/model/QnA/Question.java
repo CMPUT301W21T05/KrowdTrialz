@@ -8,14 +8,14 @@ import java.util.ArrayList;
  */
 public class Question {
     private String question;
-    private ArrayList<Answer> answer;
+    private ArrayList<Answer> answers;
     private User askedBy;
 
     public Question() { }
 
     public Question(String question,  User askedBy) {
         this.question = question;
-        this.answer = new ArrayList<Answer>();
+        this.answers = new ArrayList<Answer>();
         this.askedBy = askedBy;
     }
 
@@ -28,11 +28,14 @@ public class Question {
     }
 
     public ArrayList<Answer> getAnswers() {
-        return answer;
+        return answers;
     }
 
     public void addAnswer(Answer answer) {
-        this.answer.add(answer);
+        if (this.answers == null){
+            this.answers = new ArrayList<Answer>();
+        }
+        this.answers.add(answer);
     }
 
     public User getAskedBy() {

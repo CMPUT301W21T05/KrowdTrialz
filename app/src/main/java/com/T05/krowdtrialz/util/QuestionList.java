@@ -46,7 +46,7 @@ public class QuestionList extends ArrayAdapter<Question> {
         View view = convertView;
 
         if (view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.question_list_element, parent);
+            view = LayoutInflater.from(context).inflate(R.layout.question_list_element, parent, false);
         }
 
         Question question = questions.get(position);
@@ -65,7 +65,7 @@ public class QuestionList extends ArrayAdapter<Question> {
                 intent = new Intent(context, QuestionDetailsActivity.class);
 
                 intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experimentID);
-
+                intent.putExtra("Position", position);
                 context.startActivity(intent);
             }
         });

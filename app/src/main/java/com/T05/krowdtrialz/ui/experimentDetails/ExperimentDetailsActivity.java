@@ -174,7 +174,8 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.replace(R.id.empty_frame, nextFragment);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.commit();
+                transaction.commitAllowingStateLoss();
+//                transaction.commitNowAllowingStateLoss();
             }
 
             @Override

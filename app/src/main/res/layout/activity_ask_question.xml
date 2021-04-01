@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#AFACAC">
 
     <TextView
         android:id="@+id/ask_question_owner_textView"
@@ -12,6 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Owner"
+        android:textColor="#000000"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/ask_question_description_textView"
         app:layout_constraintHorizontal_bias="0.099"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,18 +24,19 @@
         android:id="@+id/ask_question_description_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="272dp"
         android:text="description"
+        android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/ask_question_editText"
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:background="#AFACAC"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
         android:gravity="top"
         android:hint="Ask your question"
         app:layout_constraintEnd_toEndOf="parent"
