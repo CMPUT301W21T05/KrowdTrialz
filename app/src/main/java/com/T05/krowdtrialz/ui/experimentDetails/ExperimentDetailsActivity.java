@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -109,6 +111,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         });
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -121,6 +124,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             addTrialButton.setEnabled(false);
         }
     }
+
 
     /**
      * Set the tab layout in experiment details screen
@@ -161,6 +165,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                         moreFragment = ExperimentMore.newInstance(experiment);
                         nextFragment = moreFragment;
                         break;
+
                     default:
                         Log.e(TAG, "Unknown tab selection");
                         return;
