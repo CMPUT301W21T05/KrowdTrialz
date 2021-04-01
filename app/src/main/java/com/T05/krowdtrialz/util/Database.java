@@ -264,6 +264,20 @@ public class Database {
         CollectionReference userCollectionReference = db.collection("Users");
         userCollectionReference.document(deviceUser.getId()).set(user);
 
+        getExperimentsByOwner(user, new QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                for (Experiment e: experiments) {
+                    e.setOwner(user);
+                    updateExperiment(e);
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "ERROR UPDATING OWNED EXPERIMENTS");
+            }
+        });
         // Update the user locally
         deviceUser = user;
     }
