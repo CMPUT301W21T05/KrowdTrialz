@@ -22,6 +22,7 @@
         <activity android:name=".ui.QnA.AskQuestionActivity"></activity>
         <activity android:name=".ui.QnA.QuestionDetailsActivity" />
         <activity android:name=".ui.QnA.QuestionsActivity" />
+        <activity android:name=".ui.owner.UserActivity"></activity>
         <activity android:name=".ui.trial.SaveBarCodeActivity" />
         <activity android:name=".ui.subscribed.ScanActivity" />
         <activity android:name=".ui.experimentDetails.ExperimentMap" />

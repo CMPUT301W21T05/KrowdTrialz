@@ -27,18 +27,16 @@ public class ExperimentList extends ArrayAdapter<Experiment> {
 
     private static final String TAG = "ExperimentList";
     private ArrayList<Experiment> experiments;
-    private User deviceUser;
     private Context context;
 
     private com.google.android.material.textview.MaterialTextView experimentOwner;
     private com.google.android.material.textview.MaterialTextView experimentDescription;
     private com.google.android.material.checkbox.MaterialCheckBox experimentStatusCheck;
 
-    public ExperimentList (Context context, ArrayList<Experiment> experiments, User deviceUser) {
+    public ExperimentList (Context context, ArrayList<Experiment> experiments) {
         super(context, 0, experiments);
         this.experiments = experiments;
         this.context = context;
-        this.deviceUser = deviceUser;
     }
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

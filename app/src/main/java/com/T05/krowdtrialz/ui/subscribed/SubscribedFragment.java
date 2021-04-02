@@ -48,13 +48,12 @@ public class SubscribedFragment extends Fragment {
         subscribedViewModel = new ViewModelProvider(this).get(SubscribedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscribed, container, false);
 
-
         experimentsList = root.findViewById(R.id.subscribed_exp_listView);
 
-        User deviceUser = Database.getInstance().getDeviceUser();
-
         experimentsDataList = new ArrayList<Experiment>();
-        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList, deviceUser);
+
+        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList);
+
         experimentsList.setAdapter(experimentArrayAdapter);
 
         subscribedViewModel.getExperimentList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Experiment>>() {

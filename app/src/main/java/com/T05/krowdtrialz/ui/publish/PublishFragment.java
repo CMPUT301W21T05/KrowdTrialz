@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
