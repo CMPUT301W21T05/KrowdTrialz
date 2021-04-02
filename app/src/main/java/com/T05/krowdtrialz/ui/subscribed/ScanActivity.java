@@ -44,7 +44,7 @@ public class ScanActivity extends AppCompatActivity {
     private CodeScanner codeScanner;
     private CodeScannerView scannerView;
     private Database db;
-    private ListenerRegistration expRegistration;
+    private ListenerRegistration expRegistration = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,7 +315,9 @@ public class ScanActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // Stop listening to changes in the Database.
-        expRegistration.remove();
+        if(expRegistration != null){
+            expRegistration.remove();
+        }
         codeScanner.releaseResources();
     }
 }
