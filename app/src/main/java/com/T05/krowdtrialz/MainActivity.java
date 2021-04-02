@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.T05.krowdtrialz.ui.search.SearchActivity;
+import com.T05.krowdtrialz.ui.subscribed.ScanActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,6 +61,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "Clicked Search");
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button scanButton = findViewById(R.id.scan_button);
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ScanActivity.class);
                 startActivity(intent);
             }
         });
