@@ -13,13 +13,15 @@
         android:layout_width="184dp"
         android:layout_height="23dp"
         android:layout_marginTop="36dp"
+        android:background="#2196F3"
         android:clickable="true"
         android:contentDescription="Name"
         android:hint="Name"
         android:textColor="#000000"
+        android:drawableRight="@drawable/ic_edit_field"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@id/name_label"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -27,13 +29,15 @@
         android:layout_width="184dp"
         android:layout_height="23dp"
         android:layout_marginTop="76dp"
+        android:background="#2196F3"
         android:clickable="true"
         android:contentDescription="Username"
         android:hint="Username"
         android:textColor="#000000"
+        android:drawableRight="@drawable/ic_edit_field"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@id/user_name_label"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -41,13 +45,15 @@
         android:layout_width="184dp"
         android:layout_height="23dp"
         android:layout_marginTop="120dp"
+        android:background="#2196F3"
         android:clickable="true"
         android:contentDescription="Email"
         android:hint="Email"
         android:textColor="#000000"
+        android:drawableRight="@drawable/ic_edit_field"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@id/email_label"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -71,5 +77,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.305" />
+
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Name:"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/profile_name"
+        app:layout_constraintStart_toEndOf="@id/user_profile_ImageView"/>
+
+    <TextView
+        android:id="@+id/user_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Username:"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.97"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/profile_username"
+        app:layout_constraintStart_toEndOf="@id/user_profile_ImageView"/>
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="Email:"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.80"
+        app:layout_constraintTop_toBottomOf="@id/user_profile_ImageView"
+        app:layout_constraintBottom_toBottomOf="@id/profile_email"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -293,7 +295,10 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         }
         // fill out owner Username
         ownerName = findViewById(R.id.owner_textView_experiment);
-        ownerName.setText(experiment.getOwner().getUserName());
+        String ownerUserNameString = experiment.getOwner().getUserName();
+        SpannableString ownerUserName = new SpannableString(ownerUserNameString);
+        ownerUserName.setSpan(new UnderlineSpan(), 0, ownerUserNameString.length(), 0);
+        ownerName.setText(ownerUserName);
 
         ownerName.setClickable(true);
         ownerName.setOnClickListener(new View.OnClickListener() {

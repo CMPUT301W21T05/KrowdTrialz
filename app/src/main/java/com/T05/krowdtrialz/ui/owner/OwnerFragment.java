@@ -154,6 +154,15 @@ public class OwnerFragment extends Fragment {
             profileUsername.setClickable(false);
             profileName.setClickable(false);
             profileEmail.setClickable(false);
+
+            //white
+            profileUsername.setBackgroundColor(17170443);
+            profileName.setBackgroundColor(17170443);
+            profileEmail.setBackgroundColor(17170443);
+
+            profileUsername.setCompoundDrawablesWithIntrinsicBounds(0,0, android.R.color.transparent, 0);
+            profileName.setCompoundDrawablesWithIntrinsicBounds(0,0, android.R.color.transparent, 0);
+            profileEmail.setCompoundDrawablesWithIntrinsicBounds(0,0, android.R.color.transparent, 0);
         }
 
         listener = db.getExperimentsByOwner(user, new Database.QueryExperimentsCallback() {
