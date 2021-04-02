@@ -52,7 +52,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         searchResultsList = findViewById(R.id.search_results_list);
 
-        experimentAdapter = new ExperimentList(this, new ArrayList<>(), db.getDeviceUser());
+        experimentAdapter = new ExperimentList(this, new ArrayList<>());
 
         searchResultsList.setAdapter(experimentAdapter);
 
@@ -101,6 +101,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 Log.d(TAG, "Got search results" + experiments.toString());
                 experimentAdapter.clear();
                 experimentAdapter.addAll(experiments);
+
                 experimentAdapter.notifyDataSetChanged();
 
                 /*
@@ -124,6 +125,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
                     }
                 });
+
             }
 
             @Override

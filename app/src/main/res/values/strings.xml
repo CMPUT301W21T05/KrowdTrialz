@@ -45,7 +45,7 @@
     <string name="view_map_owner">view map</string>
     <string name="view_q_amp_a_owner"><![CDATA[View Q&A]]></string>
     <string name="subscribed_experiments_title">Subscribed Experiments</string>
-    <string name="edit_profile_button_text">Edit Profile</string>
+    <string name="edit_profile_button_text">Edit</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="trial_use_location">Use Location</string>

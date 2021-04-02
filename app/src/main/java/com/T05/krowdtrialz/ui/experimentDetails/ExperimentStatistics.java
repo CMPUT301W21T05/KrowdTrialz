@@ -80,6 +80,8 @@ public class ExperimentStatistics extends Fragment {
         return root;
     }
 
+
+
     /**
      * This method fills out Mean, Standard deviation, Median and maybe some trial results
      * @author
