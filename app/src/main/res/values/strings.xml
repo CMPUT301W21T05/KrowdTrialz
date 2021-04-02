@@ -56,4 +56,5 @@
     <string name="trial_assign_barcode">Assign To Barcode</string>
     <string name="download">DOWNLOAD</string>
     <string name="qr_image">qrImage</string>
+    <string name="title_search">Search</string>
 </resources>

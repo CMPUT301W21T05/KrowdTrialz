@@ -35,6 +35,8 @@ public class AddIntegerTrialActivity extends TrialActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_integer_trial);
 
+        setTitle("Add Integer Trial");
+
         valueEditText = findViewById(R.id.integer_editText);
     }
 

@@ -68,6 +68,9 @@ public class ExperimentDetailsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_details);
+
+        setTitle("Experiment Details");
+
         db = Database.getInstance();
 
         Intent intent = getIntent();
@@ -75,6 +78,8 @@ public class ExperimentDetailsActivity extends AppCompatActivity
 
         Button subscribeButton = findViewById(R.id.subscribe_button_experiment);
         addTrialButton = findViewById(R.id.add_trials_experiment);
+
+
 
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
