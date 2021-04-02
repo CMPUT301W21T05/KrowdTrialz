@@ -152,6 +152,8 @@ public class ExperimentPlots extends Fragment {
             // create data set
             barData = new BarData(dataSets);
             barData.setDrawValues(false);
+
+            barChart.getXAxis().setEnabled(false);
         }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
