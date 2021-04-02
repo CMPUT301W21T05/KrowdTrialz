@@ -136,7 +136,7 @@ public class ExperimentPlots extends Fragment {
             }
             for (int i = 0; i < failDataPoints.size(); i++) {
                 // turn your data into Entry objects
-                failEntries.add(new BarEntry(i, failDataPoints.get(i)));
+                failEntries.add(new BarEntry(i + 1, failDataPoints.get(i)));
             }
 
             BarDataSet passDataSet = new BarDataSet(passEntries, binomialExperiment.getPassUnit());
@@ -152,6 +152,8 @@ public class ExperimentPlots extends Fragment {
             // create data set
             barData = new BarData(dataSets);
             barData.setDrawValues(false);
+
+            barChart.getXAxis().setEnabled(false);
         }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
