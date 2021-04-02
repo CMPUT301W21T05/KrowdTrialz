@@ -49,7 +49,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
 
         searchResultsList = findViewById(R.id.search_results_list);
 
-        experimentAdapter = new ExperimentList(this, new ArrayList<>(), db.getDeviceUser());
+        experimentAdapter = new ExperimentList(this, new ArrayList<>());
 
         searchResultsList.setAdapter(experimentAdapter);
 
@@ -98,6 +98,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
                 Log.d(TAG, "Got search results" + experiments.toString());
                 experimentAdapter.clear();
                 experimentAdapter.addAll(experiments);
+
                 experimentAdapter.notifyDataSetChanged();
 
                 /*
@@ -121,6 +122,7 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
 
                     }
                 });
+
             }
 
             @Override

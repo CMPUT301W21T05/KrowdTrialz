@@ -4,11 +4,11 @@
     package="com.T05.krowdtrialz">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,10 +19,11 @@
         android:theme="@style/Theme.KrowdTrialz"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.trial.SaveBarCodeActivity"></activity>
+        <activity android:name=".ui.owner.UserActivity"></activity>
+        <activity android:name=".ui.trial.SaveBarCodeActivity" />
         <activity android:name=".ui.subscribed.ScanActivity" />
-        <activity android:name=".ui.experimentDetails.ExperimentMap"></activity>
-        <activity android:name=".ui.trial.AddMeasurementTrialActivity"></activity>
+        <activity android:name=".ui.experimentDetails.ExperimentMap" />
+        <activity android:name=".ui.trial.AddMeasurementTrialActivity" />
         <activity android:name=".ui.trial.GenerateTrialQRActivity" />
         <activity android:name=".ui.trial.AddIntegerTrialActivity" />
         <activity android:name=".ui.trial.AddCountTrialActivity" />
