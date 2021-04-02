@@ -28,6 +28,8 @@ public class AddCountTrialActivity extends TrialActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_count_trial);
 
+        setTitle("Add Count Trial");
+
         // Change text from "Submit" to "Increment"
         getSubmitButton().setText(R.string.trial_increment);
 

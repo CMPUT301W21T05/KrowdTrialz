@@ -1,6 +1,8 @@
 package com.T05.krowdtrialz.ui.search;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 /**
  * Accept user queries and display results.
  */
-public class SearchActivity extends Activity implements SearchView.OnQueryTextListener{
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     private Database db;
     private ArrayAdapter<Experiment> experimentAdapter;
@@ -44,6 +45,8 @@ public class SearchActivity extends Activity implements SearchView.OnQueryTextLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         db = Database.getInstance();
+
+        setTitle("Search");
 
         searchExperimentsQuery = findViewById(R.id.search_experiment_query);
 

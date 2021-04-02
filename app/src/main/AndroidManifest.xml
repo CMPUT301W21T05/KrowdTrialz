@@ -19,15 +19,15 @@
         android:theme="@style/Theme.KrowdTrialz"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".ui.publish.PublishActivity"></activity>
+        <activity android:name=".ui.publish.PublishActivity" />
         <activity android:name=".ui.trial.SaveBarCodeActivity" />
         <activity android:name=".ui.subscribed.ScanActivity" />
         <activity android:name=".ui.experimentDetails.ExperimentMap" />
-        <activity android:name=".ui.trial.AddMeasurementTrialActivity" />
+        <activity android:name=".ui.trial.AddMeasurementTrialActivity"/>
         <activity android:name=".ui.trial.GenerateTrialQRActivity" />
-        <activity android:name=".ui.trial.AddIntegerTrialActivity" />
-        <activity android:name=".ui.trial.AddCountTrialActivity" />
-        <activity android:name=".ui.trial.AddBinomialTrialActivity" />
+        <activity android:name=".ui.trial.AddIntegerTrialActivity"/>
+        <activity android:name=".ui.trial.AddCountTrialActivity"/>
+        <activity android:name=".ui.trial.AddBinomialTrialActivity"/>
         <activity android:name=".ui.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,9 +37,12 @@
         </activity>
         <activity
             android:name=".ui.search.SearchActivity"
+            android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ui.contributors.ContributorsActivity" />
-        <activity android:name=".ui.experimentDetails.ExperimentDetailsActivity" />
+        <activity android:name=".ui.contributors.ContributorsActivity"
+                    android:parentActivityName=".ui.experimentDetails.ExperimentDetailsActivity"/>
+        <activity android:name=".ui.experimentDetails.ExperimentDetailsActivity"
+                    android:parentActivityName=".ui.experimentDetails.ExperimentDetailsActivity"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" />
