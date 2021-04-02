@@ -1,5 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import android.util.Log;
+
 import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.interfaces.Tagged;
 import com.T05.krowdtrialz.model.scannable.Barcode;
@@ -247,6 +249,20 @@ public abstract class Experiment implements Tagged {
         Set<User> users = new HashSet<>();
         trials.stream().forEach(trial -> users.add(trial.getExperimenter()));
         return users;
+    }
+
+    /**
+     * Get all contriubtors to this experiment regardless of if they're ignored
+     *
+     * @return
+     *  Set of users
+     */
+    @Exclude
+    public Set<String> getContributorsIDs() {
+        ArrayList<Trial> trials = (ArrayList<Trial>) getTrials();
+        Set<String> userIDs = new HashSet<>();
+        trials.stream().forEach(trial -> userIDs.add(trial.getExperimenter().getId()));
+        return userIDs;
     }
 
     /**

@@ -57,12 +57,15 @@ public class ContributorList extends ArrayAdapter<User> {
 
         contributorName.setText(contributor.getUserName());
 
-        //set checkbox if user is ignored
-        if(experiment.isIgnored(contributor)){
-            ignoreCheckBox.setChecked(true);
-        } else {
-            ignoreCheckBox.setChecked(false);
+        if(contributor != null){
+            if(experiment.isIgnored(contributor)){
+                ignoreCheckBox.setChecked(true);
+            } else {
+                ignoreCheckBox.setChecked(false);
+            }
         }
+        //set checkbox if user is ignored
+
 
         ignoreCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
