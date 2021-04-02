@@ -62,6 +62,8 @@ public class Database {
     // The single instance for the singleton pattern
     private static Database instance = null;
 
+    private ListenerRegistration listener;
+
     /**
      * Initializes the single instance.
      * This must be called before getInstance() is called.
@@ -265,6 +267,22 @@ public class Database {
         CollectionReference userCollectionReference = db.collection("Users");
         userCollectionReference.document(deviceUser.getId()).set(user);
 
+        listener = getExperimentsByOwner(user, new QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                for (Experiment e: experiments) {
+                    e.setOwner(user);
+                    updateExperiment(e);
+                }
+                listener.remove();
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "ERROR UPDATING OWNED EXPERIMENTS");
+                listener.remove();
+            }
+        });
         // Update the user locally
         deviceUser = user;
     }
