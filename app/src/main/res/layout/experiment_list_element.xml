@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:fontFamily="sans-serif-black"
-        android:text="@string/owner_username"
+        android:text="Owner Username"
         android:textColor="#000000" />
 
     <com.google.android.material.textview.MaterialTextView

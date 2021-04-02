@@ -8,7 +8,7 @@
     <string name="add_experiment_name_prompt">Add experiment name</string>
     <string name="add_experiment_description_prompt">Add a description</string>
     <string name="geo_location_toggle">Geolocation required</string>
-    <string name="owner_username">Owner Username</string>
+    <string name="owner_username"><u>Owner Username</u></string>
     <string name="description_non_owner_text">Description</string>
     <string name="status">Status</string>
     <string name="region_non_owner">Region</string>
