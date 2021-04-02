@@ -43,13 +43,13 @@ public class ContributorsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
-        Database.getInstance().getExperimentByIDNotLive(expID, new Database.GetExperimentCallback() {
+        db.getExperimentByIDNotLive(expID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
                 contributorsDataList = new ArrayList<User>();
 
-                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
+                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment, db);
 
                 contributorsList.setAdapter(contributorsArrayAdapter);
 
