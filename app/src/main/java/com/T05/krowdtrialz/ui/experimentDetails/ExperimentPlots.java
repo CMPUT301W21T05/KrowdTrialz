@@ -136,7 +136,7 @@ public class ExperimentPlots extends Fragment {
             }
             for (int i = 0; i < failDataPoints.size(); i++) {
                 // turn your data into Entry objects
-                failEntries.add(new BarEntry(i, failDataPoints.get(i)));
+                failEntries.add(new BarEntry(i + 1, failDataPoints.get(i)));
             }
 
             BarDataSet passDataSet = new BarDataSet(passEntries, binomialExperiment.getPassUnit());
