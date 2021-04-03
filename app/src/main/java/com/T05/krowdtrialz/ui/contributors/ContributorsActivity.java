@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -19,34 +20,54 @@ import java.util.ArrayList;
 
 public class ContributorsActivity extends AppCompatActivity {
 
+    private static final String TAG = "CONTRIBUTORS ACTIVITY";
+
     ListView contributorsList;
     ArrayAdapter<User> contributorsArrayAdapter;
     ArrayList<User> contributorsDataList;
 
     private Experiment currentExperiment;
 
-    private ListenerRegistration expRegistration;
+
+    private Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = Database.getInstance();
+
         setContentView(R.layout.activity_contributors);
 
         contributorsList = findViewById(R.id.contributors_listView);
 
         Intent intent = getIntent();
         String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
-        expRegistration = Database.getInstance().getExperimentByID(expID, new Database.GetExperimentCallback() {
+        Database.getInstance().getExperimentByIDNotLive(expID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
                 contributorsDataList = new ArrayList<User>();
-                if(currentExperiment != null){
-                    contributorsDataList.addAll(currentExperiment.getContributors());
-                }
 
                 contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
+
                 contributorsList.setAdapter(contributorsArrayAdapter);
+
+                for (User u: currentExperiment.getContributors()) {
+
+                    db.getUserByIdNotLive(u.getId(), new Database.GetUserCallback() {
+                        @Override
+                        public void onSuccess(User user) {
+                            contributorsDataList.add(user);
+                            contributorsArrayAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Log.e(TAG, "COULD NOT GET USERS");
+                        }
+                    });
+                }
             }
 
             @Override
@@ -54,12 +75,5 @@ public class ContributorsActivity extends AppCompatActivity {
                 currentExperiment = null;
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Stop listening to changes in the Database
-        expRegistration.remove();
     }
 }

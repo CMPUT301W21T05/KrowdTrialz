@@ -65,23 +65,21 @@ public class SubscribedFragment extends Fragment {
             }
         });
 
-        scanButton = root.findViewById(R.id.scan_button);
-
-        scanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ScanActivity.class);
-                startActivity(intent);
-            }
-        });
-
+        scanButton = getActivity().findViewById(R.id.scan_button);
 
         return root;
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        scanButton.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        scanButton.setVisibility(View.VISIBLE);
         experimentArrayAdapter.notifyDataSetChanged();
     }
 }

@@ -34,6 +34,8 @@ public class AddBinomialTrialActivity extends TrialActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_binomial_trial);
 
+        setTitle("Add Binomial Trial");
+
         db = Database.getInstance();
 
         passEditText  = findViewById(R.id.binomial1_editText);

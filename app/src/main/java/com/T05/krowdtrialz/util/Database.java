@@ -62,6 +62,8 @@ public class Database {
     // The single instance for the singleton pattern
     private static Database instance = null;
 
+    private ListenerRegistration listener;
+
     /**
      * Initializes the single instance.
      * This must be called before getInstance() is called.
@@ -156,6 +158,49 @@ public class Database {
         return registration;
     }
 
+
+    /**
+     * This gets an experiment of a unique ID. Not live.
+     * @param expID An Experiment ID
+     * @author Vasu Gupta
+     */
+    public void getExperimentByIDNotLive(String expID, GetExperimentCallback callback){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("AllExperiments");
+
+        Query query = userCollectionReference.whereEqualTo("id", expID);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.getResult().size() == 1){
+                    Experiment experiment = null;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        if(document.get("type").toString().equals("Binomial")){
+                            experiment = document.toObject(BinomialExperiment.class);
+                        }else if(document.get("type").toString().equals("Count")){
+                            experiment = document.toObject(CountExperiment.class);
+                        }else if(document.get("type").toString().equals("Measurement")){
+                            experiment = document.toObject(MeasurementExperiment.class);
+                        }else if(document.get("type").toString().equals("Integer")){
+                            experiment = document.toObject(IntegerExperiment.class);
+                        }else {
+                            Log.e(TAG, "Unknown experiment type");
+                            callback.onFailure();
+                            return;
+                        }
+                    }
+                    Log.d(TAG, "Experiment of ID " + expID.toString() + " found.");
+                    callback.onSuccess(experiment);
+                } else if (task.getResult().size() > 1) {
+                    Log.e(TAG, "Multiple experiments with same ID " + expID.toString() + " found.");
+                    callback.onFailure();
+                } else {
+                    Log.e(TAG, "No experiment of ID: " + expID.toString() + " found.");
+                    callback.onFailure();
+                }
+            }
+        });
+    }
 
     /**
      * This saves unique id after initializeDeviceUser generates a unique id
@@ -265,6 +310,22 @@ public class Database {
         CollectionReference userCollectionReference = db.collection("Users");
         userCollectionReference.document(deviceUser.getId()).set(user);
 
+        listener = getExperimentsByOwner(user, new QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                for (Experiment e: experiments) {
+                    e.setOwner(user);
+                    updateExperiment(e);
+                }
+                listener.remove();
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "ERROR UPDATING OWNED EXPERIMENTS");
+                listener.remove();
+            }
+        });
         // Update the user locally
         deviceUser = user;
     }
@@ -302,6 +363,37 @@ public class Database {
         });
 
         return registration;
+    }
+
+    /**
+     * Queries for the user associated with the given ID. No callback.
+     * @param id The ID of the user to search for.
+     * @param callback The callback to be called when the query is finished.
+     * @author Ryan Shukla
+     */
+    public void getUserByIdNotLive(String id, GetUserCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("Users");
+
+        Query query = userCollectionReference.whereEqualTo("id", id); // Create a query to check if ID exists in the database already
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.getResult().size() == 1) {
+                    User user = null;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        user = document.toObject(User.class);
+                    }
+                    callback.onSuccess(user);
+                } else if (task.getResult().size() > 1) {
+                    Log.e(TAG, "Multiple users with same ID found.");
+                    callback.onFailure();
+                } else {
+                    Log.e(TAG, "No user with given ID found.");
+                    callback.onFailure();
+                }
+            }
+        });
     }
 
     /**

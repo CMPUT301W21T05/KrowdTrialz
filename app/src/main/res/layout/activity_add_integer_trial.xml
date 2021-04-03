@@ -8,6 +8,7 @@
 
     <EditText
         android:id="@+id/integer_editText"
+        android:inputType="number"
         android:layout_width="151dp"
         android:layout_height="47dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -8,28 +8,27 @@
     android:theme="@style/Widget.AppCompat.SearchView"
     tools:context=".ui.search.SearchActivity">
 
+
     <SearchView
         android:id="@+id/search_experiment_query"
         android:layout_width="414dp"
         android:layout_height="98dp"
         android:background="#57009688"
+        android:iconifiedByDefault="false"
         android:queryHint="Search experiments..."
-        app:layout_constraintBottom_toTopOf="@+id/search_results_list"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:iconifiedByDefault="false" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/search_results_list"
-        android:layout_width="411dp"
-        android:layout_height="617dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/search_experiment_query"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_experiment_query" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,8 @@ public class AddMeasurementTrialActivity extends TrialActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_measurement_trial);
 
+        setTitle("Add Measurement Trial");
+
         valueEditText  = findViewById(R.id.measure_editText);
     }
 

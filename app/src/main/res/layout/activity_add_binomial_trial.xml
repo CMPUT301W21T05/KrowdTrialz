@@ -8,6 +8,7 @@
 
     <EditText
         android:id="@+id/binomial1_editText"
+        android:inputType="number"
         android:layout_width="151dp"
         android:layout_height="47dp"
         android:layout_marginStart="44dp"
@@ -19,6 +20,7 @@
 
     <EditText
         android:id="@+id/binomial2_editText"
+        android:inputType="number"
         android:layout_width="151dp"
         android:layout_height="47dp"
         android:layout_marginEnd="44dp"

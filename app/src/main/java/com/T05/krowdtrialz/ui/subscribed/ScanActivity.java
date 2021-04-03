@@ -44,7 +44,7 @@ public class ScanActivity extends AppCompatActivity {
     private CodeScanner codeScanner;
     private CodeScannerView scannerView;
     private Database db;
-    private ListenerRegistration expRegistration;
+    private ListenerRegistration expRegistration = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +77,6 @@ public class ScanActivity extends AppCompatActivity {
                     expRegistration = db.getExperimentByID(resultArray[0], new Database.GetExperimentCallback() {
                         @Override
                         public void onSuccess(Experiment experiment) {
-                            if (resultArray[5] == "None" || resultArray[6] == "None"){
-                                resultArray[5] = null;
-                                resultArray[6] = null;
-                            }
                             Trial trial = makeTrial(experiment, resultArray);
                             fillDialog(experiment, trial, resultArray);
                         }
@@ -112,10 +108,6 @@ public class ScanActivity extends AppCompatActivity {
                             expRegistration = db.getExperimentByID(trialInfo[0], new Database.GetExperimentCallback() {
                                 @Override
                                 public void onSuccess(Experiment experiment) {
-                                    if (trialInfo[5] == "None" || trialInfo[6] == "None"){
-                                        trialInfo[5] = null;
-                                        trialInfo[6] = null;
-                                    }
                                     Trial trial = makeTrial(experiment, trialInfo);
                                     fillDialog(experiment, trial, trialInfo);
                                 }
@@ -194,7 +186,7 @@ public class ScanActivity extends AppCompatActivity {
         User user = db.getDeviceUser();
         double longitude;
         double latitude;
-        if (resultArray[5] == null || resultArray[6] == null) {
+        if (resultArray[5].equals("None") || resultArray[6].equals("None")) {
             longitude = 999d;
             latitude = 999d;
         } else {
@@ -315,7 +307,9 @@ public class ScanActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         // Stop listening to changes in the Database.
-        expRegistration.remove();
+        if(expRegistration != null){
+            expRegistration.remove();
+        }
         codeScanner.releaseResources();
     }
 }
