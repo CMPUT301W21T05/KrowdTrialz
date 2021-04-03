@@ -1,6 +1,8 @@
 package com.T05.krowdtrialz.ui.contributors;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +30,6 @@ public class ContributorsActivity extends AppCompatActivity {
 
     private Experiment currentExperiment;
 
-
     private Database db;
 
     @Override
@@ -43,7 +44,8 @@ public class ContributorsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
-        Database.getInstance().getExperimentByIDNotLive(expID, new Database.GetExperimentCallback() {
+
+        db.getExperimentByIDNotLive(expID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
@@ -52,22 +54,7 @@ public class ContributorsActivity extends AppCompatActivity {
                 contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
 
                 contributorsList.setAdapter(contributorsArrayAdapter);
-
-                for (User u: currentExperiment.getContributors()) {
-
-                    db.getUserByIdNotLive(u.getId(), new Database.GetUserCallback() {
-                        @Override
-                        public void onSuccess(User user) {
-                            contributorsDataList.add(user);
-                            contributorsArrayAdapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            Log.e(TAG, "COULD NOT GET USERS");
-                        }
-                    });
-                }
+                updateConList(experiment);
             }
 
             @Override
@@ -75,5 +62,29 @@ public class ContributorsActivity extends AppCompatActivity {
                 currentExperiment = null;
             }
         });
+
+    }
+
+    private void updateConList(Experiment exp){
+        contributorsArrayAdapter.clear();
+        ArrayList<String> userIDs = new ArrayList<String>();
+        userIDs.addAll(exp.getContributorsIDs());
+        Log.d(TAG, userIDs.toString());
+        for(String id : userIDs){
+            Log.d(TAG, id);
+            db.getUserByIdNotLive(id, new Database.GetUserCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    contributorsArrayAdapter.add(user);
+                    contributorsArrayAdapter.notifyDataSetChanged();
+                    Log.d(TAG,"got a contributor");
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.e(TAG,"Could not get a contributor");
+                }
+            });
+        }
     }
 }
