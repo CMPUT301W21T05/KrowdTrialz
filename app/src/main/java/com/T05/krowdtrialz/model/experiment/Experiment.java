@@ -252,10 +252,10 @@ public abstract class Experiment implements Tagged {
     }
 
     /**
-     * Get all contriubtors to this experiment regardless of if they're ignored
+     * Get all IDs of contriubtors to this experiment regardless of if they're ignored
      *
      * @return
-     *  Set of users
+     *  Set of user IDs
      */
     @Exclude
     public Set<String> getContributorsIDs() {

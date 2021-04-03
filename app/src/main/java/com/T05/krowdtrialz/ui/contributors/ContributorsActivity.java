@@ -54,7 +54,7 @@ public class ContributorsActivity extends AppCompatActivity {
                 contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
 
                 contributorsList.setAdapter(contributorsArrayAdapter);
-                updateConList(experiment);
+                updateContributorsList(experiment);
             }
 
             @Override
@@ -65,7 +65,12 @@ public class ContributorsActivity extends AppCompatActivity {
 
     }
 
-    private void updateConList(Experiment exp){
+    /**
+     * This fetches a list of contributors for an experiment from the database.
+     *
+     * @param exp
+     */
+    private void updateContributorsList(Experiment exp){
         contributorsArrayAdapter.clear();
         ArrayList<String> userIDs = new ArrayList<String>();
         userIDs.addAll(exp.getContributorsIDs());
