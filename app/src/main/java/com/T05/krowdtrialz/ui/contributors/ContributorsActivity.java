@@ -35,12 +35,13 @@ public class ContributorsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contributors);
+        setTitle("Contributors");
 
         db = Database.getInstance();
 
-        setContentView(R.layout.activity_contributors);
-
         contributorsList = findViewById(R.id.contributors_listView);
+        contributorsDataList = new ArrayList<User>();
 
         Intent intent = getIntent();
         String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
@@ -49,7 +50,6 @@ public class ContributorsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
-                contributorsDataList = new ArrayList<User>();
 
                 contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
 
