@@ -1,6 +1,7 @@
 package com.T05.krowdtrialz.ui.contributors;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +61,10 @@ public class ContributorList extends ArrayAdapter<User> {
 
         if(experiment.isIgnored(contributor)){
             ignoreButton.setText("Un-Ignore");
+            ignoreButton.setBackgroundColor(view.getResources().getColor(R.color.unignore_blue));
         } else {
             ignoreButton.setText("Ignore");
+            ignoreButton.setBackgroundColor(view.getResources().getColor(R.color.ignore_orange));
         }
 
         ignoreButton.setOnClickListener(new View.OnClickListener() {
@@ -71,11 +74,13 @@ public class ContributorList extends ArrayAdapter<User> {
                     experiment.removeIgnoredUser(contributor);
                     db.updateExperiment(experiment);
                     ignoreButton.setText("Ignore");
+                    ignoreButton.setBackgroundColor(v.getResources().getColor(R.color.ignore_orange));
                     Log.d(TAG, "Un-Ignored User");
                 } else{
                     experiment.ignoreUser(contributor);
                     db.updateExperiment(experiment);
                     ignoreButton.setText("Un-Ignore");
+                    ignoreButton.setBackgroundColor(v.getResources().getColor(R.color.unignore_blue));
                     Log.d(TAG, "Ignored User");
                 }
             }
