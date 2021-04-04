@@ -43,6 +43,10 @@ public class AnswerViewModel extends ViewModel {
                         public void onSuccess(User user) {
                             answer.setResponder(user);
                             ArrayList<Answer> tmpList = answerList.getValue();
+                            if (tmpList.contains(answer)) {
+                                // avoid duplicate answers
+                                tmpList.remove(answer);
+                            }
                             tmpList.add(answer);
                             answerList.setValue(tmpList);
                         }
