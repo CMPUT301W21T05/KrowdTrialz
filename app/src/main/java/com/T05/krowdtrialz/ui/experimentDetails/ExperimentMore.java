@@ -140,15 +140,15 @@ public class ExperimentMore extends Fragment {
                     ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
                 }
             });
-
-            unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    db.deleteExperiment(experiment);
-                    getActivity().finish();
-                }
-            });
         }
+
+        unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteExperiment(experiment);
+                getActivity().finish();
+            }
+        });
 
         viewContributorsButton.setOnClickListener(new View.OnClickListener() {
             @Override
