@@ -7,11 +7,14 @@
 
     <Button
         android:id="@+id/ignore_contributor_button"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginHorizontal="10dp"
-        android:text="Ignore" />
+        android:layout_weight="1"
+        android:text="Ignore"
+        android:textSize="14sp"
+        app:backgroundTint="@color/ignore_orange"
+        app:iconTint="#FFFFFF" />
 
     <TextView
         android:id="@+id/contributor_name_textView"
@@ -19,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_weight="2"
+        android:fontFamily="sans-serif-black"
         android:text="Contributor Name"
-        android:textSize="20sp" />
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 
 </LinearLayout>
