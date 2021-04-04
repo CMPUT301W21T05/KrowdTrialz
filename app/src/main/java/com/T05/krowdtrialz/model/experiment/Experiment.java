@@ -1,11 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
-import android.util.Log;
-
 import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.interfaces.Tagged;
-import com.T05.krowdtrialz.model.scannable.Barcode;
-import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.google.firebase.firestore.Exclude;
@@ -29,8 +25,6 @@ public abstract class Experiment implements Tagged {
     private boolean locationRequired = false;
     public boolean status;
     private int minTrials = 0;
-    private ArrayList<Barcode> barcodes;
-    private ArrayList<QRCode> qrCodes;
     private ArrayList<User> ignoredUsers;
     private ArrayList<Question> questions;
 
@@ -44,8 +38,6 @@ public abstract class Experiment implements Tagged {
         // TODO generate unique id
         this.owner = owner;
         this.description = description;
-        barcodes = new ArrayList<Barcode>();
-        qrCodes = new ArrayList<QRCode>();
         status = active;
         ignoredUsers = new ArrayList<User>();
         questions = new ArrayList<Question>();
@@ -78,46 +70,6 @@ public abstract class Experiment implements Tagged {
     }
 
     public void setId(String id) { this.id = id; }
-
-    /**
-     * Get the barcodes associated with this Experiment
-     *
-     * @return array of associated barcodes
-     */
-    public ArrayList<Barcode> getBarcodes() {
-        return barcodes;
-    }
-
-    /**
-     * Add a new barcode to be associated with this experiment
-     *
-     * @param barcode
-     *      barcode to add
-     */
-    public void addBarcode(Barcode barcode) {
-        barcodes.add(barcode);
-    }
-
-
-    /**
-     * Get the QR codes associated with this experimet
-     *
-     * @return
-     *  Array of associated QR codes
-     */
-    public ArrayList<QRCode> getQrCodes() {
-        return qrCodes;
-    }
-
-    /**
-     * Add new QR code associated with this experiment
-     *
-     * @param qrCode
-     *  QR code to add
-     */
-    public void addQRCode(QRCode qrCode) {
-        qrCodes.add(qrCode);
-    }
 
     /**
      * Get owner of this experiment
