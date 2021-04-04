@@ -182,8 +182,8 @@ public class TrialIntentTests {
         solo.clickOnView(solo.getView(R.id.view_contributors_button));
 
         //Check off the contributor
-        solo.waitForView(solo.getView(R.id.contributors_title_textView));
-        solo.clickOnView(solo.getView(R.id.ignore_contributor_checkbox));
+        solo.waitForView(solo.getView(R.id.contributor_name_textView));
+        solo.clickOnView(solo.getView(R.id.ignore_contributor_button));
 
         //Go back to subscribed page
         solo.goBack();
