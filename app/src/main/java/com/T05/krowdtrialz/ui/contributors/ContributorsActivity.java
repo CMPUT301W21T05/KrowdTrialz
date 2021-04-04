@@ -51,7 +51,7 @@ public class ContributorsActivity extends AppCompatActivity {
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
 
-                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
+                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment, db);
 
                 contributorsList.setAdapter(contributorsArrayAdapter);
                 updateContributorsList(experiment);

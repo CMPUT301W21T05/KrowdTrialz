@@ -35,12 +35,12 @@ public class ContributorList extends ArrayAdapter<User> {
     private Experiment experiment;
     private Database db;
 
-    public ContributorList(Context context, ArrayList<User> contributors, Experiment experiment){
+    public ContributorList(Context context, ArrayList<User> contributors, Experiment experiment, Database db){
         super(context,0, contributors);
         this.contributors = contributors;
         this.context = context;
         this.experiment = experiment;
-        db = Database.getInstance();
+        this.db = db;
     }
 
     @NonNull

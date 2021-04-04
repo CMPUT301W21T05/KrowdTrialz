@@ -21,6 +21,7 @@ import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.QnA.Answer;
 import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.AnswerList;
 import com.T05.krowdtrialz.util.Database;
 import com.T05.krowdtrialz.util.QuestionList;
@@ -79,7 +80,19 @@ public class QuestionDetailsActivity extends AppCompatActivity {
                 ArrayList<Question> questionList = exp.getQuestions();
                 Question question = questionList.get( position);
                 questionText.setText(question.getQuestion());
-                usernameText.setText(question.getAskedBy().getUserName());
+
+                db.getUserByIdNotLive(question.getAskedBy().getId(), new Database.GetUserCallback() {
+                    @Override
+                    public void onSuccess(User user) {
+                        usernameText.setText(user.getUserName());
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Log.e(TAG, "COULD NOT GET USER");
+                    }
+                });
+
                 submitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -50,26 +50,39 @@ public class QuestionsActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_question_button);
 
         questionsDataList = new ArrayList<Question>();
-        questionsArrayAdapter = new QuestionList(this, questionsDataList, experimentID);
-        questionsList.setAdapter(questionsArrayAdapter);
 
-        questionViewModel.getQuestionList(experimentID).observe(this, new Observer<ArrayList<Question>>() {
+        db.getExperimentByIDNotLive(experimentID, new Database.GetExperimentCallback() {
             @Override
-            public void onChanged(ArrayList<Question> questions) {
-                questionsArrayAdapter.clear();
-                questionsArrayAdapter.addAll(questions);
-                questionsArrayAdapter.notifyDataSetChanged();
+            public void onSuccess(Experiment experiment) {
+
+                questionsArrayAdapter = new QuestionList(QuestionsActivity.this, questionsDataList, experiment);
+                questionsList.setAdapter(questionsArrayAdapter);
+
+                questionViewModel.getQuestionList(experimentID).observe(QuestionsActivity.this, new Observer<ArrayList<Question>>() {
+                    @Override
+                    public void onChanged(ArrayList<Question> questions) {
+                        questionsArrayAdapter.clear();
+                        questionsArrayAdapter.addAll(questions);
+                        questionsArrayAdapter.notifyDataSetChanged();
+                    }
+                });
+
+
+
+                addButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), AskQuestionActivity.class);
+                        intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experimentID);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure() {
+
             }
         });
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AskQuestionActivity.class);
-                intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experimentID);
-                startActivity(intent);
-            }
-        });
-
     }
 }

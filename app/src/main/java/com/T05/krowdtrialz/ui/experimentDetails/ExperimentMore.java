@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -106,25 +107,48 @@ public class ExperimentMore extends Fragment {
             }
         });
 
-        endExperimentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                experiment.setInactive();
-                db.updateExperiment(experiment);
 
-                ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+        if (experiment.getMinTrials() > experiment.getTrials().size() || experiment.isInactive()) {
+            endExperimentButton.setClickable(true);
+            endExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    CharSequence text;
+                    if (experiment.getMinTrials() > experiment.getTrials().size()) {
+                        text = "Not enough trials (" + experiment.getTrials().size() + " out of " +
+                                ((Integer) experiment.getMinTrials()).toString() + " needed)";
+                    } else {
+                        text = "Already inactive";
+                    }
 
-                ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
-            }
-        });
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
+        } else {
+            endExperimentButton.setEnabled(true);
+            endExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    experiment.setInactive();
+                    db.updateExperiment(experiment);
 
-        unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.deleteExperiment(experiment);
-                getActivity().finish();
-            }
-        });
+                    ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+
+                    ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
+                }
+            });
+
+            unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.deleteExperiment(experiment);
+                    getActivity().finish();
+                }
+            });
+        }
 
         viewContributorsButton.setOnClickListener(new View.OnClickListener() {
             @Override

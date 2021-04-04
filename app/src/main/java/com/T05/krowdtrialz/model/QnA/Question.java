@@ -1,8 +1,13 @@
 package com.T05.krowdtrialz.model.QnA;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.T05.krowdtrialz.model.user.User;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  *  This class represents a question
  */
@@ -44,5 +49,19 @@ public class Question {
 
     public void setAskedBy(User askedBy) {
         this.askedBy = askedBy;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question1 = (Question) o;
+        return Objects.equals(question, question1.question) &&
+                Objects.equals(askedBy, question1.askedBy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(question, askedBy);
     }
 }
