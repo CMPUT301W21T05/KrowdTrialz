@@ -43,8 +43,7 @@
             android:name=".ui.search.SearchActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".ui.contributors.ContributorsActivity"
-                    android:parentActivityName=".ui.experimentDetails.ExperimentDetailsActivity"/>
+        <activity android:name=".ui.contributors.ContributorsActivity"/>
         <activity android:name=".ui.experimentDetails.ExperimentDetailsActivity"
                     android:parentActivityName=".ui.experimentDetails.ExperimentDetailsActivity"/>
         <activity
