@@ -77,8 +77,13 @@ public class QuestionDetailsActivity extends AppCompatActivity {
         expRegistration = db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment exp) {
+                int positionFinal = position;
+                if (positionFinal == -1){
+                    positionFinal = exp.getQuestions().size() - 1;
+                }
+
                 ArrayList<Question> questionList = exp.getQuestions();
-                Question question = questionList.get( position);
+                Question question = questionList.get(positionFinal);
                 questionText.setText(question.getQuestion());
 
                 db.getUserByIdNotLive(question.getAskedBy().getId(), new Database.GetUserCallback() {
