@@ -18,18 +18,32 @@ public class MeasurementTrial extends Trial {
         super();
     }
 
-    public MeasurementTrial(User user, int longitude, int latitude) {
+    public MeasurementTrial(User user) {
+        super(user);
+    }
+
+    public MeasurementTrial(User user, double longitude, double latitude) {
         super(user, longitude, latitude);
     }
 
-    public MeasurementTrial(User user, int longitude, int latitude, String dateCreated) {
+    public MeasurementTrial(User user, double longitude, double latitude, String dateCreated) {
         super(user, longitude, latitude, dateCreated);
     }
 
+    /**
+     * Get value of the measurement trial
+     * @return
+     *  floating point measurement
+     */
     public Float getMeasurementValue() {
         return measurementValue;
     }
 
+    /**
+     * Add result to the trial
+     *
+     * @param measurementValue trial result
+     */
     public void setMeasurementValue(Float measurementValue) {
         this.measurementValue = measurementValue;
     }

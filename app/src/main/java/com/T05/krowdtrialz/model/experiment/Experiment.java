@@ -1,8 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
+import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.interfaces.Tagged;
-import com.T05.krowdtrialz.model.scannable.Barcode;
-import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.google.firebase.firestore.Exclude;
@@ -11,11 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Base class to represent all types of experiments.
+ * Base class to represent all types of experiments. Note: experiments are active by default.
  */
 public abstract class Experiment implements Tagged {
     private String id;
@@ -26,9 +26,8 @@ public abstract class Experiment implements Tagged {
     private boolean locationRequired = false;
     public boolean status;
     private int minTrials = 0;
-    private ArrayList<Barcode> barcodes;
-    private ArrayList<QRCode> qrCodes;
     private ArrayList<User> ignoredUsers;
+    private ArrayList<Question> questions;
 
     private final boolean active = true;
     private final boolean inactive = false;
@@ -40,42 +39,55 @@ public abstract class Experiment implements Tagged {
         // TODO generate unique id
         this.owner = owner;
         this.description = description;
-        barcodes = new ArrayList<Barcode>();
-        qrCodes = new ArrayList<QRCode>();
         status = active;
         ignoredUsers = new ArrayList<User>();
+        questions = new ArrayList<Question>();
     }
 
+    /**
+     * Get the trials for this experiment
+     *
+     * @return generic list of trials
+     */
+    abstract public ArrayList<? extends Trial> getTrials();
+
+    /**
+     * Add a new trial to the experiment
+     *
+     * @param trial the trial to be added
+     * @param <E> trial type matching the experiment type
+     *
+     * @alert trial type E must match the experiment type.
+     */
+    abstract public <E extends Trial> void addTrial(E trial);
+
+    /**
+     *
+     * @return
+     *  ID of the current experiment
+     */
     public String getId() {
         return id;
     }
 
     public void setId(String id) { this.id = id; }
 
-    abstract public ArrayList<? extends Trial> getTrials();
-
-    abstract public <E extends Trial> void addTrial(E trial);
-
-    public ArrayList<Barcode> getBarcodes() {
-        return barcodes;
-    }
-
-    public void addBarcode(Barcode barcode) {
-        barcodes.add(barcode);
-    }
-
-    public ArrayList<QRCode> getQrCodes() {
-        return qrCodes;
-    }
-
-    public void addQRCode(QRCode qrCode) {
-        qrCodes.add(qrCode);
-    }
-
+    /**
+     * Get owner of this experiment
+     *
+     * @return
+     */
     public User getOwner() {
         return owner;
     }
 
+    /**
+     * Query if the given user owns the current experiment
+     *
+     * @param user user to check if owner
+     * @return
+     *  true if owner, otherwise false
+     */
     public boolean isOwner(User user){
         if(owner.getId().equals(user.getId())){
             return true;
@@ -122,10 +134,29 @@ public abstract class Experiment implements Tagged {
 
     abstract public String getType();
 
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
+    public void addQuestion(Question question) {
+        this.questions.add(question);
+    }
+
+    /**
+     * Get array of users to be excluded from results
+     *
+     * @return array of ignored users
+     */
     public ArrayList<User> getIgnoredUsers(){
         return ignoredUsers;
     }
 
+    /**
+     * Check if the give user is to be ignored
+     *
+     * @param user
+     * @return true if user is ignored, false otherwise
+     */
     public boolean isIgnored(User user){
         for (User i : ignoredUsers){
             if(i.getId().equals(user.getId())) {
@@ -135,10 +166,20 @@ public abstract class Experiment implements Tagged {
         return false;
     }
 
+    /**
+     * Set user to be ignored in this experiment's results
+     *
+     * @param user user to be ignored
+     */
     public void ignoreUser(User user){
         ignoredUsers.add(user);
     }
 
+    /**
+     * Ignore users as a batch action
+     *
+     * @param users
+     */
     public void ignoreMultipleUsers(ArrayList<User> users){
         ignoredUsers.addAll(users);
     }
@@ -149,6 +190,12 @@ public abstract class Experiment implements Tagged {
         }
     }
 
+    /**
+     * Get all contriubtors to this experiment regardless of if they're ignored
+     *
+     * @return
+     *  Set of users
+     */
     @Exclude
     public Set<User> getContributors() {
         ArrayList<Trial> trials = (ArrayList<Trial>) getTrials();
@@ -157,6 +204,25 @@ public abstract class Experiment implements Tagged {
         return users;
     }
 
+    /**
+     * Get all IDs of contriubtors to this experiment regardless of if they're ignored
+     *
+     * @return
+     *  Set of user IDs
+     */
+    @Exclude
+    public Set<String> getContributorsIDs() {
+        ArrayList<Trial> trials = (ArrayList<Trial>) getTrials();
+        Set<String> userIDs = new HashSet<>();
+        trials.stream().forEach(trial -> userIDs.add(trial.getExperimenter().getId()));
+        return userIDs;
+    }
+
+    /**
+     * Get the trials only from the non-ignored contributors
+     *
+     * @return array of trials from valid users
+     */
     @Exclude
     public ArrayList<? extends Trial> getValidTrials() {
         ArrayList<? extends Trial> trials = getTrials();
@@ -189,6 +255,11 @@ public abstract class Experiment implements Tagged {
         status = inactive;
     }
 
+    /**
+     * Query if the experiment is inactive
+     *
+     * @return true if inactive
+     */
     public boolean isInactive() {
         return status == inactive;
     }
@@ -258,10 +329,6 @@ public abstract class Experiment implements Tagged {
 
     @Override
     public int hashCode() {
-        int result = 0x05;
-        result = 31 * result + getId().hashCode();
-        result = 31 * result + getDescription().hashCode();
-        result = 31 * result + getType().hashCode();
-        return result;
+        return Objects.hash(id);
     }
 }

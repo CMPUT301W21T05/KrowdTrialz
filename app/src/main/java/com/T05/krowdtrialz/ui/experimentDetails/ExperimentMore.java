@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,13 +19,17 @@ import com.T05.krowdtrialz.MainActivity;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.QnA.QuestionsActivity;
 import com.T05.krowdtrialz.ui.contributors.ContributorsActivity;
 import com.T05.krowdtrialz.util.Database;
 
 import org.apache.commons.math3.analysis.function.Exp;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Display misc. information about the experiment. Customized based on whether or not the user
+ * is the owner of the current experiment
+ *
+ * A simple {@link Fragment} subclass with dependency injection
  * Use the {@link ExperimentMore#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -102,17 +107,40 @@ public class ExperimentMore extends Fragment {
             }
         });
 
-        endExperimentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                experiment.setInactive();
-                db.updateExperiment(experiment);
 
-                ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+        if (experiment.getMinTrials() > experiment.getTrials().size() || experiment.isInactive()) {
+            endExperimentButton.setClickable(true);
+            endExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    CharSequence text;
+                    if (experiment.getMinTrials() > experiment.getTrials().size()) {
+                        text = "Not enough trials (" + experiment.getTrials().size() + " out of " +
+                                ((Integer) experiment.getMinTrials()).toString() + " needed)";
+                    } else {
+                        text = "Already inactive";
+                    }
 
-                ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
-            }
-        });
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
+        } else {
+            endExperimentButton.setEnabled(true);
+            endExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    experiment.setInactive();
+                    db.updateExperiment(experiment);
+
+                    ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+
+                    ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
+                }
+            });
+        }
 
         unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +173,11 @@ public class ExperimentMore extends Fragment {
         Log.d(TAG, "view map");
         Toast.makeText(view.getContext(), "pressed view map",Toast.LENGTH_SHORT).show();
         // TODO: open map activity
+        Intent intent = new Intent(view.getContext(), ExperimentMap.class);
+
+        intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+
+        startActivity(intent);
     }
 
     /**
@@ -155,6 +188,10 @@ public class ExperimentMore extends Fragment {
     public void viewQnA(View view){
         Log.d(TAG, "view Q&A");
         Toast.makeText(view.getContext(), "pressed view Q&A",Toast.LENGTH_SHORT).show();
-        // TODO: open Q&A activity
+        Intent intent = new Intent(view.getContext(), QuestionsActivity.class);
+
+        intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+
+        startActivity(intent);
     }
 }

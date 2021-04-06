@@ -1,11 +1,14 @@
 package com.T05.krowdtrialz.ui.subscribed;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 
@@ -26,11 +29,15 @@ import com.T05.krowdtrialz.util.ExperimentList;
 
 import java.util.ArrayList;
 
-
-
+/**
+ * View all subscribed experiments in the MainActivity
+ *
+ * @todo This needs to be updated properly. Currently the fragment must be reloaded to see all experiments.
+ */
 public class SubscribedFragment extends Fragment {
 
     private SubscribedViewModel subscribedViewModel;
+    private Button scanButton;
 
     ListView experimentsList;
     ArrayAdapter<Experiment> experimentArrayAdapter;
@@ -41,13 +48,12 @@ public class SubscribedFragment extends Fragment {
         subscribedViewModel = new ViewModelProvider(this).get(SubscribedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_subscribed, container, false);
 
-
         experimentsList = root.findViewById(R.id.subscribed_exp_listView);
 
-        User deviceUser = Database.getInstance().getDeviceUser();
-
         experimentsDataList = new ArrayList<Experiment>();
-        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList, deviceUser);
+
+        experimentArrayAdapter = new ExperimentList(root.getContext(), experimentsDataList);
+
         experimentsList.setAdapter(experimentArrayAdapter);
 
         subscribedViewModel.getExperimentList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Experiment>>() {
@@ -55,16 +61,25 @@ public class SubscribedFragment extends Fragment {
             public void onChanged(ArrayList<Experiment> experiments) {
                 experimentArrayAdapter.clear();
                 experimentArrayAdapter.addAll(experiments);
+                experimentArrayAdapter.notifyDataSetChanged();
             }
         });
 
+        scanButton = getActivity().findViewById(R.id.scan_button);
 
         return root;
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        scanButton.setVisibility(View.GONE);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        scanButton.setVisibility(View.VISIBLE);
         experimentArrayAdapter.notifyDataSetChanged();
     }
 }

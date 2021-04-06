@@ -3,16 +3,20 @@ package com.T05.krowdtrialz.model.experiment;
 import android.util.Log;
 
 import com.T05.krowdtrialz.model.trial.BinomialTrial;
-import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
-import com.google.firebase.firestore.Exclude;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Representation of binomial experiment. Responsible for maintaining a list of the trials
+ * associated with this experiment, and the "pass"/"fail" criteria of the experiment.
+ *
+ * Binomial experiments store pass/fail results, such as the results of a coin flip
+ */
 public class BinomialExperiment extends Experiment {
     public static final String type = "Binomial";
 

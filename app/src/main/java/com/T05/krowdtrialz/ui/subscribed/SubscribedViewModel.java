@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
@@ -17,14 +18,20 @@ public class SubscribedViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Experiment>> experimentsList;
     private static final String TAG = "SubscribedViewModel";
 
+    private ListenerRegistration expRegistration;
+
     public SubscribedViewModel() {
         db = Database.getInstance();
         experimentsList = new MutableLiveData<>();
     }
 
+    /**
+     * Get list of subscribed experiments
+     * @return experiments currently subscribed to
+     */
     public LiveData<ArrayList<Experiment>> getExperimentList(){
         db = Database.getInstance();
-        db.getExperimentsBySubscriber(db.getDeviceUser(), new Database.QueryExperimentsCallback() {
+        expRegistration = db.getExperimentsBySubscriber(db.getDeviceUser(), new Database.QueryExperimentsCallback() {
             @Override
             public void onSuccess(ArrayList<Experiment> experiments) {
                 ArrayList<Experiment> newList = new ArrayList<>();
@@ -41,4 +48,10 @@ public class SubscribedViewModel extends ViewModel {
         return experimentsList;
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        // Stop listening to changes in the Database
+        expRegistration.remove();
+    }
 }

@@ -16,22 +16,25 @@ import com.T05.krowdtrialz.model.trial.BinomialTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 public class AddBinomialTrialActivity extends TrialActivity {
     private Database db;
     private User user;
-    private int longitude;
-    private int latitude;
     private EditText passEditText;
     private EditText failEditText;
     private TextView passTextView;
     private TextView failTextView;
     private BinomialTrial binomialTrial;
 
+    private ListenerRegistration expRegistration;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_binomial_trial);
+
+        setTitle("Add Binomial Trial");
 
         db = Database.getInstance();
 
@@ -42,7 +45,7 @@ public class AddBinomialTrialActivity extends TrialActivity {
         failTextView = findViewById(R.id.binomial2_textView);
 
         Intent intent = getIntent();
-        db.getExperimentByID(intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID), new Database.GetExperimentCallback() {
+        expRegistration = db.getExperimentByID(intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID), new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
                 BinomialExperiment binomialExperiment = (BinomialExperiment) experiment;
@@ -55,21 +58,21 @@ public class AddBinomialTrialActivity extends TrialActivity {
 
             }
         });
-
-
-
     }
 
+    /**
+     * Construct a trial from the current application state
+     *
+     * @return trial
+     */
     @Override
     protected Trial createTrial() {
 
         // get user, location and create a trial
         db = Database.getInstance();
         user = db.getDeviceUser();
-        longitude = 90; // This is temporary until Geolocation is implemented
-        latitude = 90; // This is temporary until Geolocation is implemented
 
-        binomialTrial = new BinomialTrial(user, longitude, latitude);
+        binomialTrial = new BinomialTrial(user);
 
         // set the pass and the fail counts
         int passText = Integer.parseInt(passEditText.getText().toString());
@@ -79,4 +82,11 @@ public class AddBinomialTrialActivity extends TrialActivity {
 
         return binomialTrial;
     } // end createTrial
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        expRegistration.remove();
+    }
 }// end AddBinomialTrialActivity

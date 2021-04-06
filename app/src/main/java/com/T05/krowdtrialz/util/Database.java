@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
 import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
@@ -20,7 +22,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -44,8 +49,6 @@ import static android.content.ContentValues.TAG;
  * @author
  *  Furmaan Sekhon and Jacques Leong-Sit
  */
-
-
 public class Database {
 
     private FirebaseFirestore db;
@@ -54,9 +57,12 @@ public class Database {
     // The user with a unique id associated with this device.
     // This is populated when the app is opened.
     private User deviceUser;
+    private ListenerRegistration deviceUserListenerRegistration;
 
     // The single instance for the singleton pattern
     private static Database instance = null;
+
+    private ListenerRegistration listener;
 
     /**
      * Initializes the single instance.
@@ -98,10 +104,67 @@ public class Database {
 
     /**
      * This gets an experiment of a unique ID
+     *
+     * @param expID An Experiment ID
+     * @param callback Callback to call when query is finished
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
+     * @author Vasu Gupta
+     */
+    public ListenerRegistration getExperimentByID(String expID, GetExperimentCallback callback){
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("AllExperiments");
+
+        Query query = userCollectionReference.whereEqualTo("id", expID);
+        ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException error) {
+                if(error != null) {
+                    Log.w(TAG, "Listen failed.", error);
+                    return;
+                }
+
+                Experiment experiment = null;
+
+                if(value.size() == 1){
+                    for(QueryDocumentSnapshot doc : value){
+                        if(doc.get("type").toString().equals("Binomial")){
+                            experiment = doc.toObject(BinomialExperiment.class);
+                        }else if(doc.get("type").toString().equals("Count")){
+                            experiment = doc.toObject(CountExperiment.class);
+                        }else if(doc.get("type").toString().equals("Measurement")){
+                            experiment = doc.toObject(MeasurementExperiment.class);
+                        }else if(doc.get("type").toString().equals("Integer")){
+                            experiment = doc.toObject(IntegerExperiment.class);
+                        } else{
+                            Log.e(TAG, "Unknown Experiment Type.");
+                            callback.onFailure();
+                            return;
+                        }
+                    }
+                    Log.d(TAG, "Experiment of ID " + expID + " found.");
+                    callback.onSuccess(experiment);
+                } else if(value.size() > 1) {
+                    Log.e(TAG, "Multiple experiments with same ID " + expID.toString() + " found.");
+                    callback.onFailure();
+                } else{
+                    Log.e(TAG, "No experiment of ID: " + expID.toString() + " found.");
+                    callback.onFailure();
+                }
+            }
+        });
+
+        return registration;
+    }
+
+
+    /**
+     * This gets an experiment of a unique ID. Not live.
      * @param expID An Experiment ID
      * @author Vasu Gupta
      */
-    public void getExperimentByID(String expID, GetExperimentCallback callback){
+    public void getExperimentByIDNotLive(String expID, GetExperimentCallback callback){
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("AllExperiments");
 
@@ -138,7 +201,6 @@ public class Database {
             }
         });
     }
-
 
     /**
      * This saves unique id after initializeDeviceUser generates a unique id
@@ -200,12 +262,13 @@ public class Database {
             });
         } else {
             // User exists, restore the user's info from the database
-            getUserById(localID, new GetUserCallback() {
+            deviceUserListenerRegistration = getUserById(localID, new GetUserCallback() {
                 @Override
                 public void onSuccess(User user) {
                     deviceUser = user;
                     Log.d(TAG, "Successfully retrieved existing user information from database."
                             + " ID: " + deviceUser.getId());
+                    deviceUserListenerRegistration.remove();
                     callback.onSuccess();
                 }
 
@@ -247,6 +310,22 @@ public class Database {
         CollectionReference userCollectionReference = db.collection("Users");
         userCollectionReference.document(deviceUser.getId()).set(user);
 
+        listener = getExperimentsByOwner(user, new QueryExperimentsCallback() {
+            @Override
+            public void onSuccess(ArrayList<Experiment> experiments) {
+                for (Experiment e: experiments) {
+                    e.setOwner(user);
+                    updateExperiment(e);
+                }
+                listener.remove();
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "ERROR UPDATING OWNED EXPERIMENTS");
+                listener.remove();
+            }
+        });
         // Update the user locally
         deviceUser = user;
     }
@@ -255,9 +334,44 @@ public class Database {
      * Queries for the user associated with the given ID.
      * @param id The ID of the user to search for.
      * @param callback The callback to be called when the query is finished.
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      * @author Ryan Shukla
      */
-    public void getUserById(String id, GetUserCallback callback) {
+    public ListenerRegistration getUserById(String id, GetUserCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        CollectionReference userCollectionReference = db.collection("Users");
+
+        Query query = userCollectionReference.whereEqualTo("id", id); // Create a query to check if ID exists in the database already
+        ListenerRegistration registration = query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(value.size() == 1) {
+                    User user = null;
+                    for (QueryDocumentSnapshot document : value) {
+                        user = document.toObject(User.class);
+                    }
+                    callback.onSuccess(user);
+                } else if (value.size() > 1) {
+                    Log.e(TAG, "Multiple users with same ID found.");
+                    callback.onFailure();
+                } else {
+                    Log.e(TAG, "No user with given ID found.");
+                    callback.onFailure();
+                }
+            }
+        });
+
+        return registration;
+    }
+
+    /**
+     * Queries for the user associated with the given ID. No callback.
+     * @param id The ID of the user to search for.
+     * @param callback The callback to be called when the query is finished.
+     * @author Ryan Shukla
+     */
+    public void getUserByIdNotLive(String id, GetUserCallback callback) {
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
 
@@ -431,22 +545,61 @@ public class Database {
     }// end addTrial
 
     /**
+     * This method adds the given question to the given experiment
+     * @author
+     *  Furmaan Sekhon and Jacques Leong-Sit and Ricky Au
+     * @param question
+     *  this is the question to be added
+     * @param experiment
+     *  this is the experiment that the question is being added to
+     */
+    public void addQuestion(Question question, Experiment experiment) {
+
+        db = FirebaseFirestore.getInstance();
+        CollectionReference lookupCollectionReference = db.collection("ExperimentLookups");
+
+        lookupCollectionReference.document(String.valueOf(experiment.getId())).collection("Paths").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // if successful get list of all paths that need updating
+                    List<String> pathList = new ArrayList<>();
+                    experiment.addQuestion(question);
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        pathList.add(String.valueOf(document.get("Path")));
+                    }
+                    // update each path
+                    for (int i = 0; i < pathList.size(); i++) {
+                        db.document(pathList.get(i)).set(experiment);
+                    }
+
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }// end on complete
+        });
+
+    }// end addQuestion
+
+    /**
      * This method returns a list of experiments that are owned by a given user
      * @author
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param owner
      *  This is the user that owns the experiments
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      */
-    public void getExperimentsByOwner (User owner, QueryExperimentsCallback callback) {
+    public ListenerRegistration getExperimentsByOwner (User owner, QueryExperimentsCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
         String ownerID = owner.getId();
-        ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
-        userCollectionReference.document(ownerID).collection("OwnedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ListenerRegistration registration = userCollectionReference.document(ownerID).collection("OwnedExperiments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                ArrayList<Experiment> ownedExperiments = new ArrayList<Experiment>();
+                for (QueryDocumentSnapshot document : value) {
                     if(document.get("type").toString().equals("Binomial")){
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                         ownedExperiments.add(experiment);
@@ -462,13 +615,10 @@ public class Database {
                     }
 
                 }
-                if(ownedExperiments.size() > 0){
-                    callback.onSuccess(ownedExperiments);
-                }else{
-                    callback.onFailure();
-                }
+                callback.onSuccess(ownedExperiments);
             }
         });
+        return registration;
     }// end getExperimentsByOwner
 
     /**
@@ -477,17 +627,19 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param subscriber
      *  This is the user that is subscribed to the experiments
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      */
-    public void getExperimentsBySubscriber (User subscriber, QueryExperimentsCallback callback) {
+    public ListenerRegistration getExperimentsBySubscriber (User subscriber, QueryExperimentsCallback callback) {
 
         db = FirebaseFirestore.getInstance();
         CollectionReference userCollectionReference = db.collection("Users");
         String subscriberID = subscriber.getId();
-        ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
-        userCollectionReference.document(subscriberID).collection("SubscribedExperiments").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        ListenerRegistration registration = userCollectionReference.document(subscriberID).collection("SubscribedExperiments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                ArrayList<Experiment> subscribedExperiments = new ArrayList<Experiment>();
+                for (QueryDocumentSnapshot document : value) {
                     if(document.get("type").toString().equals("Binomial")){
                         BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                         subscribedExperiments.add(experiment);
@@ -503,14 +655,11 @@ public class Database {
                     }
 
                 }
-                if(subscribedExperiments.size() > 0){
-                    callback.onSuccess(subscribedExperiments);
-
-                }else{
-                    callback.onFailure();
-                }
+                callback.onSuccess(subscribedExperiments);
             }
         });
+
+        return registration;
     }// end getExperimentsBySubscriber
 
     /**
@@ -562,8 +711,10 @@ public class Database {
      *  Furmaan Sekhon and Jacques Leong-Sit
      * @param tags
      *  This is the tags to search for
+     * @return Returns a ListenerRegistration. This is mainly so that remove() can be called to stop
+     *          listening for changes.
      */
-    public void getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
+    public ListenerRegistration getExperimentsByTags (ArrayList<String> tags, QueryExperimentsCallback callback) {
 
         for (int i = 0; i < tags.size(); i++) {
             tags.set(i, tags.get(i).toLowerCase());
@@ -573,14 +724,17 @@ public class Database {
 
         Set<Experiment> resultSet = new HashSet<>();
 
+        // Stores the registration for each sub query
+        MultipleListenerRegistration registrations = new MultipleListenerRegistration();
+
         CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
 
         for (String tag: tags) {
-            allExperimentsCollectionReference.whereArrayContains("tags", tag).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            ListenerRegistration registration = allExperimentsCollectionReference.whereArrayContains("tags", tag).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     Set<Experiment> matchingExperiments = new HashSet<>();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    for (QueryDocumentSnapshot document : value) {
                         if (document.get("type").toString().equals("Binomial")) {
                             BinomialExperiment experiment = document.toObject(BinomialExperiment.class);
                             matchingExperiments.add(experiment);
@@ -596,28 +750,22 @@ public class Database {
                         }
                     }
 
+                    // Intersect the new set of experiments with the previous set
                     if (resultSet.isEmpty()) {
                         resultSet.addAll(matchingExperiments);
                     } else {
                         resultSet.retainAll(matchingExperiments);
                     }
 
-                    if (matchingExperiments.size() > 0) {
-                        ArrayList<Experiment> output = new ArrayList<>();
-                        output.addAll(resultSet);
-                        callback.onSuccess(output);
-                    } else {
-                        callback.onFailure();
-                    }
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    callback.onFailure();
+                    ArrayList<Experiment> output = new ArrayList<>();
+                    output.addAll(resultSet);
+                    callback.onSuccess(output);
                 }
             });
+            registrations.add(registration);
         }
+
+        return registrations;
     }// end getExperimentsByTags
 
     /**
@@ -644,6 +792,11 @@ public class Database {
         });
     }// end updateExperiment
 
+    /**
+     *  This method deletes the given experiment from the database
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     * @param experiment
+     */
     public void deleteExperiment (Experiment experiment) {
         db = FirebaseFirestore.getInstance();
         CollectionReference lookupCollectionReference = db.collection("ExperimentLookups");
@@ -661,6 +814,72 @@ public class Database {
             }
         });
     }// end removeExperiment
+
+    /**
+     *  This method saves barcode and related trial info to database
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     * @param data this is the trial info and barcode to be saved
+     */
+    public void saveBarcode (String[] data) {
+        db = FirebaseFirestore.getInstance();
+        CollectionReference barcodeCollectionReference = db.collection("Barcodes");
+
+        // Add Barcode
+        HashMap<String, String> newBarcode = new HashMap<>();
+        newBarcode.put("ExperimentID", data[1]);
+        newBarcode.put("ExperimentType", data[2]);
+        newBarcode.put("PassCount", data[3]);
+        newBarcode.put("FailCount", data[4]);
+        newBarcode.put("Value", data[5]);
+        if (data[6] == null || data[7] == null) {
+            newBarcode.put("Longitude", null);
+            newBarcode.put("Latitude", null);
+        } else {
+            newBarcode.put("Longitude", data[6]);
+            newBarcode.put("Latitude", data[7]);
+        }
+        barcodeCollectionReference.document(data[0]).set(newBarcode);
+    }
+
+    /**
+     *  This method takes a barcode and searches for related trial info in the database
+     *
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     * @param barcode This is the barcode to search
+     * @param callback
+     */
+    public void getTrialInfoByBarcode(String barcode, GetTrialInfoCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        DocumentReference barcodeDocumentReference = db.collection("Barcodes").document(barcode);
+
+        String[] results = new String[7];
+        barcodeDocumentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                results[0] = (String) documentSnapshot.get("ExperimentID");
+                results[1] = (String) documentSnapshot.get("ExperimentType");
+                results[2] = (String) documentSnapshot.get("PassCount");
+                results[3] = (String) documentSnapshot.get("FailCount");
+                results[4] = (String) documentSnapshot.get("Value");
+                results[5] = (String) documentSnapshot.get("Longitude");
+                results[6] = (String) documentSnapshot.get("Latitude");
+
+                for (int i = 0; i < results.length; i++){
+                    if(results[i] == null) {
+                        callback.onFailure();
+                        return;
+                    }
+                }
+
+                callback.onSuccess(results);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure();
+            }
+        });
+    }
 
     /**
      * For this call back onSuccess indicates that the id does not exist in the database
@@ -708,6 +927,15 @@ public class Database {
      */
     public interface InitializeDatabaseCallback {
         public void onSuccess();
+        public void onFailure();
+    }
+
+    /**
+     * Callback for methods that query trial info
+     * @author Furmaan Sekhon and Jacques Leong-Sit
+     */
+    public interface GetTrialInfoCallback {
+        public void onSuccess(String[] trialInfo);
         public void onFailure();
     }
 }// end Database

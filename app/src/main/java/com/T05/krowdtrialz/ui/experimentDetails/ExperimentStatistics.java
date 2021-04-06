@@ -19,7 +19,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Show statistics for the statistics experiment selected. Based on valid user's trials.
+ *
+ * A simple {@link Fragment} subclass with dependency injection.
  * Use the {@link ExperimentStatistics#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -77,6 +79,8 @@ public class ExperimentStatistics extends Fragment {
 
         return root;
     }
+
+
 
     /**
      * This method fills out Mean, Standard deviation, Median and maybe some trial results

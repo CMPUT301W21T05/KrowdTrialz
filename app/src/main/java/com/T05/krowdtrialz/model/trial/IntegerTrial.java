@@ -20,18 +20,33 @@ public class IntegerTrial extends Trial {
         super();
     }
 
-    public IntegerTrial(User user, int longitude, int latitude) {
+    public IntegerTrial(User user) {
+        super(user);
+    }
+
+    public IntegerTrial(User user, double longitude, double latitude) {
         super(user, longitude, latitude);
     }
 
-    public IntegerTrial(User user, int longitude, int latitude, String dateCreated) {
+    public IntegerTrial(User user, double longitude, double latitude, String dateCreated) {
         super(user, longitude, latitude, dateCreated);
     }
 
+    /**
+     * Get integer trial value
+     *
+     * @return
+     *  value of the trial result
+     */
     public int getValue() {
         return value;
     }
 
+    /**
+     * Set value of the integer trial
+     *
+     * @param value trial result
+     */
     public void setValue(int value) {
         this.value = value;
     }
