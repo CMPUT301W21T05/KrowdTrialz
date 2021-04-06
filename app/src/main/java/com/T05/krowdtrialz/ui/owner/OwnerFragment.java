@@ -23,6 +23,10 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
+/**
+ * Show user information with editable fields if user is same as
+ * device user
+ */
 public class OwnerFragment extends Fragment {
 
     private final String TAG = "OwnerFragment";

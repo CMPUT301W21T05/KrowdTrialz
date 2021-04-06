@@ -25,6 +25,10 @@ public class SubscribedViewModel extends ViewModel {
         experimentsList = new MutableLiveData<>();
     }
 
+    /**
+     * Get list of subscribed experiments
+     * @return experiments currently subscribed to
+     */
     public LiveData<ArrayList<Experiment>> getExperimentList(){
         db = Database.getInstance();
         expRegistration = db.getExperimentsBySubscriber(db.getDeviceUser(), new Database.QueryExperimentsCallback() {

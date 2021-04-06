@@ -20,6 +20,9 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
+/**
+ * Activity to display the list of contributors in ListView
+ */
 public class ContributorsActivity extends AppCompatActivity {
 
     private static final String TAG = "CONTRIBUTORS ACTIVITY";

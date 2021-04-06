@@ -29,6 +29,15 @@ public class AnswerViewModel extends ViewModel {
         answerList.setValue(new ArrayList<>());
     }
 
+    /**
+     * Get list of ansers to the current question
+     * @param expId
+     *   Experiment of interest
+     * @param position
+     *   Answer's position in list
+     * @return
+     *   Live updating list of answers
+     */
     public LiveData<ArrayList<Answer>> getAnswerList(String expId, int position){
         db = Database.getInstance();
         expRegistration = db.getExperimentByID(expId, new Database.GetExperimentCallback() {

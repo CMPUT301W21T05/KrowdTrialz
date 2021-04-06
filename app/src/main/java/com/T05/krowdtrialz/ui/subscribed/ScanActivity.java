@@ -54,6 +54,9 @@ public class ScanActivity extends AppCompatActivity {
         setupPermissions();
     }
 
+    /**
+     * Scan code using phone camera
+     */
     private void codeScanner() {
 
         scannerView = findViewById(R.id.scanner_codeScannerView);
@@ -154,6 +157,9 @@ public class ScanActivity extends AppCompatActivity {
         codeScanner.startPreview();
     }
 
+    /**
+     * Get required device permissions
+     */
     private void setupPermissions() {
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
 
@@ -164,6 +170,9 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Package permissions request
+     */
     private void makeRequest() {
         String[] permissionArray = {Manifest.permission.CAMERA};
         ActivityCompat.requestPermissions(this, permissionArray, CAMERA_REQUEST_CODE);
@@ -181,6 +190,13 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Make trial out of the scanned code
+     * @param experiment Experiment to add results to
+     * @param resultArray Retults(s) to add to the trial
+     * @return
+     *   trial to be added
+     */
     private Trial makeTrial(Experiment experiment, String[] resultArray){
         String type = experiment.getType();
         User user = db.getDeviceUser();
@@ -220,6 +236,15 @@ public class ScanActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Populate dialog box for user confirmation
+     * @param experiment
+     *      experiment to add to
+     * @param trial
+     *      Trial to be added
+     * @param resultArray
+     *      Results to be added to experiment
+     */
     private void fillDialog(Experiment experiment, Trial trial, String[] resultArray){
         String type = experiment.getType();
         if (trial != null) {

@@ -27,6 +27,12 @@ public class QuestionViewModel extends ViewModel {
         questionList = new MutableLiveData<>();
     }
 
+    /**
+     * Get Experiment's list of questions
+     *
+     * @param expId Experiment of interest
+     * @return Live updating list of questions
+     */
     public LiveData<ArrayList<Question>> getQuestionList(String expId){
         db = Database.getInstance();
         expRegistration = db.getExperimentByID(expId, new Database.GetExperimentCallback() {
