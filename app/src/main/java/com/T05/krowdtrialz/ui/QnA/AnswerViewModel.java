@@ -44,9 +44,13 @@ public class AnswerViewModel extends ViewModel {
             @Override
             public void onSuccess(Experiment experiment) {
                 Log.d(TAG, "Got experiment query result: " + experiment.toString());
+                int positionFinal = position;
 
                 // Get up to date user info for each answer
-                for (Answer answer: experiment.getQuestions().get(position).getAnswers()) {
+                if (positionFinal == -1){
+                    positionFinal = experiment.getQuestions().size() - 1;
+                }
+                for (Answer answer: experiment.getQuestions().get(positionFinal).getAnswers()) {
                     db.getUserByIdNotLive(answer.getResponder().getId(), new Database.GetUserCallback() {
                         @Override
                         public void onSuccess(User user) {
