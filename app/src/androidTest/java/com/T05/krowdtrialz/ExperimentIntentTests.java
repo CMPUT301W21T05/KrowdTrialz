@@ -141,7 +141,7 @@ public class ExperimentIntentTests {
      * @alert Verification for US 01.04.01
      */
     public void testSubscribe(){
-        experimentType = "binomial";
+        experimentType = "Measurement";
         publish();
 
         search();
@@ -298,12 +298,12 @@ public class ExperimentIntentTests {
         solo.clickOnView(solo.getView(R.id.new_publish_button));
         solo.waitForView(R.id.geo_location_toggle);
 
-        //Click on binomial
-        if (experimentType == "measurement") {
+        //Click on Experiment type
+        if (experimentType.toLowerCase().equals("measurement")) {
             solo.clickOnView(solo.getView(R.id.measurement_experiment_radio));
-        } else if (experimentType == "count") {
+        }else if (experimentType.toLowerCase().equals("count")) {
             solo.clickOnView(solo.getView(R.id.count_experiment_radio));
-        }else if (experimentType == "integer") {
+        }else if (experimentType.toLowerCase().equals("integer")) {
             solo.clickOnView(solo.getView(R.id.integer_experiment_radio));
         }else{
             solo.clickOnView(solo.getView(R.id.binomial_experiment_radio));
@@ -336,7 +336,7 @@ public class ExperimentIntentTests {
         //Type in a region
         solo.typeText(regionBox, region);
 
-        if (experimentType == "binomial") {
+        if (experimentType.toLowerCase().equals("binomial")) {
             //Click on pass criteria
             EditText passCriteriaBox = (EditText) solo.getView(R.id.binomial_pass_criteria_input);
             solo.clickOnView(passCriteriaBox);
