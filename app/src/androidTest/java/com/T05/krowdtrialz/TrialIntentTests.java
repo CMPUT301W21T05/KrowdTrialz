@@ -210,8 +210,8 @@ public class TrialIntentTests {
         solo.waitForView(R.id.subscribe_button_experiment);
         solo.clickOnText("More");
 
-        //Click on unpublish button
-        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
+        //Click on delete button
+        solo.clickOnView(solo.getView(R.id.delete_experiment_button));
     }
 
     @After
@@ -230,6 +230,7 @@ public class TrialIntentTests {
         solo.sleep(500);
 
         //Type in a word from the description
+        solo.clearEditText(0);
         solo.typeText(0, searchTerm);
     }
 
@@ -273,7 +274,7 @@ public class TrialIntentTests {
         solo.typeText(regionBox, region);
 
         //Click on unit
-        EditText unitBox = (EditText) solo.getView(R.id.edit_user_text);
+        EditText unitBox = (EditText) solo.getView(R.id.experiment_variable_name_input);
         solo.clickOnView(unitBox);
         solo.sleep(500);
 
