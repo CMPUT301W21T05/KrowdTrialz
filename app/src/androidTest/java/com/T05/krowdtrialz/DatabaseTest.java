@@ -301,6 +301,27 @@ public class DatabaseTest {
     }
 
     @Test
+    public void testGetUserByIdNotLive() throws InterruptedException {
+        String id = db.getDeviceUser().getId();
+        db.getUserByIdNotLive(id, new Database.GetUserCallback() {
+            @Override
+            public void onSuccess(User user) {
+                returnedUser = user;
+            }
+
+            @Override
+            public void onFailure() {
+                fail("onFailure called");
+            }
+        });
+
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertNotNull(returnedUser);
+        assertEquals(id, returnedUser.getId());
+    }
+
+    @Test
     public void testAddExperiment() throws InterruptedException {
         Experiment experiment = mockIntegerExperiment();
         experiment.setRegion("China");
@@ -318,6 +339,32 @@ public class DatabaseTest {
         Thread.sleep(WAIT_TIME_MS);
 
         registration = db.getExperimentByID(experiment.getId(),
+                new Database.GetExperimentCallback() {
+                    @Override
+                    public void onSuccess(Experiment experiment) {
+                        returnedExperiment = experiment;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        fail("onFailure called");
+                    }
+                });
+
+        Thread.sleep(WAIT_TIME_MS);
+
+        assertNotNull(returnedExperiment);
+        assertEquals(experiment.getId(), returnedExperiment.getId());
+    }
+
+    @Test
+    public void testGetExperimentByIdNotLive() throws InterruptedException {
+        Experiment experiment = mockIntegerExperiment();
+        db.addExperiment(experiment);
+        experimentsToDelete.add(experiment);
+        Thread.sleep(WAIT_TIME_MS);
+
+        db.getExperimentByIDNotLive(experiment.getId(),
                 new Database.GetExperimentCallback() {
                     @Override
                     public void onSuccess(Experiment experiment) {
