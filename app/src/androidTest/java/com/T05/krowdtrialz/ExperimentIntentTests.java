@@ -1,12 +1,14 @@
 package com.T05.krowdtrialz;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import com.T05.krowdtrialz.ui.SplashActivity;
+import com.T05.krowdtrialz.ui.search.SearchActivity;
 import com.robotium.solo.Solo;
 import org.junit.After;
 import org.junit.Before;
@@ -23,12 +25,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class ExperimentIntentTests {
     private Solo solo;
-    private String description = "Determine what rate of success a coin has";
-    private String minTrials = "13";
+    private String experimentType = "binomial";
+    private String description = "Determine what success a coin has";
+    private String minTrials = "0";
     private String region = "Antarctica";
     private String passCriteria = "Heads";
     private String failCriteria = "Tails";
-    private String searchTerm = "Determine what rate of success a coin";
+    private String valueCriteria = "Coin's Flipped";
+    private String searchTerm = "Determine what success a coin";
 
     @Rule
     public ActivityTestRule<MainActivity> ruleMain =
@@ -56,7 +60,68 @@ public class ExperimentIntentTests {
     /**
      * @alert Verification for US 01.01.01
      */
-    public void testPublishExperiment(){
+    public void testPublishBinomialExperiment(){
+        experimentType = "binomial";
+        publish();
+
+        search();
+
+        //Make sure the experiment shows up
+        assertTrue(solo.waitForText(description));
+
+        //Go back to subscribed page
+        solo.hideSoftKeyboard();
+        solo.goBack();
+
+        delete();
+    }
+
+    @Test
+    /**
+     * @alert Verification for US 01.01.01
+     */
+    public void testPublishIntegerExperiment(){
+        experimentType = "integer";
+        publish();
+
+        search();
+
+        //Make sure the experiment shows up
+        assertTrue(solo.waitForText(description));
+
+        //Go back to subscribed page
+        solo.hideSoftKeyboard();
+        solo.goBack();
+
+        delete();
+    }
+
+    @Test
+    /**
+     * @alert Verification for US 01.01.01
+     */
+    public void testPublishCountExperiment(){
+        experimentType = "count";
+        publish();
+
+        search();
+
+        //Make sure the experiment shows up
+        assertTrue(solo.waitForText(description));
+
+        //Go back to subscribed page
+        solo.hideSoftKeyboard();
+        solo.goBack();
+
+        delete();
+    }
+
+    @Test
+    /**
+     * @alert Verification for US 01.01.01
+     */
+    public void testPublishMeasurementExperiment(){
+        experimentType = "measurement";
         publish();
 
         search();
@@ -76,6 +141,7 @@ public class ExperimentIntentTests {
      * @alert Verification for US 01.04.01
      */
     public void testSubscribe(){
+        experimentType = "binomial";
         publish();
 
         search();
@@ -99,7 +165,7 @@ public class ExperimentIntentTests {
 
         //Click on publish tab
         solo.clickOnView(solo.getView(R.id.navigation_publish));
-        solo.waitForView(R.id.experiment_description_input);
+        solo.waitForView(R.id.new_publish_button);
 
         //Click on subscribed tab
         solo.clickOnView(solo.getView(R.id.navigation_subscribed));
@@ -114,6 +180,7 @@ public class ExperimentIntentTests {
      * @alert Verification for US 01.02.01 and US 01.03.01
      */
     public void testEndAndUnpublish(){
+        experimentType = "binomial";
         publish();
 
         search();
@@ -136,7 +203,7 @@ public class ExperimentIntentTests {
         solo.waitForView(solo.getView(R.id.search_experiment_query));
         solo.hideSoftKeyboard();
         solo.goBack();
-        solo.waitForView(solo.getView(R.id.experiment_description_input));
+        solo.waitForView(solo.getView(R.id.search_action_button));
 
         search();
 
@@ -160,7 +227,47 @@ public class ExperimentIntentTests {
         solo.hideSoftKeyboard();
         solo.goBack();
 
-        delete();
+        search();
+
+        //Make sure the experiment shows up
+        assertTrue(solo.waitForText(description));
+
+        //Click on experiment
+        solo.clickOnText(description);
+
+        //Click on more tab
+        solo.waitForView(R.id.subscribe_button_experiment);
+        solo.clickOnText("More");
+
+        //Click on unpublish button
+        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
+
+        //Go back to subscribed page
+        solo.sleep(1000);
+        solo.goBack();
+
+        //Make sure the experiment doesn't show up
+        assertFalse(solo.waitForText(description));
+
+        solo.hideSoftKeyboard();
+        solo.goBack();
+
+        //Click on owner tab
+        solo.waitForView(R.id.search_action_button);
+        solo.clickOnView(solo.getView(R.id.navigation_owner));
+
+        //Make sure the experiment shows up in owners page
+        assertTrue(solo.waitForText(description));
+
+        // click on experiment
+        solo.waitForView(R.id.search_action_button);
+        solo.clickOnText(description);
+        //Click on more tab
+        solo.waitForView(R.id.subscribe_button_experiment);
+        solo.clickOnText("More");
+        //Click on delete button
+        solo.clickOnView(solo.getView(R.id.delete_experiment_button));
+
     }
 
     @After
@@ -192,7 +299,15 @@ public class ExperimentIntentTests {
         solo.waitForView(R.id.geo_location_toggle);
 
         //Click on binomial
-        solo.clickOnView(solo.getView(R.id.binomial_experiment_radio));
+        if (experimentType == "measurement") {
+            solo.clickOnView(solo.getView(R.id.measurement_experiment_radio));
+        } else if (experimentType == "count") {
+            solo.clickOnView(solo.getView(R.id.count_experiment_radio));
+        }else if (experimentType == "integer") {
+            solo.clickOnView(solo.getView(R.id.integer_experiment_radio));
+        }else{
+            solo.clickOnView(solo.getView(R.id.binomial_experiment_radio));
+        }
 
         //Click on add a description editText
         EditText descriptionBox = (EditText) solo.getView(R.id.experiment_description_input);
@@ -221,21 +336,32 @@ public class ExperimentIntentTests {
         //Type in a region
         solo.typeText(regionBox, region);
 
-        //Click on pass criteria
-        EditText passCriteriaBox = (EditText) solo.getView(R.id.binomial_pass_criteria_input);
-        solo.clickOnView(passCriteriaBox);
-        solo.sleep(500);
+        if (experimentType == "binomial") {
+            //Click on pass criteria
+            EditText passCriteriaBox = (EditText) solo.getView(R.id.binomial_pass_criteria_input);
+            solo.clickOnView(passCriteriaBox);
+            solo.sleep(500);
 
-        //Type in a pass criteria
-        solo.typeText(passCriteriaBox, passCriteria);
+            //Type in a pass criteria
+            solo.typeText(passCriteriaBox, passCriteria);
 
-        //Click on fail criteria
-        EditText failCriteriaBox = (EditText) solo.getView(R.id.binomial_fail_criteria_input);
-        solo.clickOnView(failCriteriaBox);
-        solo.sleep(500);
+            //Click on fail criteria
+            EditText failCriteriaBox = (EditText) solo.getView(R.id.binomial_fail_criteria_input);
+            solo.clickOnView(failCriteriaBox);
+            solo.sleep(500);
 
-        //Type in a fail criteria
-        solo.typeText(failCriteriaBox, failCriteria);
+            //Type in a fail criteria
+            solo.typeText(failCriteriaBox, failCriteria);
+        }else{
+            // Click on value criteria
+            EditText valueCriteriaBox = (EditText) solo.getView(R.id.experiment_variable_name_input);
+            solo.clickOnView(valueCriteriaBox);
+            solo.sleep(500);
+
+            //Type in value criteria
+            solo.typeText(valueCriteriaBox, valueCriteria);
+        }
+
 
         //Click on publish
         solo.clickOnView(solo.getView(R.id.publish_experiment_button));
@@ -264,7 +390,7 @@ public class ExperimentIntentTests {
         solo.waitForView(R.id.subscribe_button_experiment);
         solo.clickOnText("More");
 
-        //Click on unpublish button
+        //Click on delete button
         solo.clickOnView(solo.getView(R.id.delete_experiment_button));
     }
 }
