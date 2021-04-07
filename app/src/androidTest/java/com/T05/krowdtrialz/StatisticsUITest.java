@@ -3,33 +3,21 @@ package com.T05.krowdtrialz;
 import android.app.Activity;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.SearchView;
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.T05.krowdtrialz.model.experiment.Experiment;
-import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
-import com.T05.krowdtrialz.model.trial.IntegerTrial;
-import com.T05.krowdtrialz.model.trial.Trial;
-import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.ui.SplashActivity;
-import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
-import com.T05.krowdtrialz.ui.search.SearchActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -115,7 +103,7 @@ public class StatisticsUITest {
         solo.goBack();
         solo.goBack();
 
-        unpublish();
+        delete();
     }
 
 
@@ -166,7 +154,7 @@ public class StatisticsUITest {
         solo.goBack();
         solo.goBack();
 
-        unpublish();
+        delete();
     }
 
 
@@ -201,7 +189,10 @@ public class StatisticsUITest {
         //Click on publish tab
         solo.waitForView(R.id.search_action_button);
         solo.clickOnText("Publish");
-        solo.waitForView(R.id.integer_experiment_radio);
+
+        // Click on "Publish New Experiment" button
+        solo.clickOnView(solo.getView(R.id.new_publish_button));
+        solo.waitForView(R.id.geo_location_toggle);
 
         //Click on integer
         solo.clickOnView(solo.getView(R.id.integer_experiment_radio));
@@ -240,7 +231,7 @@ public class StatisticsUITest {
     /**
      * Un-publishes the test experiment created using publish()
      */
-    private void unpublish(){
+    private void delete(){
         //Click on search icon
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.search_action_button));
@@ -264,7 +255,7 @@ public class StatisticsUITest {
         solo.clickOnText("More");
 
         //Click on unpublish button
-        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
+        solo.clickOnView(solo.getView(R.id.delete_experiment_button));
     }
 
 

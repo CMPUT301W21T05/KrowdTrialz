@@ -1,29 +1,20 @@
 package com.T05.krowdtrialz;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import android.app.Activity;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.SearchView;
 
-import com.T05.krowdtrialz.model.experiment.Experiment;
-import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
-import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.ui.SplashActivity;
-import com.T05.krowdtrialz.ui.search.SearchActivity;
-import com.T05.krowdtrialz.util.Database;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -121,7 +112,7 @@ public class QRCodeBarcodeIntentTests {
         solo.hideSoftKeyboard();
         solo.goBack();
 
-        unpublish();
+        delete();
     }
 
     @Test
@@ -185,7 +176,7 @@ public class QRCodeBarcodeIntentTests {
         solo.hideSoftKeyboard();
         solo.goBack();
 
-        unpublish();
+        delete();
     }
 
     @Test
@@ -224,6 +215,9 @@ public class QRCodeBarcodeIntentTests {
         //Click on publish tab
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.navigation_publish));
+
+        // Click on "Publish New Experiment" button
+        solo.clickOnView(solo.getView(R.id.new_publish_button));
         solo.waitForView(R.id.geo_location_toggle);
 
         //Click on binomial
@@ -276,7 +270,7 @@ public class QRCodeBarcodeIntentTests {
         solo.clickOnView(solo.getView(R.id.publish_experiment_button));
     }
 
-    private void unpublish(){
+    private void delete(){
         //Click on search icon
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.search_action_button));
@@ -300,6 +294,6 @@ public class QRCodeBarcodeIntentTests {
         solo.clickOnText("More");
 
         //Click on unpublish button
-        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
+        solo.clickOnView(solo.getView(R.id.delete_experiment_button));
     }
 }
