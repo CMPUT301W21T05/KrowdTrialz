@@ -200,9 +200,11 @@ public class QRCodeBarcodeIntentTests {
     private void search(){
         //Click on search icon
         solo.waitForView(R.id.search_action_button);
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.search_action_button));
 
         //Click on search bar
+        solo.waitForView(R.id.search_experiment_query);
         SearchView searchBar = (SearchView) solo.getView(R.id.search_experiment_query);
         solo.clickOnView(searchBar);
         solo.sleep(500);

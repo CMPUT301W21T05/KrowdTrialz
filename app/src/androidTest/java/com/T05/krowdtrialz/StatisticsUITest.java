@@ -77,6 +77,7 @@ public class StatisticsUITest {
         solo.clickOnText(search_tag);
 
         addTrials("100");
+        solo.sleep(500);
         addTrials("101");
         solo.sleep(500);
 
@@ -113,7 +114,8 @@ public class StatisticsUITest {
      *
      * @alert Verification for US 01.09.01
      */
-    @Test public void testStats(){
+    @Test
+    public void testStats(){
         publish();
 
         searchAndFindExperiment();
@@ -123,6 +125,7 @@ public class StatisticsUITest {
         solo.clickOnText(search_tag);
 
         addTrials("100");
+        solo.sleep(500);
         addTrials("101");
         solo.sleep(500);
 
@@ -170,6 +173,7 @@ public class StatisticsUITest {
     private void searchAndFindExperiment(){
         //Click on search icon
         solo.waitForView(R.id.search_action_button);
+        solo.sleep(1000);
         solo.clickOnView(solo.getView(R.id.search_action_button));
 
         //Click on search bar
@@ -222,6 +226,14 @@ public class StatisticsUITest {
         //Type in a region
         solo.typeText(regionBox, "Kenya");
 
+        //Click on unit
+        EditText unitBox = (EditText) solo.getView(R.id.experiment_variable_name_input);
+        solo.clickOnView(unitBox);
+        solo.sleep(500);
+
+        //Type in a unit
+        solo.typeText(unitBox, "Eggs Dropped");
+
         //Click on publish
         solo.clickOnView(solo.getView(R.id.publish_experiment_button));
         solo.sleep(500);
@@ -267,9 +279,10 @@ public class StatisticsUITest {
     private void addTrials(String value){
         //Click add trials button
         solo.waitForView(solo.getView(R.id.add_trials_experiment));
-        solo.clickOnView(solo.getView(R.id.add_trials_experiment));
+        solo.sleep(1000);
+        solo.clickOnText("ADD Trials");
 
-        //Click measurement value EditText
+        //Click integer value EditText
         solo.waitForView(solo.getView(R.id.submit_trial_button));
         EditText integerEditText = (EditText) solo.getView(R.id.integer_editText);
         solo.clickOnView(integerEditText);
