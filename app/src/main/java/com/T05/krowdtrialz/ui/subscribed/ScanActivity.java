@@ -77,7 +77,7 @@ public class ScanActivity extends AppCompatActivity {
 
                 if (resultArray.length > 1) { // QRCode
                     db = Database.getInstance();
-                    expRegistration = db.getExperimentByID(resultArray[0], new Database.GetExperimentCallback() {
+                    db.getExperimentByIDNotLive(resultArray[0], new Database.GetExperimentCallback() {
                         @Override
                         public void onSuccess(Experiment experiment) {
                             if (experiment.isInactive()) {
@@ -86,7 +86,7 @@ public class ScanActivity extends AppCompatActivity {
                                 final Dialog dialog = new Dialog(ScanActivity.this);
                                 dialog.setTitle("Attention");
                                 dialog.setContentView(R.layout.barcode_not_found);
-                                TextView error_message = findViewById(R.id.scanner_error_text);
+                                TextView error_message = dialog.findViewById(R.id.scanner_error_text);
                                 error_message.setText("Experiment is not accepting trials");
                                 Button okButton = dialog.findViewById(R.id.ok_barcode_button);
 
@@ -110,7 +110,7 @@ public class ScanActivity extends AppCompatActivity {
                             final Dialog dialog = new Dialog(ScanActivity.this);
                             dialog.setTitle("Edit Experiment Info");
                             dialog.setContentView(R.layout.barcode_not_found);
-                            TextView error_message = findViewById(R.id.scanner_error_text);
+                            TextView error_message = dialog.findViewById(R.id.scanner_error_text);
                             error_message.setText("QR/Barcode not linked");
                             Button okButton = dialog.findViewById(R.id.ok_barcode_button);
 
@@ -129,7 +129,7 @@ public class ScanActivity extends AppCompatActivity {
                     db.getTrialInfoByBarcode(result.getText(), new Database.GetTrialInfoCallback() {
                         @Override
                         public void onSuccess(String[] trialInfo) {
-                            expRegistration = db.getExperimentByID(trialInfo[0], new Database.GetExperimentCallback() {
+                            db.getExperimentByIDNotLive(trialInfo[0], new Database.GetExperimentCallback() {
                                 @Override
                                 public void onSuccess(Experiment experiment) {
                                     if (experiment.isInactive()) {
@@ -138,7 +138,7 @@ public class ScanActivity extends AppCompatActivity {
                                         final Dialog dialog = new Dialog(ScanActivity.this);
                                         dialog.setTitle("Attention");
                                         dialog.setContentView(R.layout.barcode_not_found);
-                                        TextView error_message = findViewById(R.id.scanner_error_text);
+                                        TextView error_message = dialog.findViewById(R.id.scanner_error_text);
                                         error_message.setText("Experiment is not accepting trials");
                                         Button okButton = dialog.findViewById(R.id.ok_barcode_button);
 
@@ -342,7 +342,9 @@ public class ScanActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    expRegistration.remove();
+                    if (expRegistration != null) {
+                        expRegistration.remove();
+                    }
                     db.addTrial(finalTrial, experiment);
                     dialog.dismiss();
                     codeScanner.startPreview();

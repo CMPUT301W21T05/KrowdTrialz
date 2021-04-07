@@ -30,8 +30,11 @@ public abstract class Experiment implements Tagged {
     private ArrayList<Question> questions;
 
     private boolean published = true;
-    private final boolean active = true;
-    private final boolean inactive = false;
+
+    @Exclude
+    private static final boolean active = true;
+    @Exclude
+    private static final boolean inactive = false;
 
     public Experiment() {
     }
@@ -257,10 +260,12 @@ public abstract class Experiment implements Tagged {
     /**
      * Set experiment status to active
      */
+    @Exclude
     public void setActive() {
         status = active;
     }
 
+    @Exclude
     public boolean isActive() {
         return status == active;
     }
@@ -268,6 +273,7 @@ public abstract class Experiment implements Tagged {
     /**
      * Set experiment status to inactive
      */
+    @Exclude
     public void setInactive() {
         status = inactive;
     }
@@ -277,6 +283,7 @@ public abstract class Experiment implements Tagged {
      *
      * @return true if inactive
      */
+    @Exclude
     public boolean isInactive() {
         return status == inactive;
     }

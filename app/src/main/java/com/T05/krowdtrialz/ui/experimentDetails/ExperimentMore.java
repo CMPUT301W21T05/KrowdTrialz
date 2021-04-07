@@ -154,7 +154,6 @@ public class ExperimentMore extends Fragment {
                 public void onClick(View v) {
                     experiment.unpublish();
                     experiment.setInactive();
-                    endExperimentButton.setEnabled(false);
 
                     db.updateExperiment(experiment);
 
