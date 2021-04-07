@@ -295,7 +295,6 @@ public abstract class TrialActivity extends AppCompatActivity implements Locatio
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(this, ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show();
         try {
             Trial trial = createTrial();
             trial.setLatitude(location.getLatitude());
