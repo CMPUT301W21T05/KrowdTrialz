@@ -1,7 +1,6 @@
 package com.T05.krowdtrialz;
 
 import android.app.Activity;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -121,7 +120,7 @@ public class QnATests {
         solo.hideSoftKeyboard();
         solo.goBack();
 
-        unpublish();
+        delete();
     }
 
     private void search(){
@@ -142,10 +141,10 @@ public class QnATests {
         //Click on publish tab
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.navigation_publish));
-        solo.waitForView(R.id.geo_location_toggle);
 
         // Click on "Publish New Experiment" button
         solo.clickOnView(solo.getView(R.id.new_publish_button));
+        solo.waitForView(R.id.geo_location_toggle);
 
         //Click on binomial
         solo.clickOnView(solo.getView(R.id.binomial_experiment_radio));
@@ -197,7 +196,7 @@ public class QnATests {
         solo.clickOnView(solo.getView(R.id.publish_experiment_button));
     }
 
-    private void unpublish(){
+    private void delete(){
         //Click on search icon
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.search_action_button));
@@ -221,6 +220,6 @@ public class QnATests {
         solo.clickOnText("More");
 
         //Click on unpublish button
-        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
+        solo.clickOnView(solo.getView(R.id.delete_experiment_button));
     }
 }

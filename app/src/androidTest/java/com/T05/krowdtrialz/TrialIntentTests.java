@@ -115,7 +115,7 @@ public class TrialIntentTests {
         solo.hideSoftKeyboard();
         solo.goBack();
 
-        unpublish();
+        delete();
     }
 
     @Test
@@ -237,6 +237,9 @@ public class TrialIntentTests {
         //Click on publish tab
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.navigation_publish));
+
+        // Click on "Publish New Experiment" button
+        solo.clickOnView(solo.getView(R.id.new_publish_button));
         solo.waitForView(R.id.geo_location_toggle);
 
         //Click on measurement
@@ -281,7 +284,7 @@ public class TrialIntentTests {
         solo.clickOnView(solo.getView(R.id.publish_experiment_button));
     }
 
-    private void unpublish(){
+    private void delete(){
         //Click on search icon
         solo.waitForView(R.id.search_action_button);
         solo.clickOnView(solo.getView(R.id.search_action_button));
@@ -305,6 +308,6 @@ public class TrialIntentTests {
         solo.clickOnText("More");
 
         //Click on unpublish button
-        solo.clickOnView(solo.getView(R.id.unpublish_experiment_button));
+        solo.clickOnView(solo.getView(R.id.delete_experiment_button));
     }
 }
