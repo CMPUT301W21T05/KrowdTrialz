@@ -32,6 +32,9 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 
+/**
+ * Represent and display locality of contributed experiments
+ */
 public class ExperimentMap extends AppCompatActivity {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE  = 1;
     private MapView map = null;
@@ -92,6 +95,11 @@ public class ExperimentMap extends AppCompatActivity {
 
     }
 
+    /**
+     * Get persmission to user location services
+     *
+     * @param permissions permission to request
+     */
     private void requestPermissionsIfNecessary(String[] permissions) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (String permission : permissions) {

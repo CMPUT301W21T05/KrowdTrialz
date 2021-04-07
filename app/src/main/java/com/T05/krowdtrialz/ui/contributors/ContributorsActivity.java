@@ -20,6 +20,9 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
+/**
+ * Activity to display the list of contributors in ListView
+ */
 public class ContributorsActivity extends AppCompatActivity {
 
     private static final String TAG = "CONTRIBUTORS ACTIVITY";
@@ -35,12 +38,13 @@ public class ContributorsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contributors);
+        setTitle("Contributors");
 
         db = Database.getInstance();
 
-        setContentView(R.layout.activity_contributors);
-
         contributorsList = findViewById(R.id.contributors_listView);
+        contributorsDataList = new ArrayList<User>();
 
         Intent intent = getIntent();
         String expID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
@@ -49,12 +53,11 @@ public class ContributorsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Experiment experiment) {
                 currentExperiment = experiment;
-                contributorsDataList = new ArrayList<User>();
 
-                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment);
+                contributorsArrayAdapter = new ContributorList(ContributorsActivity.this, contributorsDataList, currentExperiment, db);
 
                 contributorsList.setAdapter(contributorsArrayAdapter);
-                updateConList(experiment);
+                updateContributorsList(experiment);
             }
 
             @Override
@@ -65,7 +68,12 @@ public class ContributorsActivity extends AppCompatActivity {
 
     }
 
-    private void updateConList(Experiment exp){
+    /**
+     * This fetches a list of contributors for an experiment from the database.
+     *
+     * @param exp
+     */
+    private void updateContributorsList(Experiment exp){
         contributorsArrayAdapter.clear();
         ArrayList<String> userIDs = new ArrayList<String>();
         userIDs.addAll(exp.getContributorsIDs());

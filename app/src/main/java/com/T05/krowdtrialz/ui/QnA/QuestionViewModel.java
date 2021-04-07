@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.experiment.Experiment;
+import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -26,15 +27,37 @@ public class QuestionViewModel extends ViewModel {
         questionList = new MutableLiveData<>();
     }
 
+    /**
+     * Get Experiment's list of questions
+     *
+     * @param expId Experiment of interest
+     * @return Live updating list of questions
+     */
     public LiveData<ArrayList<Question>> getQuestionList(String expId){
         db = Database.getInstance();
         expRegistration = db.getExperimentByID(expId, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment experiment) {
-                ArrayList<Question> newList = new ArrayList<>();
-                newList.addAll(experiment.getQuestions());
-                questionList.setValue(newList);
-                Log.d(TAG, "Got query result: " + experiment.toString());
+                questionList.setValue(new ArrayList<>());
+                Log.d(TAG, "Got experiment query result: " + experiment.toString());
+
+                // Get up to date information about each user
+                for (Question question: experiment.getQuestions()) {
+                    db.getUserByIdNotLive(question.getAskedBy().getId(), new Database.GetUserCallback() {
+                        @Override
+                        public void onSuccess(User user) {
+                            question.setAskedBy(user);
+                            ArrayList<Question> tmpList = questionList.getValue();
+                            tmpList.add(question);
+                            questionList.setValue(tmpList);
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Log.d(TAG, "Failed to get asked by user with id: " + question.getAskedBy().getId());
+                        }
+                    });
+                }
             }
 
             @Override

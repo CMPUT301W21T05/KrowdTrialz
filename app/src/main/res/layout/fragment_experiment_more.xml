@@ -38,10 +38,23 @@
             android:layout_height="67dp"
             android:layout_marginTop="108dp"
             android:text="Unpublish"
-            app:backgroundTint="#F44336"
+            app:backgroundTint="#FF5722"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.547"
             app:layout_constraintStart_toEndOf="@+id/end_experiment_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/delete_experiment_button"
+            android:layout_width="130dp"
+            android:layout_height="67dp"
+            android:layout_marginTop="312dp"
+            android:layout_marginEnd="140dp"
+            android:text="Delete Experiment"
+            app:backgroundTint="#F44336"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.967"
+            app:layout_constraintStart_toStartOf="@+id/view_contributors_button"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button

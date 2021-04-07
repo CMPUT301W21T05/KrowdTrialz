@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -80,16 +81,19 @@ public class ExperimentMore extends Fragment {
         Button endExperimentButton = root.findViewById(R.id.end_experiment_button);
         Button unpublishExperimentButton = root.findViewById(R.id.unpublish_experiment_button);
         Button viewContributorsButton = root.findViewById(R.id.view_contributors_button);
+        Button deleteExperimentButton = root.findViewById(R.id.delete_experiment_button);
 
         User user = db.getDeviceUser();
         if (experiment.isOwner(user)) {
             endExperimentButton.setVisibility(Button.VISIBLE);
             unpublishExperimentButton.setVisibility(Button.VISIBLE);
             viewContributorsButton.setVisibility(Button.VISIBLE);
+            deleteExperimentButton.setVisibility(Button.VISIBLE);
         } else {
             endExperimentButton.setVisibility(Button.GONE);
             unpublishExperimentButton.setVisibility(Button.GONE);
             viewContributorsButton.setVisibility(Button.GONE);
+            deleteExperimentButton.setVisibility(Button.GONE);
         }
 
         viewMapButton.setOnClickListener(new View.OnClickListener() {
@@ -106,19 +110,63 @@ public class ExperimentMore extends Fragment {
             }
         });
 
-        endExperimentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                experiment.setInactive();
-                db.updateExperiment(experiment);
 
-                ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+        if (experiment.getMinTrials() > experiment.getTrials().size() || experiment.isInactive()) {
+            endExperimentButton.setClickable(true);
+            endExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    CharSequence text;
+                    if (experiment.getMinTrials() > experiment.getTrials().size() && experiment.isPublished()) {
+                        text = "Not enough trials (" + experiment.getTrials().size() + " out of " +
+                                ((Integer) experiment.getMinTrials()).toString() + " needed)";
+                    } else if (experiment.isPublished()){
+                        text = "Already inactive";
+                    } else {
+                        text = "Experiment was unpublished";
+                    }
 
-                ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
-            }
-        });
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            });
+        } else {
+            endExperimentButton.setEnabled(true);
+            endExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    experiment.setInactive();
+                    db.updateExperiment(experiment);
 
-        unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
+                    ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+
+                    ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
+                }
+            });
+        }
+
+        if (experiment.isPublished()) {
+            unpublishExperimentButton.setEnabled(true);
+            unpublishExperimentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    experiment.unpublish();
+                    experiment.setInactive();
+
+                    db.updateExperiment(experiment);
+
+                    ((ExperimentDetailsActivity) getActivity()).updateAddTrialsButton();
+
+                    ((ExperimentDetailsActivity) getActivity()).populateMainInfo();
+                }
+            });
+        } else {
+            unpublishExperimentButton.setEnabled(false);
+        }
+
+        deleteExperimentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 db.deleteExperiment(experiment);

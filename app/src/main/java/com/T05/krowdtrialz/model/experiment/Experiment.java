@@ -1,11 +1,7 @@
 package com.T05.krowdtrialz.model.experiment;
 
-import android.util.Log;
-
 import com.T05.krowdtrialz.model.QnA.Question;
 import com.T05.krowdtrialz.model.interfaces.Tagged;
-import com.T05.krowdtrialz.model.scannable.Barcode;
-import com.T05.krowdtrialz.model.scannable.QRCode;
 import com.T05.krowdtrialz.model.trial.Trial;
 import com.T05.krowdtrialz.model.user.User;
 import com.google.firebase.firestore.Exclude;
@@ -14,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,13 +26,15 @@ public abstract class Experiment implements Tagged {
     private boolean locationRequired = false;
     public boolean status;
     private int minTrials = 0;
-    private ArrayList<Barcode> barcodes;
-    private ArrayList<QRCode> qrCodes;
     private ArrayList<User> ignoredUsers;
     private ArrayList<Question> questions;
 
-    private final boolean active = true;
-    private final boolean inactive = false;
+    private boolean published = true;
+
+    @Exclude
+    private static final boolean active = true;
+    @Exclude
+    private static final boolean inactive = false;
 
     public Experiment() {
     }
@@ -44,11 +43,25 @@ public abstract class Experiment implements Tagged {
         // TODO generate unique id
         this.owner = owner;
         this.description = description;
-        barcodes = new ArrayList<Barcode>();
-        qrCodes = new ArrayList<QRCode>();
         status = active;
         ignoredUsers = new ArrayList<User>();
         questions = new ArrayList<Question>();
+    }
+
+    /**
+     * Set this experiment to unpublished state
+     */
+    public void unpublish() {
+        published = false;
+    }
+
+    /**
+     * Query whether this experiment is published
+     *
+     * @return true if the experiment is published
+     */
+    public boolean isPublished() {
+        return published;
     }
 
     /**
@@ -78,46 +91,6 @@ public abstract class Experiment implements Tagged {
     }
 
     public void setId(String id) { this.id = id; }
-
-    /**
-     * Get the barcodes associated with this Experiment
-     *
-     * @return array of associated barcodes
-     */
-    public ArrayList<Barcode> getBarcodes() {
-        return barcodes;
-    }
-
-    /**
-     * Add a new barcode to be associated with this experiment
-     *
-     * @param barcode
-     *      barcode to add
-     */
-    public void addBarcode(Barcode barcode) {
-        barcodes.add(barcode);
-    }
-
-
-    /**
-     * Get the QR codes associated with this experimet
-     *
-     * @return
-     *  Array of associated QR codes
-     */
-    public ArrayList<QRCode> getQrCodes() {
-        return qrCodes;
-    }
-
-    /**
-     * Add new QR code associated with this experiment
-     *
-     * @param qrCode
-     *  QR code to add
-     */
-    public void addQRCode(QRCode qrCode) {
-        qrCodes.add(qrCode);
-    }
 
     /**
      * Get owner of this experiment
@@ -252,10 +225,10 @@ public abstract class Experiment implements Tagged {
     }
 
     /**
-     * Get all contriubtors to this experiment regardless of if they're ignored
+     * Get all IDs of contriubtors to this experiment regardless of if they're ignored
      *
      * @return
-     *  Set of users
+     *  Set of user IDs
      */
     @Exclude
     public Set<String> getContributorsIDs() {
@@ -287,10 +260,12 @@ public abstract class Experiment implements Tagged {
     /**
      * Set experiment status to active
      */
+    @Exclude
     public void setActive() {
         status = active;
     }
 
+    @Exclude
     public boolean isActive() {
         return status == active;
     }
@@ -298,6 +273,7 @@ public abstract class Experiment implements Tagged {
     /**
      * Set experiment status to inactive
      */
+    @Exclude
     public void setInactive() {
         status = inactive;
     }
@@ -307,6 +283,7 @@ public abstract class Experiment implements Tagged {
      *
      * @return true if inactive
      */
+    @Exclude
     public boolean isInactive() {
         return status == inactive;
     }
@@ -376,10 +353,6 @@ public abstract class Experiment implements Tagged {
 
     @Override
     public int hashCode() {
-        int result = 0x05;
-        result = 31 * result + getId().hashCode();
-        result = 31 * result + getDescription().hashCode();
-        result = 31 * result + getType().hashCode();
-        return result;
+        return Objects.hash(id);
     }
 }

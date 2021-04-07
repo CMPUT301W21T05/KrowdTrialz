@@ -19,6 +19,8 @@ import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.ui.QnA.QuestionDetailsActivity;
 import com.T05.krowdtrialz.ui.experimentDetails.ExperimentDetailsActivity;
 
+import org.apache.commons.math3.analysis.function.Exp;
+
 import java.util.ArrayList;
 
 /**
@@ -30,16 +32,16 @@ public class QuestionList extends ArrayAdapter<Question> {
     private static final String TAG = "QuestionList";
     private ArrayList<Question> questions;
     private Context context;
-    private String experimentID;
+    private Experiment experiment;
 
     private com.google.android.material.textview.MaterialTextView askedBy;
     private com.google.android.material.textview.MaterialTextView questionAsked;
 
-    public QuestionList (Context context, ArrayList<Question> questions, String experimentID) {
+    public QuestionList (Context context, ArrayList<Question> questions, Experiment experiment) {
         super(context, 0, questions);
         this.questions = questions;
         this.context = context;
-        this.experimentID = experimentID;
+        this.experiment = experiment;
     }
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -64,8 +66,10 @@ public class QuestionList extends ArrayAdapter<Question> {
 
                 intent = new Intent(context, QuestionDetailsActivity.class);
 
-                intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experimentID);
-                intent.putExtra("Position", position);
+                int questionIndex = experiment.getQuestions().indexOf(question);
+
+                intent.putExtra(MainActivity.EXTRA_EXPERIMENT_ID, experiment.getId());
+                intent.putExtra("Position", questionIndex);
                 context.startActivity(intent);
             }
         });

@@ -54,6 +54,9 @@ public class ScanActivity extends AppCompatActivity {
         setupPermissions();
     }
 
+    /**
+     * Scan code using phone camera
+     */
     private void codeScanner() {
 
         scannerView = findViewById(R.id.scanner_codeScannerView);
@@ -74,9 +77,29 @@ public class ScanActivity extends AppCompatActivity {
 
                 if (resultArray.length > 1) { // QRCode
                     db = Database.getInstance();
-                    expRegistration = db.getExperimentByID(resultArray[0], new Database.GetExperimentCallback() {
+                    db.getExperimentByIDNotLive(resultArray[0], new Database.GetExperimentCallback() {
                         @Override
                         public void onSuccess(Experiment experiment) {
+                            if (experiment.isInactive()) {
+                                Log.e(TAG, "inactive experiment");
+
+                                final Dialog dialog = new Dialog(ScanActivity.this);
+                                dialog.setTitle("Attention");
+                                dialog.setContentView(R.layout.barcode_not_found);
+                                TextView error_message = dialog.findViewById(R.id.scanner_error_text);
+                                error_message.setText("Experiment is not accepting trials");
+                                Button okButton = dialog.findViewById(R.id.ok_barcode_button);
+
+                                okButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                        codeScanner.startPreview();
+                                    }
+                                });
+                                dialog.show();
+                                return;
+                            }
                             Trial trial = makeTrial(experiment, resultArray);
                             fillDialog(experiment, trial, resultArray);
                         }
@@ -87,7 +110,8 @@ public class ScanActivity extends AppCompatActivity {
                             final Dialog dialog = new Dialog(ScanActivity.this);
                             dialog.setTitle("Edit Experiment Info");
                             dialog.setContentView(R.layout.barcode_not_found);
-
+                            TextView error_message = dialog.findViewById(R.id.scanner_error_text);
+                            error_message.setText("QR/Barcode not linked");
                             Button okButton = dialog.findViewById(R.id.ok_barcode_button);
 
                             okButton.setOnClickListener(new View.OnClickListener() {
@@ -105,9 +129,29 @@ public class ScanActivity extends AppCompatActivity {
                     db.getTrialInfoByBarcode(result.getText(), new Database.GetTrialInfoCallback() {
                         @Override
                         public void onSuccess(String[] trialInfo) {
-                            expRegistration = db.getExperimentByID(trialInfo[0], new Database.GetExperimentCallback() {
+                            db.getExperimentByIDNotLive(trialInfo[0], new Database.GetExperimentCallback() {
                                 @Override
                                 public void onSuccess(Experiment experiment) {
+                                    if (experiment.isInactive()) {
+                                        Log.e(TAG, "inactive experiment");
+
+                                        final Dialog dialog = new Dialog(ScanActivity.this);
+                                        dialog.setTitle("Attention");
+                                        dialog.setContentView(R.layout.barcode_not_found);
+                                        TextView error_message = dialog.findViewById(R.id.scanner_error_text);
+                                        error_message.setText("Experiment is not accepting trials");
+                                        Button okButton = dialog.findViewById(R.id.ok_barcode_button);
+
+                                        okButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog.dismiss();
+                                                codeScanner.startPreview();
+                                            }
+                                        });
+                                        dialog.show();
+                                        return;
+                                    }
                                     Trial trial = makeTrial(experiment, trialInfo);
                                     fillDialog(experiment, trial, trialInfo);
                                 }
@@ -154,6 +198,9 @@ public class ScanActivity extends AppCompatActivity {
         codeScanner.startPreview();
     }
 
+    /**
+     * Get required device permissions
+     */
     private void setupPermissions() {
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
 
@@ -164,6 +211,9 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Package permissions request
+     */
     private void makeRequest() {
         String[] permissionArray = {Manifest.permission.CAMERA};
         ActivityCompat.requestPermissions(this, permissionArray, CAMERA_REQUEST_CODE);
@@ -181,6 +231,13 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Make trial out of the scanned code
+     * @param experiment Experiment to add results to
+     * @param resultArray Retults(s) to add to the trial
+     * @return
+     *   trial to be added
+     */
     private Trial makeTrial(Experiment experiment, String[] resultArray){
         String type = experiment.getType();
         User user = db.getDeviceUser();
@@ -220,6 +277,15 @@ public class ScanActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Populate dialog box for user confirmation
+     * @param experiment
+     *      experiment to add to
+     * @param trial
+     *      Trial to be added
+     * @param resultArray
+     *      Results to be added to experiment
+     */
     private void fillDialog(Experiment experiment, Trial trial, String[] resultArray){
         String type = experiment.getType();
         if (trial != null) {
@@ -276,7 +342,9 @@ public class ScanActivity extends AppCompatActivity {
             confirmButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    expRegistration.remove();
+                    if (expRegistration != null) {
+                        expRegistration.remove();
+                    }
                     db.addTrial(finalTrial, experiment);
                     dialog.dismiss();
                     codeScanner.startPreview();

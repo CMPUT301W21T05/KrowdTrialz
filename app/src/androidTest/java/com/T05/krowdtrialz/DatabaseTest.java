@@ -370,11 +370,6 @@ public class DatabaseTest {
         assertTrue(returnedExperiments.contains(experiment));
     }
 
-    /**
-     * FAILING
-     *  The assertTrue at the end of this method fails.
-     * @throws InterruptedException
-     */
     @Test
     public void testGetExperimentsByOwner() throws InterruptedException {
         Experiment experiment = mockIntegerExperiment();
@@ -383,13 +378,12 @@ public class DatabaseTest {
         Thread.sleep(WAIT_TIME_MS);
 
         ArrayList<Experiment> returnedExperiments = new ArrayList<>();
-        registration = db.getExperimentsByOwner(db.getDeviceUser(),
+        registration = db.getExperimentsByOwner(mockUser(),
                 new Database.QueryExperimentsCallback() {
                     @Override
                     public void onSuccess(ArrayList<Experiment> experiments) {
-                        experiments.forEach(
-                                e -> returnedExperiments.add(e)
-                        );
+                        returnedExperiments.clear();
+                        returnedExperiments.addAll(experiments);
                     }
 
                     @Override

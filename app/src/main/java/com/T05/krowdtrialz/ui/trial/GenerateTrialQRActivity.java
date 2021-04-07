@@ -59,7 +59,10 @@ public class GenerateTrialQRActivity extends AppCompatActivity {
 
     }
 
-    // saves bitmap image as png in root/Android/data/com.T05.krowdtrialz/files/QrCodes
+    /**
+     * saves bitmap image as png in root/Android/data/com.T05.krowdtrialz/files/QrCodes
+     * @param bitmap bits to save
+     */
     private void saveToGallery(Bitmap bitmap){
         FileOutputStream outputStream = null;
         File file = new File(getExternalFilesDir(null), "QrCodes");
