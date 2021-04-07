@@ -730,7 +730,10 @@ public class Database {
         CollectionReference allExperimentsCollectionReference = db.collection("AllExperiments");
 
         for (String tag: tags) {
-            ListenerRegistration registration = allExperimentsCollectionReference.whereArrayContains("tags", tag).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            ListenerRegistration registration = allExperimentsCollectionReference
+                    .whereArrayContains("tags", tag)
+                    .whereEqualTo("published", true)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                     Set<Experiment> matchingExperiments = new HashSet<>();

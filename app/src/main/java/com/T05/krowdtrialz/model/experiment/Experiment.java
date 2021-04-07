@@ -29,6 +29,7 @@ public abstract class Experiment implements Tagged {
     private ArrayList<User> ignoredUsers;
     private ArrayList<Question> questions;
 
+    private boolean published = true;
     private final boolean active = true;
     private final boolean inactive = false;
 
@@ -42,6 +43,22 @@ public abstract class Experiment implements Tagged {
         status = active;
         ignoredUsers = new ArrayList<User>();
         questions = new ArrayList<Question>();
+    }
+
+    /**
+     * Set this experiment to unpublished state
+     */
+    public void unpublish() {
+        published = false;
+    }
+
+    /**
+     * Query whether this experiment is published
+     *
+     * @return true if the experiment is published
+     */
+    public boolean isPublished() {
+        return published;
     }
 
     /**
