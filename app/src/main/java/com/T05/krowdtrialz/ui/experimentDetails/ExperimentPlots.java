@@ -169,6 +169,7 @@ public class ExperimentPlots extends Fragment {
             BarDataSet barDataSet = new BarDataSet(entries, countExperiment.getUnit());
             barData = new BarData(barDataSet);
             barData.setDrawValues(false);
+            barChart.getXAxis().setEnabled(false);
         }
         else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             // make list of data
@@ -243,6 +244,8 @@ public class ExperimentPlots extends Fragment {
         // add data to chart
         barChart.setData(barData);
         barData.setBarWidth(0.9f); // set custom bar width
+        barChart.getXAxis().setGranularity(1f);
+        barChart.getAxisLeft().setGranularity(1f);
         barChart.setFitBars(true);
         barChart.getXAxis().setTextSize(11f);
         barChart.getAxisLeft().setTextSize(11f);
@@ -541,6 +544,8 @@ public class ExperimentPlots extends Fragment {
             scatterChart.setDescription(description);
             scatterChart.invalidate(); // Refreshes chart
         }
+        scatterChart.getAxisLeft().setGranularity(1f);
+        scatterChart.invalidate(); // Refreshes chart
     }// end populateTimePlot
 
     private String encodeDate (int year, int month, int day){
