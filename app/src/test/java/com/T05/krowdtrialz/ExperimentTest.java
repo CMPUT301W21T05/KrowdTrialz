@@ -3,8 +3,10 @@ package com.T05.krowdtrialz;
 import android.util.Log;
 
 import com.T05.krowdtrialz.model.experiment.BinomialExperiment;
+import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
+import com.T05.krowdtrialz.model.trial.CountTrial;
 import com.T05.krowdtrialz.model.trial.IntegerTrial;
 import com.T05.krowdtrialz.model.trial.MeasurementTrial;
 import com.T05.krowdtrialz.model.trial.Trial;
@@ -58,11 +60,25 @@ public class ExperimentTest {
     }
 
     public IntegerTrial mockIntegerTrial1(){
-        IntegerTrial iTrial = new IntegerTrial(mockOwner(), 100,187);
+        IntegerTrial iTrial = new IntegerTrial(mockExperimenter(), 100,187);
         return iTrial;
     }
 
-    // test adding trial into statistics experiments
+    public CountExperiment mockCountExperiment (){
+        CountExperiment experiment = new CountExperiment(mockOwner(),"Test Count experiment", "uNiTs");
+        return experiment;
+    }
+
+    public CountTrial mockCountTrial1(){
+        CountTrial cTrial = new CountTrial(mockOwner(), 100.2,-187.99, "September 30 2020");
+        return cTrial;
+    }
+    public CountTrial mockCountTrial2(){
+        CountTrial cTrial = new CountTrial(mockExperimenter(), 72.2,-10.99, "January 10 2020");
+        return cTrial;
+    }
+
+    // test adding trial into statistics experiments and getting a specific trial
     @Test
     public void testAddTrial(){
         MeasurementExperiment experiment = mockMeasurementExperiment();
@@ -76,8 +92,35 @@ public class ExperimentTest {
         intExperiment.addTrial(iTrial);
         ArrayList<?> IntegerTrial = intExperiment.getTrials();
         assertEquals(IntegerTrial.get(0), iTrial);
+    }
+
+    // test methods for getting experiment type, unit and setting unit
+    @Test
+    public void testUnit(){
+        CountExperiment experiment = mockCountExperiment();
+        CountTrial cTrial = mockCountTrial1();
+        experiment.addTrial(cTrial);
+
+        assertEquals("Count", experiment.getType());
+        assertEquals("uNiTs", experiment.getUnit());
+
+        experiment.setUnit("Unit");
+        assertEquals("Unit", experiment.getUnit());
+    }
+
+    // test method for getting count of a trial
+    @Test
+    public void testGetCount(){
+        CountExperiment experiment = mockCountExperiment();
+        CountTrial cTrial1 = mockCountTrial1();
+        CountTrial cTrial2 = mockCountTrial2();
+        experiment.addTrial(cTrial1);
+        experiment.addTrial(cTrial2);
+
+        assertEquals(2, experiment.getCount());
 
     }
+
 
     // test method to find if user is owner of experiment
     @Test
@@ -132,6 +175,122 @@ public class ExperimentTest {
 
         experiment.removeIgnoredUser(testExperimenter);
         assertFalse(experiment.isIgnored(testExperimenter));
+    }
+
+    // test publishing state
+    @Test
+    public void testPublishing(){
+        MeasurementExperiment experiment = mockMeasurementExperiment();
+        assertTrue(experiment.isPublished());
+
+        experiment.unpublish();
+        assertFalse(experiment.isPublished());
+    }
+
+    // test setting and getting ID
+    @Test
+    public void testID(){
+        IntegerExperiment intExperiment = mockIntegerExperiment();
+        intExperiment.setId("abc123");
+        assertEquals(intExperiment.getId(), "abc123");
+    }
+
+    // test setting and getting Description
+    @Test
+    public void testDescription(){
+        IntegerExperiment intExperiment = mockIntegerExperiment();
+        intExperiment.setDescription("test     Description");
+        assertEquals(intExperiment.getDescription(), "test     Description");
+    }
+
+    // test setting and getting Region
+    @Test
+    public void testRegion(){
+        IntegerExperiment intExperiment = mockIntegerExperiment();
+        intExperiment.setRegion("test     Region");
+        assertEquals(intExperiment.getRegion(), "test     Region");
+    }
+
+    // test location required or not
+    @Test
+    public void testLocationRequired(){
+        IntegerExperiment intExperiment = mockIntegerExperiment();
+        intExperiment.setLocationRequired(true);
+        assertTrue(intExperiment.isLocationRequired());
+
+        intExperiment.setLocationRequired(false);
+        assertFalse(intExperiment.isLocationRequired());
+    }
+
+    // test getting and setting minimum number of trials
+    @Test
+    public void testMinTrials(){
+        IntegerExperiment intExperiment = mockIntegerExperiment();
+        intExperiment.setMinTrials(0);
+        assertEquals(intExperiment.getMinTrials(), 0);
+
+        intExperiment.setMinTrials(-99);
+        assertEquals(intExperiment.getMinTrials(), -99);
+
+        intExperiment.setMinTrials(256);
+        assertEquals(intExperiment.getMinTrials(), 256);
+    }
+
+    // test getting contributors and their ID's
+    @Test
+    public void testContributors(){
+        Set<User> users = new HashSet<>();
+        User testExperimenter = mockExperimenter();
+        User testOwner = mockOwner();
+        users.add(testExperimenter);
+        users.add(testOwner);
+
+        IntegerExperiment experiment = mockIntegerExperiment();
+        experiment.addTrial(mockIntegerTrial());
+        experiment.addTrial(mockIntegerTrial1());
+
+        Set<User> usersExp = new HashSet<>();
+        usersExp = experiment.getContributors();
+        assertEquals(users,usersExp);
+
+        Set<String> userID = new HashSet<>();
+        userID.add("123");
+        userID.add("999");
+        assertEquals(userID, experiment.getContributorsIDs());
+    }
+
+    // test get valid trials of non-ignored contributors
+    @Test
+    public void testGetValidTrials(){
+        User testExperimenter = mockExperimenter();
+        User testOwner = mockOwner();
+        IntegerExperiment experiment = mockIntegerExperiment();
+
+        assertFalse(experiment.isIgnored(testExperimenter));
+
+        IntegerTrial iTrial1 = mockIntegerTrial1();
+        IntegerTrial iTrial = mockIntegerTrial();
+        experiment.addTrial(iTrial1);
+        experiment.addTrial(iTrial);
+
+        experiment.ignoreUser(testExperimenter);
+        assertTrue(experiment.isIgnored(testExperimenter));
+
+        ArrayList<?> IntegerTrial = experiment.getValidTrials();
+        assertEquals(IntegerTrial.get(0), iTrial);
+    }
+
+    // test setActive, isActive, setInactive, isInactive
+    @Test
+    public void testActive(){
+
+        IntegerExperiment intExperiment = mockIntegerExperiment();
+        intExperiment.setActive();
+        assertTrue(intExperiment.isActive());
+
+        intExperiment.setInactive();
+        assertTrue(intExperiment.isInactive());
+
     }
 
     // test experiments getting tags
