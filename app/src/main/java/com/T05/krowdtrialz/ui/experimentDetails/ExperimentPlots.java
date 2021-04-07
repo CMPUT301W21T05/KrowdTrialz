@@ -44,7 +44,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Show experiment plots and histograms
+ *
+ * A simple {@link Fragment} subclass with dependency injection.
  * Use the {@link ExperimentPlots#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -134,7 +136,7 @@ public class ExperimentPlots extends Fragment {
             }
             for (int i = 0; i < failDataPoints.size(); i++) {
                 // turn your data into Entry objects
-                failEntries.add(new BarEntry(i, failDataPoints.get(i)));
+                failEntries.add(new BarEntry(i + 1, failDataPoints.get(i)));
             }
 
             BarDataSet passDataSet = new BarDataSet(passEntries, binomialExperiment.getPassUnit());
@@ -150,6 +152,8 @@ public class ExperimentPlots extends Fragment {
             // create data set
             barData = new BarData(dataSets);
             barData.setDrawValues(false);
+
+            barChart.getXAxis().setEnabled(false);
         }else if (this.experiment.getType() == CountExperiment.type){ // Count format: {Count}
             // make list of data
             ArrayList<Integer> dataPoints = new ArrayList<Integer>();
@@ -165,6 +169,7 @@ public class ExperimentPlots extends Fragment {
             BarDataSet barDataSet = new BarDataSet(entries, countExperiment.getUnit());
             barData = new BarData(barDataSet);
             barData.setDrawValues(false);
+            barChart.getXAxis().setEnabled(false);
         }
         else if (this.experiment.getType() == IntegerExperiment.type){ // Integer format: list of data points
             // make list of data
@@ -239,6 +244,8 @@ public class ExperimentPlots extends Fragment {
         // add data to chart
         barChart.setData(barData);
         barData.setBarWidth(0.9f); // set custom bar width
+        barChart.getXAxis().setGranularity(1f);
+        barChart.getAxisLeft().setGranularity(1f);
         barChart.setFitBars(true);
         barChart.getXAxis().setTextSize(11f);
         barChart.getAxisLeft().setTextSize(11f);
@@ -537,6 +544,8 @@ public class ExperimentPlots extends Fragment {
             scatterChart.setDescription(description);
             scatterChart.invalidate(); // Refreshes chart
         }
+        scatterChart.getAxisLeft().setGranularity(1f);
+        scatterChart.invalidate(); // Refreshes chart
     }// end populateTimePlot
 
     private String encodeDate (int year, int month, int day){

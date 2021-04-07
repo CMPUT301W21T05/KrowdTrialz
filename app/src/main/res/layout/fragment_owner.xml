@@ -2,50 +2,165 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_owner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#5CFFFFFF"
     tools:context=".ui.owner.OwnerFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="409dp"
+        android:layout_height="184dp"
+        android:background="#B0F44336"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/profile_name"
+        android:layout_width="184dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="36dp"
+
+        android:background="#3B00BCD4"
+        android:clickable="true"
+        android:contentDescription="Name"
+        android:drawableRight="@drawable/ic_edit_field"
+        android:hint="Name"
+        android:textColor="#000000"
+        android:drawableRight="@drawable/ic_edit_field"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@id/name_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/profile_username"
+        android:layout_width="184dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="76dp"
+        android:background="#3B00BCD4"
+        android:clickable="true"
+        android:contentDescription="Username"
+        android:drawableRight="@drawable/ic_edit_field"
+        android:hint="Username"
+        android:textColor="#000000"
+        android:drawableRight="@drawable/ic_edit_field"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toEndOf="@id/user_name_label"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/profile_email"
+        android:layout_width="184dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="120dp"
+        android:background="#3B00BCD4"
+        android:clickable="true"
+        android:contentDescription="Email"
+        android:drawableRight="@drawable/ic_edit_field"
+        android:hint="Email"
+        android:textColor="#000000"
+        android:drawableRight="@drawable/ic_edit_field"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@id/email_label"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/user_profile_ImageView"
         android:layout_width="83dp"
         android:layout_height="76dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_owned_black_24" />
 
-    <TextView
-        android:id="@+id/profile_details_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="36dp"
-        android:text="User Details here"
-        app:layout_constraintStart_toEndOf="@+id/user_profile_ImageView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/edit_profile_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
-        android:text="@string/edit_profile_button_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.737"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ListView
         android:id="@+id/owner_exp_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+        app:layout_constraintVertical_bias="0.051" />
+
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Name:"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/profile_name"
+        app:layout_constraintStart_toEndOf="@id/user_profile_ImageView"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center_horizontal" />
+        app:layout_constraintVertical_bias="0.9" />
+
+    <TextView
+        android:id="@+id/user_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Username:"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/profile_username"
+        app:layout_constraintStart_toEndOf="@id/user_profile_ImageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.97" />
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="Email:"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@id/profile_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_profile_ImageView"
+        app:layout_constraintVertical_bias="0.80" />
+
+    <TextView
+        android:id="@+id/name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Name:"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/profile_name"
+        app:layout_constraintStart_toEndOf="@id/user_profile_ImageView"/>
+
+    <TextView
+        android:id="@+id/user_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Username:"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.97"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/profile_username"
+        app:layout_constraintStart_toEndOf="@id/user_profile_ImageView"/>
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:text="Email:"
+        android:textColor="@color/black"
+        app:layout_constraintVertical_bias="0.80"
+        app:layout_constraintTop_toBottomOf="@id/user_profile_ImageView"
+        app:layout_constraintBottom_toBottomOf="@id/profile_email"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

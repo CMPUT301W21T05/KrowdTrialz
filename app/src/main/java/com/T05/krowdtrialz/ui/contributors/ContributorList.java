@@ -1,10 +1,13 @@
 package com.T05.krowdtrialz.ui.contributors;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -16,20 +19,28 @@ import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 
+/**
+ * Custom array adapter for ListView to show the list of contributors of an experiment
+ * along with a checkbox that indicated if they are ignored by the experiment.
+ */
 public class ContributorList extends ArrayAdapter<User> {
+    private static final String TAG = "CONTRIBUTOR LIST";
 
     private ArrayList<User> contributors;
     private Context context;
     private Experiment experiment;
+    private Database db;
 
-    public ContributorList(Context context, ArrayList<User> contributors, Experiment experiment){
+    public ContributorList(Context context, ArrayList<User> contributors, Experiment experiment, Database db){
         super(context,0, contributors);
         this.contributors = contributors;
         this.context = context;
         this.experiment = experiment;
+        this.db = db;
     }
 
     @NonNull
@@ -44,30 +55,33 @@ public class ContributorList extends ArrayAdapter<User> {
         User contributor = contributors.get(position);
 
         TextView contributorName = view.findViewById(R.id.contributor_name_textView);
-        CheckBox ignoreCheckBox = view.findViewById(R.id.ignore_contributor_checkbox);
+        Button ignoreButton = view.findViewById(R.id.ignore_contributor_button);
 
-        contributorName.setText(contributor.getName());
+        contributorName.setText(contributor.getUserName());
 
-        //set checkbox if user is ignored
         if(experiment.isIgnored(contributor)){
-            ignoreCheckBox.setChecked(true);
+            ignoreButton.setText("Un-Ignore");
+            ignoreButton.setBackgroundColor(view.getResources().getColor(R.color.unignore_blue));
         } else {
-            ignoreCheckBox.setChecked(false);
+            ignoreButton.setText("Ignore");
+            ignoreButton.setBackgroundColor(view.getResources().getColor(R.color.ignore_orange));
         }
 
-        ignoreCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ignoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    if(!experiment.isIgnored(contributor)){
-                        experiment.ignoreUser(contributor);
-                        Database.getInstance().updateExperiment(experiment);
-                    }
-                } else {
-                    if(experiment.isIgnored(contributor)){
-                        experiment.removeIgnoredUser(contributor);
-                        Database.getInstance().updateExperiment(experiment);
-                    }
+            public void onClick(View v) {
+                if(experiment.isIgnored(contributor)){
+                    experiment.removeIgnoredUser(contributor);
+                    db.updateExperiment(experiment);
+                    ignoreButton.setText("Ignore");
+                    ignoreButton.setBackgroundColor(v.getResources().getColor(R.color.ignore_orange));
+                    Log.d(TAG, "Un-Ignored User");
+                } else{
+                    experiment.ignoreUser(contributor);
+                    db.updateExperiment(experiment);
+                    ignoreButton.setText("Un-Ignore");
+                    ignoreButton.setBackgroundColor(v.getResources().getColor(R.color.unignore_blue));
+                    Log.d(TAG, "Ignored User");
                 }
             }
         });

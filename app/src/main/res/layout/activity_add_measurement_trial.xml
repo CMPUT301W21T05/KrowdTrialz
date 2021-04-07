@@ -8,6 +8,7 @@
 
     <EditText
         android:id="@+id/measure_editText"
+        android:inputType="numberDecimal"
         android:layout_width="151dp"
         android:layout_height="47dp"
         android:hint="cm"

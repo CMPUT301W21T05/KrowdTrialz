@@ -43,6 +43,9 @@ public class SplashActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Start main entry to application
+     */
     private void startMainActivity() {
         Log.d(TAG, "Starting MainActivity");
         Intent intent = new Intent(this, MainActivity.class);

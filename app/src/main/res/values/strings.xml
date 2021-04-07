@@ -8,7 +8,7 @@
     <string name="add_experiment_name_prompt">Add experiment name</string>
     <string name="add_experiment_description_prompt">Add a description</string>
     <string name="geo_location_toggle">Geolocation required</string>
-    <string name="owner_username">Owner Username</string>
+    <string name="owner_username"><u>Owner Username</u></string>
     <string name="description_non_owner_text">Description</string>
     <string name="status">Status</string>
     <string name="region_non_owner">Region</string>
@@ -45,7 +45,7 @@
     <string name="view_map_owner">view map</string>
     <string name="view_q_amp_a_owner"><![CDATA[View Q&A]]></string>
     <string name="subscribed_experiments_title">Subscribed Experiments</string>
-    <string name="edit_profile_button_text">Edit Profile</string>
+    <string name="edit_profile_button_text">Edit</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="trial_use_location">Use Location</string>
@@ -54,4 +54,7 @@
     <string name="trial_scan">Scan</string>
     <string name="trial_generate_qr">Generate QR Code</string>
     <string name="trial_assign_barcode">Assign To Barcode</string>
+    <string name="download">DOWNLOAD</string>
+    <string name="qr_image">qrImage</string>
+    <string name="title_search">Search</string>
 </resources>

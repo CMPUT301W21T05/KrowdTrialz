@@ -1,5 +1,6 @@
 package com.T05.krowdtrialz.ui.experimentDetails;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,13 +26,24 @@ import com.T05.krowdtrialz.model.experiment.CountExperiment;
 import com.T05.krowdtrialz.model.experiment.Experiment;
 import com.T05.krowdtrialz.model.experiment.IntegerExperiment;
 import com.T05.krowdtrialz.model.experiment.MeasurementExperiment;
+import com.T05.krowdtrialz.model.user.User;
+import com.T05.krowdtrialz.ui.owner.OwnerFragment;
+import com.T05.krowdtrialz.ui.owner.UserActivity;
+import com.T05.krowdtrialz.ui.search.SearchActivity;
 import com.T05.krowdtrialz.ui.trial.AddBinomialTrialActivity;
 import com.T05.krowdtrialz.ui.trial.AddCountTrialActivity;
 import com.T05.krowdtrialz.ui.trial.AddIntegerTrialActivity;
 import com.T05.krowdtrialz.ui.trial.AddMeasurementTrialActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.ListenerRegistration;
 
+import java.util.List;
+
+/**
+ * Set up tabs and common informaiton about the selected experiment.
+ * Tab are created based on experiment type
+ */
 public class ExperimentDetailsActivity extends AppCompatActivity
         implements LocationRequiredDialogFragment.LocationRequiredDialogListener {
 
@@ -41,32 +56,38 @@ public class ExperimentDetailsActivity extends AppCompatActivity
     private Button addTrialButton;
 
     private Database db;
-    private Experiment experiment;
-
-
+    private Experiment experiment = null;
+    private String experimentID = null;
+    private ListenerRegistration expRegistration;
 
     private Fragment plotFragment = null, statsFragment = null, moreFragment = null;
 
-    private enum StatsTabLayout {stats, plots, moreOption};
-    private enum NonStatsTabLayout {plots, moreOption};
+//    private enum StatsTabLayout {stats, plots, moreOption};
+//
+//    private enum NonStatsTabLayout {plots, moreOption};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_experiment_details);
+
+        setTitle("Experiment Details");
+
         db = Database.getInstance();
 
         Intent intent = getIntent();
-        String experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
+        experimentID = intent.getStringExtra(MainActivity.EXTRA_EXPERIMENT_ID);
 
         Button subscribeButton = findViewById(R.id.subscribe_button_experiment);
         addTrialButton = findViewById(R.id.add_trials_experiment);
+
+
 
         addTrialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Add Trials selected.");
-                if(experiment.isLocationRequired()){
+                if (experiment.isLocationRequired()) {
                     showLocationRequiredDialog();
                 } else {
                     addTrial();
@@ -82,12 +103,51 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             }
         });
 
+        expRegistration = db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
+            @Override
+            public void onSuccess(Experiment exp) {
+                experiment = exp;
+                if (exp != null) {
+                    updateAddTrialsButton();
+                    setTabs();
+                    populateMainInfo();
+
+                    TabLayout tabLayout = findViewById(R.id.experiment_tabs);
+                    tabLayout.getTabAt(0).select();
+                }
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e(TAG, "Error Searching Database for experiment");
+            }
+        });
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        expRegistration.remove();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (experimentID == null) {
+            return;
+        }
+
         db.getExperimentByID(experimentID, new Database.GetExperimentCallback() {
             @Override
             public void onSuccess(Experiment exp) {
                 experiment = exp;
                 Log.d(TAG, exp.getType());
+                Log.d(TAG, String.valueOf(exp.getTrials().size()));
                 if (exp != null) {
+
                     updateAddTrialsButton();
                     setTabs();
                     populateMainInfo();
@@ -102,7 +162,6 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             }
         });
 
-
     }
 
     public void updateAddTrialsButton(){
@@ -110,6 +169,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
             addTrialButton.setEnabled(false);
         }
     }
+
 
     /**
      * Set the tab layout in experiment details screen
@@ -150,6 +210,7 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                         moreFragment = ExperimentMore.newInstance(experiment);
                         nextFragment = moreFragment;
                         break;
+
                     default:
                         Log.e(TAG, "Unknown tab selection");
                         return;
@@ -158,7 +219,8 @@ public class ExperimentDetailsActivity extends AppCompatActivity
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.replace(R.id.empty_frame, nextFragment);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.commit();
+                transaction.commitAllowingStateLoss();
+//                transaction.commitNowAllowingStateLoss();
             }
 
             @Override
@@ -233,7 +295,23 @@ public class ExperimentDetailsActivity extends AppCompatActivity
         }
         // fill out owner Username
         ownerName = findViewById(R.id.owner_textView_experiment);
-        ownerName.setText(experiment.getOwner().getUserName());
+        String ownerUserNameString = experiment.getOwner().getUserName();
+        SpannableString ownerUserName = new SpannableString(ownerUserNameString);
+        ownerUserName.setSpan(new UnderlineSpan(), 0, ownerUserNameString.length(), 0);
+        ownerName.setText(ownerUserName);
+
+        ownerName.setClickable(true);
+        ownerName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * Start user activity for this user
+                 */
+                Intent intent = new Intent(v.getContext(), UserActivity.class);
+                intent.putExtra(UserActivity.USER_ID_EXTRA, experiment.getOwner().getId());
+                startActivity(intent);
+            }
+        });
 
         // fill out experiment description
         description = findViewById(R.id.description_textView_experiment);

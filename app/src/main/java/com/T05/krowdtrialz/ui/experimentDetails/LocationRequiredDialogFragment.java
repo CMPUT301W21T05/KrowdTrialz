@@ -10,6 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * Warn the user that the selected experiment requires locations to be
+ * provided with their trial data.
+ */
 public class LocationRequiredDialogFragment extends DialogFragment {
 
     public interface LocationRequiredDialogListener{

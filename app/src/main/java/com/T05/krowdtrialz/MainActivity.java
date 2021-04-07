@@ -1,35 +1,25 @@
 package com.T05.krowdtrialz;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 
 import com.T05.krowdtrialz.ui.search.SearchActivity;
+import com.T05.krowdtrialz.ui.subscribed.ScanActivity;
 import com.T05.krowdtrialz.util.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-
-import java.lang.reflect.Type;
-import java.util.UUID;
-
-import com.T05.krowdtrialz.util.Database;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,6 +49,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "Clicked Search");
                 Intent intent = new Intent(v.getContext(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button scanButton = findViewById(R.id.scan_button);
+
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ScanActivity.class);
                 startActivity(intent);
             }
         });
