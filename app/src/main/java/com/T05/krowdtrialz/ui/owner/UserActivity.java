@@ -10,6 +10,7 @@ import android.os.Bundle;
 import com.T05.krowdtrialz.R;
 import com.T05.krowdtrialz.model.user.User;
 import com.T05.krowdtrialz.util.Database;
+import com.google.firebase.firestore.ListenerRegistration;
 
 /**
  * Open the user fragment
@@ -17,6 +18,8 @@ import com.T05.krowdtrialz.util.Database;
 public class UserActivity extends AppCompatActivity {
 
     public static final String USER_ID_EXTRA = "USERID";
+
+    private ListenerRegistration registration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class UserActivity extends AppCompatActivity {
 
         Database db = Database.getInstance();
 
-        db.getUserById(userID, new Database.GetUserCallback() {
+        registration = db.getUserById(userID, new Database.GetUserCallback() {
             @Override
             public void onSuccess(User user) {
                 /**
@@ -45,5 +48,14 @@ public class UserActivity extends AppCompatActivity {
             }
         });
         setContentView(R.layout.activity_user);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Stop listening to changes in the Database
+        if (registration != null) {
+            registration.remove();
+        }
     }
 }
