@@ -192,7 +192,7 @@ public class StatisticsUITest {
     private void publish(){
         //Click on publish tab
         solo.waitForView(R.id.search_action_button);
-        solo.clickOnText("Publish");
+        solo.clickOnView(solo.getView(R.id.navigation_publish));
 
         // Click on "Publish New Experiment" button
         solo.clickOnView(solo.getView(R.id.new_publish_button));
