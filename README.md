@@ -1,5 +1,7 @@
 ## [Video Demonstration](https://youtu.be/Z4JSgZ22Jpo) ([short cut](https://youtu.be/OC1MA6Y6cgE))
 
+## [See Javadocs](https://cmput301w21t05.github.io/KrowdTrialz/)
+
 ## Citations:
 
 To generate histograms and time plots we used the library from:
