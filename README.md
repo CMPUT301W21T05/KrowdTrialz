@@ -1,4 +1,4 @@
-## [Video Demonstration](https://youtu.be/Z4JSgZ22Jpo)
+## [Video Demonstration](https://youtu.be/Z4JSgZ22Jpo) ([short cut](https://youtu.be/OC1MA6Y6cgE))
 
 ## Citations:
 
